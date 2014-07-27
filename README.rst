@@ -2,13 +2,13 @@
 apub
 ===============================
 
-.. image:: https://badge.fury.io/py/apub.png
+.. .. image:: https://badge.fury.io/py/apub.png
     :target: http://badge.fury.io/py/apub
     
-.. image:: https://travis-ci.org/cknoerndel/apub.png?branch=master
+.. .. image:: https://travis-ci.org/cknoerndel/apub.png?branch=master
         :target: https://travis-ci.org/cknoerndel/apub
 
-.. image:: https://pypip.in/d/apub/badge.png
+.. .. image:: https://pypip.in/d/apub/badge.png
         :target: https://pypi.python.org/pypi/apub
 
 

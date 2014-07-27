@@ -29,7 +29,7 @@ setup(
     long_description=readme + '\n\n' + history,
     author='Christopher Knörndel',
     author_email='cknoerndel@anited.de',
-    url='https://github.com/cknoerndel/apub',
+    url='https://bitbucket.org/vomaufgang/apub/',
     packages=[
         'apub',
     ],
@@ -41,8 +41,8 @@ setup(
     zip_safe=False,
     keywords='apub',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
-        'Intended Audience :: Developers',
+        'Development Status :: 1 - Planning',
+        'Intended Audience :: End Users/Desktop',
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
