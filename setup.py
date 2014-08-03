@@ -32,9 +32,14 @@ setup(
     url='https://github.com/cknoerndel/apub',
     packages=[
         'apub',
+        'apub.cli',
+        'apub.mdextensions'
     ],
-    package_dir={'apub':
-                 'apub'},
+    entry_points = {
+        'console_scripts': [
+            'apub = apub.cli.cli:main',
+        ],
+    },
     include_package_data=True,
     install_requires=requirements,
     license="BSD",
@@ -45,7 +50,6 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
-        'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
     ],
