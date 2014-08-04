@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import markdown
-from apub.mdextensions.ChapterBreakExtension import ChapterBreakExtension
+from apub.extensions.markdown import delimitscene
 
 
 def main():
@@ -18,7 +18,7 @@ def main():
     #
     configs = {
         'MARKER': ["++"],
-        'CHAPTER_BREAK': ['*']
+        'DELIMITER': ['*']
     }
 
     html = markdown.markdown("""# Heading
@@ -32,8 +32,8 @@ text
 
 the end
 """,
-                             extensions=[ChapterBreakExtension(
-                                 configs=configs)])
+                             extensions=[delimitscene.DelimitSceneExtension()])
+                                 #configs=configs)])
     print(html)
     pass
     # my code here
