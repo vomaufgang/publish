@@ -5,21 +5,13 @@ from apub.extensions.markdown import delimitscene
 
 
 def main():
-
-# todo: test.chapter or text
-#    with open('test.chapter', 'r') as f:
-#        contents = f.read()
-
-# todo: add a switch to expand single /n to /n/n
-#       in case the input file is focuswriter-made and not
-#       pure markdown
-#    contents = contents.replace('\n', '\n\n')
-
-    #
-    configs = {
-        'MARKER': ["++"],
-        'DELIMITER': ['*']
-    }
+    # todo: test.chapter or text
+    #    with open('test.chapter', 'r') as f:
+    #        contents = f.read()
+    # todo: add a switch to expand single /n to /n/n
+    #       in case the input file is focuswriter-made and not
+    #       pure markdown
+    #    contents = contents.replace('\n', '\n\n')
 
     html = markdown.markdown("""# Heading
 some text
@@ -31,9 +23,7 @@ some more text
 text
 
 the end
-""",
-                             extensions=[delimitscene.DelimitSceneExtension()])
-                                 #configs=configs)])
+""", extensions=[delimitscene.DelimitSceneExtension()])
     print(html)
     pass
     # my code here

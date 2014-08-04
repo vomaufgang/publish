@@ -10,7 +10,7 @@ Tests for `apub` module.
 
 import unittest
 
-from apub import apub
+# from apub import apub
 
 
 class TestApub(unittest.TestCase):
