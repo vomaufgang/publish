@@ -25,6 +25,7 @@ test_requirements = [
 setup(
     name='apub',
     version='0.1.0',
+    # TODO: put meaningful description here
     description='Python Boilerplate contains all the boilerplate you need to create a Python package.',
     long_description=readme + '\n\n' + history,
     author='Christopher Knörndel',
@@ -33,7 +34,9 @@ setup(
     packages=[
         'apub',
         'apub.cli',
-        'apub.mdextensions'
+        'apub.extensions',
+        'apub.extensions.markdown',
+        'apub.facades',
     ],
     entry_points = {
         'console_scripts': [
