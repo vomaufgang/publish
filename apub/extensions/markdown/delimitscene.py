@@ -24,7 +24,7 @@ class DelimitSceneExtension(Extension):
         if configs is None:
             configs = default_configs
         else:
-            configs = default_configs.copy().update(configs)
+            configs = default_configs.update(configs)
 
         super(DelimitSceneExtension, self).__init__(configs)
 
