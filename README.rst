@@ -14,8 +14,8 @@ apub
 
 Python Boilerplate contains all the boilerplate you need to create a Python package.
 
-* Free software: BSD license
-* Documentation: http://apub.readthedocs.org.
+* Free software: MIT license
+.. .. Documentation: http://apub.readthedocs.org.
 
 Features
 --------
