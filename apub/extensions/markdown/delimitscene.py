@@ -30,14 +30,14 @@ class DelimitSceneExtension(Extension):
 
     def extendMarkdown(self, md, md_globals):
         """ Add delimit scene processor to Markdown instance. """
-        processor = DelimitSceneProcessor(md.parser)
+        processor = _DelimitSceneProcessor(md.parser)
         processor.config = self.getConfigs()
         md.parser.blockprocessors.add('delimitscene', processor, '_begin')
 
         md.registerExtension(self)
 
 
-class DelimitSceneProcessor(BlockProcessor):
+class _DelimitSceneProcessor(BlockProcessor):
     def test(self, parent, block):
         return block.startswith(self.config['MARKUP'])
 

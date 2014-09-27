@@ -41,6 +41,7 @@ setup(
     entry_points = {
         'console_scripts': [
             'apub = apub.cli.cli:main',
+            'apub-quickstart = apub.cli.cli:main',
         ],
     },
     include_package_data=True,

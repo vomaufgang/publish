@@ -4,7 +4,12 @@ from apub import apub
 
 
 def main():
-    apub.main()
+    apub.build()
+
+
+def quickstart():
+    pass
+
 
 if __name__ == "__main__":
     main()
