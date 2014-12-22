@@ -15,7 +15,8 @@ readme = open('README.rst').read()
 history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
 requirements = [
-    'markdown>=2.4.1',
+    'markdown>=2.5.2',
+    'wheel>=0.24.0',
 ]
 
 test_requirements = [
@@ -38,9 +39,9 @@ setup(
         'apub.extensions.markdown',
         'apub.facades',
     ],
-    entry_points = {
+    entry_points={
         'console_scripts': [
-            'apub = apub.cli.cli:main',
+            'apub-make = apub.cli.cli:main',
             'apub-quickstart = apub.cli.cli:main',
         ],
     },
@@ -52,7 +53,7 @@ setup(
     classifiers=[
         'Development Status :: 1 - Planning',
         'Intended Audience :: End Users/Desktop',
-        'License :: OSI Approved :: BSD License',
+        'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',

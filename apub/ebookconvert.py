@@ -12,7 +12,6 @@ def convert(input_file, output_file, options=None):
     #     if '.epub' in output_file
 
 
-
 __format_exclusive_options = {
     'epub': [
         'input-encoding'
