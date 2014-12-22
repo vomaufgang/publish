@@ -37,7 +37,8 @@ setup(
         'apub.cli',
         'apub.extensions',
         'apub.extensions.markdown',
-        'apub.facades',
+        'apub.model',
+        'apub.output',
     ],
     entry_points={
         'console_scripts': [
