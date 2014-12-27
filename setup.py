@@ -25,13 +25,13 @@ test_requirements = [
 
 setup(
     name='apub',
-    version='0.1.0',
+    version='1.0.0b',
     # TODO: put meaningful description here
     description='Python Boilerplate contains all the boilerplate you need to create a Python package.',
     long_description=readme + '\n\n' + history,
     author='Christopher Knörndel',
     author_email='cknoerndel@anited.de',
-    url='https://bitbucket.org/vomaufgang/apub/',
+    url='https://github.com/vomaufgang/apub/',
     packages=[
         'apub',
         'apub.cli',
@@ -42,8 +42,9 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'apub-make = apub.cli.cli:main',
-            'apub-quickstart = apub.cli.cli:main',
+            'apub-make = apub.cli.cli:make',
+            'apub-focus = apub.cli.cli:focus',
+            'apub-quickstart = apub.cli.cli:quickstart',
         ],
     },
     include_package_data=True,
