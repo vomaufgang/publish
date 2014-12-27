@@ -28,7 +28,9 @@ class Book():
 
     @property
     def chapters(self):
-        """:rtype : list of Chapter"""
+        """Gets or sets the list of chapters.
+
+        :type: list of Chapter"""
         return self.__chapters
 
     @chapters.setter

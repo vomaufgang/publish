@@ -17,9 +17,7 @@ function clean(){
 }
 
 function get-coverage(){
-    &coverage run --source apub setup.py test
-    &coverage report -m
-    &coverage html
+    &nosetests --with-coverage --cover-html --cover-html-dir=htmlcov
     Invoke-Item .\htmlcov\index.html
 }
 
