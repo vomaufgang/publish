@@ -15,21 +15,21 @@ class Chapter():
     @property
     def id(self):
         """Gets or sets the id. May only contain the characters
-        a-z, A-Z, '-' and '_' and must be unique within the containing project.
+        a-z, A-Z, 0-9, '-' and '_' and must be unique within the containing project.
 
         Setting this to an invalid id will raise an error.
 
         Using the same id for two separate chapters will raise an error at build time.
 
         :type: str
-        :raises ValueError: if the value contains any characters not in this range: a-z, A-Z, '-' and '_'"""
+        :raises ValueError: if the value contains any characters not in this range: a-z, A-Z, 0-9, '-' and '_'"""
         return self.__id
 
     @id.setter
     def id(self, value):
         """:type value: str"""
         if not id_pattern.match(value):
-            raise ValueError('value contains invalid characters, may consist only of a-z, A-Z, -, _')
+            raise ValueError('value contains invalid characters, may consist only of a-z, A-Z, 0-9, -, _')
 
         self.__id = value
 
