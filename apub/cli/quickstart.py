@@ -16,6 +16,10 @@ b.title = '{book_title}'
 b.subtitle = {book_subtitle}
 b.authors = '{authors}'"""
 
+focus_template = """from apub import Project, Book, Chapter
+
+"""
+
 
 def main():
     project_id = input('Enter project id (may contain a-zA-Z0-9-_), will be used as part of the metadata file name: ')
@@ -38,7 +42,7 @@ def main():
 
     # todo check for existing files or projects of the same id before continuing
 
-    metadata_filename = '{project_id}.metadata.py'.format(project_id=project_id)
+    metadata_filename = '{project_id}_metadata.py'.format(project_id=project_id)
     if os.path.exists(os.path.join(os.getcwd(), metadata_filename)):
         raise FileExistsError  # todo error message, project seems to already exist
 
@@ -47,7 +51,13 @@ def main():
                                                           book_subtitle=book_subtitle,
                                                           authors=authors)
         metadata.write(metadata_file_contents)
-    with codecs.open('{project_id}.focus.py'.format(project_id=project_id), 'w', 'utf-8') as focus:
+    with codecs.open('{project_id}_focus.py'.format(project_id=project_id),
+                     'w',
+                     'utf-8') as focus:
+        focus.write('I need better glasses.')
+    with codecs.open('{project_id}_make.py'.format(project_id=project_id),
+                     'w',
+                     'utf-8') as focus:
         focus.write('I need better glasses.')
 
     return
