@@ -21,6 +21,8 @@ class Chapter():
 
         Using the same id for two separate chapters will raise an error at build time.
 
+        *This property is mandatory.*
+
         :type: str
         :raises ValueError: if the value contains any characters not in this range: a-z, A-Z, 0-9, '-' and '_'"""
         return self.__id

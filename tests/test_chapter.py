@@ -2,16 +2,14 @@
 # -*- coding: utf-8 -*-
 
 """
-test_apub
+test_chapter
 ----------------------------------
 
-Tests for `apub` module.
+Tests for `apub.model.chapter` module.
 """
 
 import unittest
 from apub.model.chapter import Chapter
-
-# from apub import apub
 
 
 class TestChapter(unittest.TestCase):
