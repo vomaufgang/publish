@@ -1,7 +1,7 @@
-from abc import ABC, abstractmethod
+from abc import ABCMeta, abstractmethod
 
 
-class Output(ABC):
+class Output(metaclass=ABCMeta):
     def __init__(self, project, out_path):
         self.__project = project
         self.__out_path = out_path
