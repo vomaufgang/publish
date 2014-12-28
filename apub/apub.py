@@ -1,8 +1,12 @@
 #!/usr/bin/python
 
-import markdown
+import markdown, re
 from apub.extensions.markdown.delimitscene import DelimitSceneExtension
 from . import Book, Chapter
+
+
+id_pattern = re.compile('^[0-9a-zA-Z-_]+$')
+
 
 p = Book()
 
@@ -82,7 +86,6 @@ def build(project=None):
 #     print(html)
 #     pass
     # my code here
-
 
 def make(book):
     """
