@@ -1,17 +1,14 @@
-from ..output import Output
-
-
 class Project():
     def __init__(self):
-        # todo one project may contain multiple books
-        # i.e.: aus-1, aus-2, aus-3 with different chapters and aus with all chapters in a single package
         self.__books = []
         self.__outputs = []
-        self.__series_name = None
         pass
 
     @property
     def books(self):
+        """Gets or sets the books managed in this project.
+
+        :type: list of Book"""
         return self.__books
 
     @books.setter
@@ -30,4 +27,4 @@ class Project():
 
     @outputs.setter
     def outputs(self, value):
-        self.outputs = value
+        self.__outputs = value
