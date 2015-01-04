@@ -27,6 +27,9 @@ class TestChapter(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.chapter.id = '@?\/.+'
 
+    def test_read(self):
+        pass
+
     def tearDown(self):
         pass
 

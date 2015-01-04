@@ -87,6 +87,28 @@ def build(project=None):
 #     pass
     # my code here
 
+
+def read_chapter(chapter=None):
+    if chapter is None:
+        raise AttributeError('chapter must not be None')
+    if chapter.path is None:
+        raise AttributeError('chapter.path must not be None')
+
+    # todo read the actual chapter
+
+    return chapter, ''
+
+
+def read_chapters(chapters=None):
+    result = []
+    if chapters is None:
+        raise AttributeError('chapters must not be None')
+    for chapter in chapters:
+        result.append(read_chapter(chapter))
+
+    return result
+
+
 def make(book):
     """
 

@@ -1,6 +1,8 @@
 class Book():
     def __init__(self):
         """Creates a new instance of the book class."""
+        self.__language = None
+        self.__cover_image_path = None
         self.__title = None
         self.__subtitle = None
         self.__chapters = []
@@ -75,3 +77,25 @@ class Book():
     @no_in_series.setter
     def no_in_series(self, value):
         self.__no_in_series = value
+    
+    @property
+    def cover_image_path(self):
+        return self.__cover_image_path
+
+    @cover_image_path.setter
+    def cover_image_path(self, value):
+        self.__cover_image_path = value
+
+    @property
+    def language(self):
+        """Gets or sets the language of this book.
+
+        Using a valid ISO3166 or ISO3166-2 country or country subdivision code like 'EN', 'DE' or 'EN-US' is strongly
+        recommended.
+
+        Default: 'UND' as in undefined"""
+        return self.__language
+
+    @language.setter
+    def language(self, value):
+        self.__language = value

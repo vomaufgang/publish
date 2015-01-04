@@ -30,14 +30,6 @@ apub.ebookconvert module
     :undoc-members:
     :show-inheritance:
 
-apub.sources module
--------------------
-
-.. automodule:: apub.sources
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 
 Module contents
 ---------------

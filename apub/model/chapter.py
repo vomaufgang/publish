@@ -55,3 +55,12 @@ class Chapter():
     def path(self, value):
         """:type value: str"""
         self.__path = value
+
+    def read(self):
+        if self.path is None:
+            raise AttributeError('path must not be None')
+
+        with open(self.path, 'r', encoding='utf-8') as f:
+            result = f.readlines()
+
+        return result
