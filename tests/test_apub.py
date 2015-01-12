@@ -29,7 +29,7 @@ class TestApub(unittest.TestCase):
                                     'test_apub.md')
         chapter, lines = apub.read_chapter(chapter)
 
-        self.assertEqual(3, lines.count())
+        self.assertEqual(3, len(lines))
         pass
 
     def tearDown(self):

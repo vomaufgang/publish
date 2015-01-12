@@ -26,13 +26,9 @@ class TestProject(unittest.TestCase):
         with self.assertRaises(AttributeError):
             self.project.outputs = []
 
-    def test_simple_substitutions_cannot_be_set(self):
+    def test_substitutions_cannot_be_set(self):
         with self.assertRaises(AttributeError):
-            self.project.simple_substitutions = []
-
-    def test_regex_substitutions_cannot_be_set(self):
-        with self.assertRaises(AttributeError):
-            self.project.regex_substitutions = []
+            self.project.substitutions = []
 
     def test_read(self):
         pass
