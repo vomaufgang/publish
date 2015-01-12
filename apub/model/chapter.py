@@ -1,15 +1,13 @@
 import re
-
 id_pattern = re.compile('^[0-9a-zA-Z-_]+$')
 
 
 class Chapter():
     def __init__(self):
-        #: :type: str
+        super().__init__()
+        self.__substitutions = []
         self.__id = ""
-        #: :type: str
         self.__title = ""
-        #: :type: str
         self.__path = ""
 
     @property
@@ -37,7 +35,21 @@ class Chapter():
 
     @property
     def title(self):
-        """Gets or sets the title."""
+        """Gets or sets the title.
+
+        You can specify the title in three distinct ways:
+
+        1. As an ordinary markdown heading at the top of the chapter file.
+        2. Via the title attribute of the chapter object in question.
+        3. Not at all.
+
+        todo: further describe and specify the options above, i.e. "for option 2 the heading must be the first line
+              within the document" and "for option 3 a heading is automatically generated, using the number of the
+              chapter as it appears in the book as the chapter title, i.e. "3"
+
+        todo: add option to create own chapter title formats via string formatting:
+              http://stackoverflow.com/questions/11022655/string-format-with-optional-placeholders
+        """
         return self.__title
 
     @title.setter
@@ -64,3 +76,7 @@ class Chapter():
             result = f.readlines()
 
         return result
+
+    @property
+    def substitutions(self):
+        return self.__substitutions

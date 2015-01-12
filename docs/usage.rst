@@ -4,4 +4,7 @@ Usage
 
 To use apub in a project::
 
-	import apub
+    import apub
+
+
+.. automember:: apub.model.book.Book.language

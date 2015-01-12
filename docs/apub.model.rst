@@ -28,6 +28,14 @@ apub.model.project module
     :undoc-members:
     :show-inheritance:
 
+apub.model.substitutions module
+-------------------------------
+
+.. automodule:: apub.model.substitutions
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------

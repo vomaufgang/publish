@@ -8,6 +8,7 @@ class Book():
         self.__chapters = []
         self.__series_name = None
         self.__no_in_series = None
+        self.__substitutions = []
 
     @property
     def title(self):
@@ -37,7 +38,7 @@ class Book():
 
     @subtitle.setter
     def subtitle(self, value):
-        return self.__subtitle
+        self.__subtitle = value
 
     @property
     def chapters(self):
@@ -99,3 +100,7 @@ class Book():
     @language.setter
     def language(self, value):
         self.__language = value
+
+    @property
+    def substitutions(self):
+        return self.__substitutions

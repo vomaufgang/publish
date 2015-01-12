@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
-import markdown, re
+import markdown
+import re
+import codecs
 from apub.extensions.markdown.delimitscene import DelimitSceneExtension
 from . import Book, Chapter
 
@@ -88,17 +90,6 @@ def build(project=None):
     # my code here
 
 
-def read_chapter(chapter=None):
-    if chapter is None:
-        raise AttributeError('chapter must not be None')
-    if chapter.path is None:
-        raise AttributeError('chapter.path must not be None')
-
-    # todo read the actual chapter
-
-    return chapter, ''
-
-
 def read_chapters(chapters=None):
     result = []
     if chapters is None:
@@ -107,6 +98,22 @@ def read_chapters(chapters=None):
         result.append(read_chapter(chapter))
 
     return result
+
+
+def read_chapter(chapter=None):
+    if chapter is None:
+        raise AttributeError('chapter must not be None')
+    if chapter.path is None:
+        raise AttributeError('chapter.path must not be None')
+
+    lines = []
+
+    # todo read the actual chapter
+
+    with open(chapter.path, mode='r', encoding='utf-8') as f:
+        lines = f.readlines()
+
+    return chapter, lines
 
 
 def make(book):

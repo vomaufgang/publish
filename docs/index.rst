@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Welcome to apub's documentation!
-======================================
+================================
 
 Contents:
 
@@ -13,7 +13,8 @@ Contents:
 
    readme
    installation
-   usage
+   getting_started
+   apub_in_depth
    contributing
    authors
    history
