@@ -8,5 +8,5 @@ The Book
 The Book class
 --------------
 
-.. autoclass:: apub.model.book.Book
+.. autoclass:: apub.Book
     :members:

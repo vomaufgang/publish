@@ -1,6 +1,3 @@
-from .substitutions import Substitution
-
-
 class Project():
     def __init__(self):
         super().__init__()
@@ -25,8 +22,10 @@ class Project():
     def outputs(self):
         """Gets the list of outputs.
 
-        Each output is called once per book contained within the project.Unless an output has been directly assigned
-        one or more books to process, in which case said output it will only process the book assigned to it.
+        Each output is called once per book contained within the
+        project unless an output has been directly assigned one or more
+        books to process, in which case said output it will only process the
+        book assigned to it.
 
         You can add an output to a project like so::
 

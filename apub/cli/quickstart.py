@@ -4,7 +4,7 @@
 import os
 import codecs
 
-from apub import id_pattern
+from ..apub import _id_pattern
 
 
 metadata_template = """from apub import Project, Book, Chapter
@@ -23,7 +23,7 @@ focus_template = """from apub import Project, Book, Chapter
 
 def main():
     project_id = input('Enter project id (may contain a-zA-Z0-9-_), will be used as part of the metadata file name: ')
-    while project_id is None or not id_pattern.match(project_id):
+    while project_id is None or not _id_pattern.match(project_id):
         project_id = input('Invalid project id, please enter project id (may contain a-zA-Z0-9-_): ')
 
     book_title = input('Enter the book\'s title: ')

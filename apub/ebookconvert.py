@@ -1,6 +1,3 @@
-__author__ = 'Christopher'
-
-
 def convert(input_file, output_file, options=None):
     if not input_file:
         raise AttributeError('input_file')

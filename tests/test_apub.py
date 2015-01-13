@@ -27,7 +27,7 @@ class TestApub(unittest.TestCase):
         chapter = Chapter()
         chapter.path = os.path.join(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))),
                                     'test_apub.md')
-        chapter, lines = apub.read_chapter(chapter)
+        lines = apub.read_chapter(chapter)
 
         self.assertEqual(3, len(lines))
         pass

@@ -25,9 +25,10 @@ test_requirements = [
 
 setup(
     name='apub',
-    version='1.0.0b',
+    version='1.0.0pre',
     # TODO: put meaningful description here
-    description='Python Boilerplate contains all the boilerplate you need to create a Python package.',
+    description='Python Boilerplate contains all the boilerplate you need to '
+                'create a Python package.',
     long_description=readme + '\n\n' + history,
     author='Christopher Knörndel',
     author_email='cknoerndel@anited.de',
@@ -37,7 +38,6 @@ setup(
         'apub.cli',
         'apub.extensions',
         'apub.extensions.markdown',
-        'apub.model',
         'apub.output',
     ],
     entry_points={

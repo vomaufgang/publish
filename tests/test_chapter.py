@@ -9,7 +9,7 @@ Tests for `apub.model.chapter` module.
 """
 
 import unittest
-from apub.model.chapter import Chapter
+from apub import Chapter
 
 
 class TestChapter(unittest.TestCase):

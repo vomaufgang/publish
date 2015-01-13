@@ -13,7 +13,7 @@ Types of Contributions
 Report Bugs
 ~~~~~~~~~~~
 
-Report bugs at https://bitbucket.org/vomaufgang/apub/issues.
+Report bugs at https://github.com/vomaufgang/apub/issues.
 
 If you are reporting a bug, please include:
 
@@ -24,13 +24,13 @@ If you are reporting a bug, please include:
 Fix Bugs
 ~~~~~~~~
 
-Look through the Bitbucket issues for bugs. Anything tagged with "bug"
+Look through the GitHub issues for bugs. Anything tagged with "bug"
 is open to whoever wants to implement it.
 
 Implement Features
 ~~~~~~~~~~~~~~~~~~
 
-Look through the Bitbucket issues for features. Anything tagged with "feature"
+Look through the GitHub issues for features. Anything tagged with "feature"
 is open to whoever wants to implement it.
 
 Write Documentation
@@ -43,7 +43,7 @@ articles, and such.
 Submit Feedback
 ~~~~~~~~~~~~~~~
 
-The best way to send feedback is to file an issue at https://Bitbucket.com/cknoerndel/apub/issues.
+The best way to send feedback is to file an issue at https://github.com/vomaufgang/apub/issues.
 
 If you are proposing a feature:
 
@@ -57,7 +57,7 @@ Get Started!
 
 Ready to contribute? Here's how to set up `apub` for local development.
 
-1. Fork the `apub` repo on Bitbucket.
+1. Fork the `apub` repo on GitHub.
 2. Clone your fork locally::
 
     $ git clone git@bitbucket.org:your_name_here/apub.git
@@ -82,13 +82,13 @@ Ready to contribute? Here's how to set up `apub` for local development.
 
    To get flake8 and tox, just pip install them into your virtualenv. 
 
-6. Commit your changes and push your branch to Bitbucket::
+6. Commit your changes and push your branch to GitHub::
 
     $ git add .
     $ git commit -m "Your detailed description of your changes."
     $ git push origin name-of-your-bugfix-or-feature
 
-7. Submit a pull request through the Bitbucket website.
+7. Submit a pull request through the GitHub website.
 
 Pull Request Guidelines
 -----------------------
@@ -100,12 +100,61 @@ Before you submit a pull request, check that it meets these guidelines:
    your new functionality into a function with a docstring, and add the
    feature to the list in README.rst.
 3. The pull request should work for Python 3.3 and 3.4, and for PyPy. Check
-   https://travis-ci.org/cknoerndel/apub/pull_requests
+   https://travis-ci.org/vomaufgang/apub/pull_requests
    and make sure that the tests pass for all supported Python versions.
 
 Tips
 ----
 
+Testing
+~~~~~~~
+
 To run a subset of tests::
 
 	$ python -m unittest tests.test_apub
+
+Documentation
+~~~~~~~~~~~~~
+
+The documentation is tailored to the readthedocs theme. `pip install` the
+theme into your virtualenv to use it for your own builds of the documentation::
+
+    pip install rtd_sphinx_theme
+
+.. note:: If the theme is not installed `make docs` will fall back to the
+   default sphinx theme.
+
+Makefiles
+~~~~~~~~~
+
+The repository contains makefiles to give easy access to recurring
+development tasks such as running tests, building apub, building the
+documentation and removing output folders.
+
+Unix/Linux/Mac users can use the traditional makefile like so::
+
+    make [command]
+
+Windows users can use the PowerShell makefile from within a PowerShell session
+like so::
+
+    .\Make [command]
+
+.. note:: Windows users may have to set their PowerShell execution-policy to
+   remote-signed before PowerShell allows the execution of self-written
+   PowerShell scripts. While tinkering with the execution-policy on a
+   development machine is usually fine, **do not** change this setting in a
+   production environment.
+
+The commands that can be invoked through `make` or `\Make` are the same on
+all systems. The most useful for day to day development are:
+
+ * `clean`: removes all temporary build and output directories that may have
+   been created during testing or simply running the package
+ * `lint`: runs flake8 on apub and the tests to verify pep8 compliance
+ * `test`: runs the test suit against the current python version
+ * `test-all`: calls tox to run the test suit against any specified python
+   versions
+ * `coverage`: calculates the test coverage using nosetests
+ * `docs`: builds and displays the documentation
+

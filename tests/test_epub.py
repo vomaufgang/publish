@@ -9,8 +9,7 @@ Tests for `apub.model.epub` module.
 """
 
 import unittest
-from apub.output.epub import EpubOutput
-from apub import Project
+from apub import EpubOutput, Project
 
 
 class TestEpub(unittest.TestCase):

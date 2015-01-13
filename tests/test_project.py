@@ -9,7 +9,7 @@ Tests for `apub.model.project` module.
 """
 
 import unittest
-from apub.model.project import Project
+from apub import Project
 
 
 class TestProject(unittest.TestCase):

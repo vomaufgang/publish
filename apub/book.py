@@ -44,7 +44,8 @@ class Book():
     def chapters(self):
         """Gets or sets the list of chapters.
 
-        Chapters will be automatically processed, numbered and put out and in the order they were added to the book.
+        Chapters will be automatically processed, numbered and put out and
+        in the order they were added to the book.
 
         :type: list of Chapter"""
         return self.__chapters
@@ -68,9 +69,11 @@ class Book():
 
     @property
     def no_in_series(self):
-        """Gets or sets the number of this book within the series specified in series_name.
+        """Gets or sets the number of this book within the series specified
+        in series_name.
 
-        Will be ignored during processing if series_name is left unset or set to None or empty.
+        Will be ignored during processing if series_name is left unset or
+        set to None or empty.
 
         :type: int"""
         return self.__no_in_series
@@ -91,7 +94,8 @@ class Book():
     def language(self):
         """Gets or sets the language of this book.
 
-        Using a valid ISO3166 or ISO3166-2 country or country subdivision code like 'EN', 'DE' or 'EN-US' is strongly
+        Using a valid ISO3166 or ISO3166-2 country or country subdivision
+        code like 'EN', 'DE' or 'EN-US' is strongly
         recommended.
 
         Default: 'UND' as in undefined"""

@@ -9,9 +9,7 @@ Tests for `apub.model.book` module.
 """
 
 import unittest
-from apub.model.book import Book
-
-# from apub import apub
+from apub import Book
 
 
 class TestBook(unittest.TestCase):

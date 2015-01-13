@@ -1,5 +1,4 @@
-import re
-id_pattern = re.compile('^[0-9a-zA-Z-_]+$')
+from .apub import _id_pattern
 
 
 class Chapter():
@@ -13,23 +12,28 @@ class Chapter():
     @property
     def id(self):
         """Gets or sets the id. May only contain the characters
-        a-z, A-Z, 0-9, '-' and '_' and must be unique within the containing project.
+        a-z, A-Z, 0-9, '-' and '_' and must be unique within the containing
+        project.
 
         Setting this to an invalid id will raise an error.
 
-        Using the same id for two separate chapters will raise an error at build time.
+        Using the same id for two separate chapters will raise an error at
+        build time.
 
         *This property is mandatory.*
 
         :type: str
-        :raises ValueError: if the value contains any characters not in this range: a-z, A-Z, 0-9, '-' and '_'"""
+        :raises ValueError:
+         if the value contains any characters not in this range: a-z, A-Z,
+         0-9, '-' and '_'"""
         return self.__id
 
     @id.setter
     def id(self, value):
         """:type value: str"""
-        if not id_pattern.match(value):
-            raise ValueError('value contains invalid characters, may consist only of a-z, A-Z, 0-9, -, _')
+        if not _id_pattern.match(value):
+            raise ValueError('value contains invalid characters, may consist '
+                             'only of a-z, A-Z, 0-9, -, _')
 
         self.__id = value
 
@@ -43,12 +47,15 @@ class Chapter():
         2. Via the title attribute of the chapter object in question.
         3. Not at all.
 
-        todo: further describe and specify the options above, i.e. "for option 2 the heading must be the first line
-              within the document" and "for option 3 a heading is automatically generated, using the number of the
+        todo: further describe and specify the options above, i.e. "for
+        option 2 the heading must be the first line
+              within the document" and "for option 3 a heading is
+              automatically generated, using the number of the
               chapter as it appears in the book as the chapter title, i.e. "3"
 
-        todo: add option to create own chapter title formats via string formatting:
-              http://stackoverflow.com/questions/11022655/string-format-with-optional-placeholders
+        todo: add option to create own chapter title formats via string
+        formatting:
+        http://stackoverflow.com/questions/11022655/string-format-with-optional-placeholders
         """
         return self.__title
 
