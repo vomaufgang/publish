@@ -16,6 +16,7 @@ Contents:
    getting_started
    apub_in_depth
    contributing
+   todo
    authors
    history
 

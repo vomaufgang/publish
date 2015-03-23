@@ -28,4 +28,4 @@ Shorthand for "anited.publish".
 Features
 --------
 
-* TODO
+.. todo::
