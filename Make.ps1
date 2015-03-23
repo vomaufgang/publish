@@ -35,11 +35,7 @@ function test-all(){
 
 function docs(){
 	Remove-Item .\docs\apub.rst
-	Remove-Item .\docs\apub.cli.rst
-    Remove-Item .\docs\apub.extensions.rst
-    Remove-Item .\docs\apub.extensions.markdown.rst
-    Remove-Item .\docs\apub.model.rst
-    Remove-Item .\docs\apub.output.rst
+	Remove-Item .\docs\apub.*.rst
     Remove-Item .\docs\modules.rst
     &sphinx-apidoc -o docs/ apub
     Push-Location .\docs
