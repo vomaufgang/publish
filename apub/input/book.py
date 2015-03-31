@@ -1,7 +1,7 @@
 class Book():
     def __init__(self):
         """Creates a new instance of the book class."""
-        self.__language = None
+        self.__language = "UND"
         self.__cover_image_path = None
         self.__title = None
         self.__subtitle = None

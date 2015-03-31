@@ -10,15 +10,25 @@ justifications = ['original', 'left', 'justify', 'right']
 
 class EpubOutput(Output):
 
-    def __init__(self, project, out_path, ebookconvert_params=None):
-        super().__init__(project, out_path)
+    def __init__(self, output_path=None, ebookconvert_params=None,
+                 css_path=None):
+        super().__init__(output_path)
         self.__change_justification = 'original'
-        self.__out_path = out_path
+        self.__css_path = css_path
+        self.__output_path = output_path
         self.__ebookconvert_params = ebookconvert_params
 
-    def make(self):
+    def make(self, project):
+        if self.output_path is None:
+            raise AttributeError("output_path of EpubOutput must not be None")
+
         temp_file = mkstemp(suffix=".html")
-        HtmlOutput(project=self.__project, out_path=temp_file).make()
+        HtmlOutput(
+            output_path=self.output_path,
+            output_range="todo",
+            css_path=self.__css_path
+        ).make()
+        # todo call ebook-convert
         os.remove(temp_file)
         pass
     
@@ -42,5 +52,5 @@ class EpubOutput(Output):
 
 
 
-# todo if htmloutput.destination is none  -> use tempfile.mkdtemp
+
 # todo force: if true, make will run each time called, if false make will run once per output

@@ -42,9 +42,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'apub-make = apub.cli.make:main',
-            'apub-focus = apub.cli.focus:main',
-            'apub-quickstart = apub.cli.quickstart:main',
+            'apub = apub.cli:main',
         ],
     },
     include_package_data=True,

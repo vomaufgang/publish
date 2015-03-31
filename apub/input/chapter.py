@@ -1,11 +1,11 @@
-from .apub import _id_pattern
+from apub.validation import id_pattern
 
 
 class Chapter():
     def __init__(self):
         super().__init__()
         self.__substitutions = []
-        self.__id = ""
+        self.__chapter_id = ""
         self.__title = ""
         self.__path = ""
 
@@ -26,19 +26,19 @@ class Chapter():
         :raises ValueError:
          if the value contains any characters not in this range: a-z, A-Z,
          0-9, '-' and '_'"""
-        return self.__id
+        return self.__chapter_id
 
     @id.setter
     def id(self, value):
         """:type value: str"""
-        if not _id_pattern.match(value):
-            raise ValueError('value contains invalid characters, may consist '
-                             'only of a-z, A-Z, 0-9, -, _')
+        if not id_pattern.match(value):
+            raise ValueError('The provided id contains invalid characters, '
+                             'may consist only of a-z, A-Z, 0-9, -, _')
 
-        self.__id = value
+        self.__chapter_id = value
 
     @property
-    def title(self):
+    def chapter_title(self):
         """Gets or sets the title.
 
         You can specify the title in three distinct ways:
@@ -59,8 +59,8 @@ class Chapter():
         """
         return self.__title
 
-    @title.setter
-    def title(self, value):
+    @chapter_title.setter
+    def chapter_title(self, value):
         self.__title = value
 
     @property
@@ -80,7 +80,7 @@ class Chapter():
             raise AttributeError('path must not be None')
 
         with open(self.path, 'r', encoding='utf-8') as f:
-            result = f.readlines()
+            result = f.read()
 
         return result
 

@@ -36,9 +36,3 @@ def read_chapter(chapter=None):
     return lines
 
 
-def make(book):
-    """
-
-    :type book: Book
-    """
-    pass
