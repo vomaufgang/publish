@@ -39,72 +39,54 @@ class HtmlOutput(Output):
         if project is None:
             raise AttributeError('project must not be None')
 
-        # todo This seems inefficient... Time it!
-
-        self.__append_all_parent_substitutions_to_chapters(project)
-
-        # the problem is complex, so my first solution will be complex
-
-        self.__apply_substitutions(project)
-        self.__transform_markdown_to_html(project)
-
         # everything creates: 1 html with everything, 1 html per book AND 1
         # html per chapter
 
         if self.output_range.startswith('everything'):
             self.everything(project)
-
-        if self.output_range.startswith('books'):
-            pass
-
-        if self.output_range.startswith('chapters'):
-            pass
-
-        if self.output_path is not None:
-            # todo write output
-            pass
-
-
-
-        # read all chapters into single string
-        # run apubdown extensions (expand newlines)
-        # run substitutions (according to levels - chapter > book > project)
-        # hook markdown extensions
-        # run markdown
-        pass
-
-# SIMPLIFY!
-# if no filename is given, derive from project metadata
-# everything - single file
-# everything - per book
-# everything - per chapter
-# books - single file?
-# books - per book
-# books - per chapter
-# a chapter
-# a book
-
-
+        elif self.output_range.startswith('books'):
+            self.book(project)
+        elif self.output_range.startswith('chapters'):
+            self.chapters(project)
 
     def everything(self, project):
         if self.mode == single_file:
             pass
         elif self.mode == file_per_book:
-            pass
-        elif self.mode == file_per_chapter:
-            # todo use this as a blueprint for the other scopes and modes
-            for book in project:
-                for chapter in book.chapters:
-                    file = _File()
-                    file.file_name = chapter.id if project.books.count == 1 \
-                        else "[{0}]_{1}.html".format(book.id, chapter.id)
-                    file.file_path = self.output_path
-                    file.chapters = [chapter]
-                    file.substitutions = chapter.substitutions \
-                        + book.substitutions \
-                        + project.substitutions  # still ugly
+            self.file_per_book(project)
 
-                    file.write()
+        elif self.mode == file_per_chapter:
+            self.everything_per_chapter(project)
+
+    def file_per_book(self, project, books=None):
+        if books is None:
+            books = project.books
+
+        for book in books:
+            file = _File()
+            file.file_name = book.id + ".html"
+            file.file_path = self.output_path
+            file.chapters = book.chapters
+            file.global_substitutions = book.substitutions \
+                + project.substitutions
+
+            file.write()
+
+    def everything_per_chapter(self, project):
+        for book in project:
+            for chapter in book.chapters:
+                file = _File()
+                file.file_name = chapter.id if project.books.count == 1 \
+                    else "[{0}]_{1}.html".format(book.id, chapter.id)
+                file.file_path = self.output_path
+                file.chapters = [chapter]
+                file.global_substitutions = book.substitutions \
+                    + project.substitutions
+
+                file.write()
+
+    def everything_single_file(self, project):
+        pass
 
     def projects(self, project, scope):
         raise NotImplementedError
@@ -112,27 +94,41 @@ class HtmlOutput(Output):
     def chapters(self, project, scope):
         raise NotImplementedError
 
+    def book(self, project):
+        pass
+
 
 class _File():
     def __init__(self):
         self.chapters = []
-        self.substitutions = []
+        self.global_substitutions = []
         self.file_name = ""
+        self.prefix = ""
+        self.suffix = ""
+        self.file_type = ".html"
         self.file_path = ""
+        self.css = ""
 
     def write(self):
         markdown = ""
         for c in self.chapters:
             markdown += c.read()
 
-        for s in self.substitutions:
+        for s in self.global_substitutions:
             markdown = s.apply_to(markdown)
 
         html = md.markdown(markdown)
 
+        name = "{0}{1}{2}{3}".format(self.prefix,
+                                     self.file_name,
+                                     self.suffix,
+                                     self.file_type)
+
+        path = os.path.join(self.file_path, name)
+
         # todo is join path
         with open(
-                self.file_path + self.file_name,
+                path,
                 mode='w',
                 encoding='utf-8') as file:
             file.write(html)

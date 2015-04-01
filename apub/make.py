@@ -55,3 +55,47 @@ def find_output(project, output_name):
 class OutputNotFoundError(Exception):
     pass
 
+
+class ChapterRepository():
+    def __init__(self, project):
+        pass
+
+    def get_all(self):
+        pass
+
+    def get_chapter_by_id(self, chapter_id):
+        pass
+
+    def get_chapter_by_number(self, chapter_number):
+        pass
+
+    def get_chapters_by_book(self, book):
+        pass
+
+    def get_chapters_by_book_id(self, book_id):
+        pass
+
+
+class BookRepository():
+    def __init__(self):
+        pass
+
+    def get_all(self):
+        pass
+
+    def get_book_by_id(self):
+        pass
+
+    def get_book_by_chapter(self, chapter):
+        pass
+
+    def get_book_by_chapter_id(self, chapter_id):
+        pass
+
+
+
+
+
+
+
+
