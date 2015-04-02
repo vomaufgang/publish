@@ -25,7 +25,7 @@ class TestApub(unittest.TestCase):
 
     def test_read_chapter(self):
         chapter = Chapter()
-        chapter.path = os.path.join(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))),
+        chapter.file_path = os.path.join(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))),
                                     'test_apub.md')
         lines = apub.read_chapter(chapter)
 

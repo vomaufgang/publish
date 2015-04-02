@@ -15,3 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Here be dragons.
+
+# apub push everything
+# apub push chapter 5
+# apub push book 1

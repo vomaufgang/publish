@@ -7,7 +7,7 @@ class Book():
         self.__subtitle = None
         self.__chapters = []
         self.__series_name = None
-        self.__no_in_series = None
+        self.__number = None
         self.__substitutions = []
 
     @property
@@ -68,7 +68,7 @@ class Book():
         self.__series_name = value
 
     @property
-    def no_in_series(self):
+    def number(self):
         """Gets or sets the number of this book within the series specified
         in series_name.
 
@@ -76,11 +76,11 @@ class Book():
         set to None or empty.
 
         :type: int"""
-        return self.__no_in_series
+        return self.__number
 
-    @no_in_series.setter
-    def no_in_series(self, value):
-        self.__no_in_series = value
+    @number.setter
+    def number(self, value):
+        self.__number = value
     
     @property
     def cover_image_path(self):

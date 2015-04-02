@@ -23,14 +23,14 @@ def read_chapters(chapters=None):
 def read_chapter(chapter=None):
     if chapter is None:
         raise AttributeError('chapter must not be None')
-    if chapter.path is None:
+    if chapter.file_path is None:
         raise AttributeError('chapter.path must not be None')
 
     lines = []
 
     # todo read the actual chapter
 
-    with open(chapter.path, mode='r', encoding='utf-8') as f:
+    with open(chapter.file_path, mode='r', encoding='utf-8') as f:
         lines = f.readlines()
 
     return lines

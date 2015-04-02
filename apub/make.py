@@ -14,10 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Here be dragons.
 
-
-from .output import Output
+from . import Output
+from . import OutputNotFoundError
 
 
 def make(project, output=None):
@@ -52,49 +51,11 @@ def find_output(project, output_name):
                               "be found: '{0}'".format(output_name))
 
 
-class OutputNotFoundError(Exception):
-    pass
 
-
-class ChapterRepository():
-    def __init__(self, project):
-        pass
-
-    def get_all(self):
-        pass
-
-    def get_chapter_by_id(self, chapter_id):
-        pass
-
-    def get_chapter_by_number(self, chapter_number):
-        pass
-
-    def get_chapters_by_book(self, book):
-        pass
-
-    def get_chapters_by_book_id(self, book_id):
-        pass
-
-
-class BookRepository():
-    def __init__(self):
-        pass
-
-    def get_all(self):
-        pass
-
-    def get_book_by_id(self):
-        pass
-
-    def get_book_by_chapter(self, chapter):
-        pass
-
-    def get_book_by_chapter_id(self, chapter_id):
-        pass
-
-
-
-
+# apub make [<output>]
+# apub make everything
+# apub make [<output>] [<scope>]
+# apub make my_html_output chapters:1
 
 
 

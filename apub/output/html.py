@@ -51,12 +51,15 @@ class HtmlOutput(Output):
 
     def everything(self, project):
         if self.mode == single_file:
-            pass
+            self.everything_single_file(project)
         elif self.mode == file_per_book:
             self.file_per_book(project)
 
         elif self.mode == file_per_chapter:
             self.everything_per_chapter(project)
+
+    def chapters(self, project, scope):
+        raise NotImplementedError
 
     def file_per_book(self, project, books=None):
         if books is None:
@@ -64,35 +67,38 @@ class HtmlOutput(Output):
 
         for book in books:
             file = _File()
+            file.prefix = self.get_book_file_prefix(book)
             file.file_name = book.id + ".html"
             file.file_path = self.output_path
             file.chapters = book.chapters
             file.global_substitutions = book.substitutions \
                 + project.substitutions
 
-            file.write()
+            file.make()
 
     def everything_per_chapter(self, project):
         for book in project:
             for chapter in book.chapters:
                 file = _File()
-                file.file_name = chapter.id if project.books.count == 1 \
-                    else "[{0}]_{1}.html".format(book.id, chapter.id)
+                file.prefix = self.get_chapter_file_prefix(book, chapter)
+                file.file_name = chapter.slug
                 file.file_path = self.output_path
                 file.chapters = [chapter]
                 file.global_substitutions = book.substitutions \
                     + project.substitutions
 
-                file.write()
+                file.make()
+
+    @staticmethod
+    def get_chapter_file_prefix(book, chapter):
+        return "{0}-{1}_".format(book.number, chapter.number)
+
+    @staticmethod
+    def get_book_file_prefix(book):
+        return "{0}_".format(book.number)
 
     def everything_single_file(self, project):
         pass
-
-    def projects(self, project, scope):
-        raise NotImplementedError
-
-    def chapters(self, project, scope):
-        raise NotImplementedError
 
     def book(self, project):
         pass
@@ -104,12 +110,11 @@ class _File():
         self.global_substitutions = []
         self.file_name = ""
         self.prefix = ""
-        self.suffix = ""
         self.file_type = ".html"
         self.file_path = ""
         self.css = ""
 
-    def write(self):
+    def make(self):
         markdown = ""
         for c in self.chapters:
             markdown += c.read()
@@ -132,3 +137,10 @@ class _File():
                 mode='w',
                 encoding='utf-8') as file:
             file.write(html)
+
+
+class Scope():
+    @staticmethod
+    def parse_scope(self, scope_string):
+        pass
+

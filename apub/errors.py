@@ -14,7 +14,22 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import re
 
-id_pattern = re.compile('^[0-9a-zA-Z-_]+$')
-slug_pattern = re.compile('^[0-9a-zA-Z-_]+$')
+class MalformedIdError(Exception):
+    pass
+
+
+class MalformedSlugError(Exception):
+    pass
+
+
+class OutputNotFoundError(Exception):
+    pass
+
+
+class DuplicateChapterNumberError(Exception):
+    pass
+
+
+class DuplicateBookNumberError(Exception):
+    pass

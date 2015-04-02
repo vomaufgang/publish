@@ -8,6 +8,7 @@ from .input import Project, Book, Chapter
 from .substitution import Substitution, SimpleSubstitution, RegexSubstitution
 from .output import Output, HtmlOutput, EpubOutput
 from .make import make
+from .errors import MalformedIdError, MalformedSlugError, OutputNotFoundError
 
 __all__ = ['Project',
            'Book',
@@ -18,4 +19,7 @@ __all__ = ['Project',
            'Output',
            'HtmlOutput',
            'EpubOutput',
+           'MalformedIdError',
+           'MalformedSlugError',
+           'OutputNotFoundError'
            'make']

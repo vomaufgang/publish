@@ -4,10 +4,11 @@ from apub.validation import id_pattern
 class Chapter():
     def __init__(self):
         super().__init__()
-        self.__substitutions = []
-        self.__chapter_id = ""
+        self.__id = ""
         self.__title = ""
-        self.__path = ""
+        self.__slug = ""
+        self.__file_path = ""
+        self.__substitutions = []
 
     @property
     def id(self):
@@ -26,7 +27,7 @@ class Chapter():
         :raises ValueError:
          if the value contains any characters not in this range: a-z, A-Z,
          0-9, '-' and '_'"""
-        return self.__chapter_id
+        return self.__id
 
     @id.setter
     def id(self, value):
@@ -35,7 +36,7 @@ class Chapter():
             raise ValueError('The provided id contains invalid characters, '
                              'may consist only of a-z, A-Z, 0-9, -, _')
 
-        self.__chapter_id = value
+        self.__id = value
 
     @property
     def chapter_title(self):
@@ -64,25 +65,16 @@ class Chapter():
         self.__title = value
 
     @property
-    def path(self):
+    def file_path(self):
         """Gets or sets the path.
 
         :type: str"""
-        return self.__path
+        return self.__file_path
 
-    @path.setter
-    def path(self, value):
+    @file_path.setter
+    def file_path(self, value):
         """:type value: str"""
-        self.__path = value
-
-    def read(self):
-        if self.path is None:
-            raise AttributeError('path must not be None')
-
-        with open(self.path, 'r', encoding='utf-8') as f:
-            result = f.read()
-
-        return result
+        self.__file_path = value
 
     @property
     def substitutions(self):
