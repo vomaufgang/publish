@@ -18,25 +18,47 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import os
+from .chapter import Chapter
+from ..output import Output
 
-from .substitution import Substitution
 
-
-class SimpleSubstitution(Substitution):
+class Project():
     def __init__(self):
-        self.old = ""
-        self.new = ""
+        super().__init__()
+        self.metadata = {}
+        self.chapters = []
+        self.output = []
+        self.substitutions = []
 
-    def apply_to(self, text):
-        lines = text.splitlines
+    @staticmethod
+    def from_file(path):
+        with open(path) as file:
+            json = file.read()
 
-        for line in lines:
-            line.replace()
+        return Project.from_json(json)
 
-        return os.linesep.join(lines)
+    @staticmethod
+    def from_json(json_):
+        import json
+
+        dict_ = json.loads(json_)
+
+        return Project.from_dict(dict_)
+
 
     @staticmethod
     def from_dict(dict_):
-        # todo implement SimpleSubstitution.from_dict
-        raise NotImplementedError
+        project = Project()
+
+        project.metadata = dict_.metadata
+
+        chapters = []
+
+        for chapter_dict in dict_.chapters:
+            chapters.append(Chapter.from_dict(chapter_dict))
+
+        output = []
+
+        for output_dict in dict_.output:
+            output.append(Output.from_dict(output_dict))
+

@@ -1,26 +1,37 @@
+#!/usr/bin/env python3
+# coding: utf8
+#
+# apub - Python package with cli to turn markdown files into ebooks
+# Copyright (C) 2015  Christopher Knörndel
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
 from abc import ABCMeta, abstractmethod
 
 
 class Output(metaclass=ABCMeta):
-    def __init__(self, output_name=None, output_path=None,
-                 output_range='everything', output_file=None):
-        if not output_name or output_name.isspace():
-            raise AttributeError('name is empty. Every output must '
-                                 'have a unique name.')
-        self.output_path = output_path
-        self.output_range = output_range
-        self.output_file = output_file
-        self.__output_name = output_name
-
-    @abstractmethod
-    def make(self, project):
+    def __init__(self):
+        self.name = None
         pass
 
-    @property
-    def output_name(self):
-        return self.__output_name
+    @abstractmethod
+    def make(self, metadata, chapters, substitutions):
+        pass
 
-    @output_name.setter
-    def output_name(self, value):
-        # todo must
-        self.__output_name = value
+    @staticmethod
+    def from_dict(dict_):
+        # todo implement Output.from_dict
+        raise NotImplementedError
+

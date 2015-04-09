@@ -1,4 +1,7 @@
-# apub - Python package to turn markdown files into ebooks
+#!/usr/bin/env python3
+# coding: utf8
+#
+# apub - Python package with cli to turn markdown files into ebooks
 # Copyright (C) 2015  Christopher Knörndel
 #
 # This program is free software: you can redistribute it and/or modify
@@ -14,4 +17,19 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Here be dragons.
+
+class Chapter():
+    def __init__(self):
+        self.title = None
+        self.source = None
+        self.url_friendly_title = None
+        self.published = False
+
+    @staticmethod
+    def from_dict(dict_):
+            chapter = Chapter()
+
+            for key, value in dict_:
+                setattr(chapter, key, value)
+
+            return chapter

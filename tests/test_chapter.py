@@ -9,7 +9,8 @@ Tests for `apub.model.chapter` module.
 """
 
 import unittest
-from apub import Chapter
+from apub.metadata import Chapter
+import validators
 
 
 class TestChapter(unittest.TestCase):
@@ -17,15 +18,6 @@ class TestChapter(unittest.TestCase):
     def setUp(self):
         self.chapter = Chapter()
         pass
-
-    def test_id(self):
-        test_id = 'Id-1'
-        self.chapter.id = test_id
-        self.assertEqual(test_id, self.chapter.id)
-
-    def test_invalid_id_raises_value_error(self):
-        with self.assertRaises(ValueError):
-            self.chapter.id = '@?\/.+'
 
     def test_read(self):
         pass

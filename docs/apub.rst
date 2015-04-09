@@ -6,21 +6,12 @@ Subpackages
 
 .. toctree::
 
-    apub.extensions
     apub.metadata
     apub.output
     apub.substitution
 
 Submodules
 ----------
-
-apub.apub module
-----------------
-
-.. automodule:: apub.apub
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 apub.cli module
 ---------------
@@ -30,26 +21,18 @@ apub.cli module
     :undoc-members:
     :show-inheritance:
 
-apub.clone module
+apub.errors module
+------------------
+
+.. automodule:: apub.errors
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+apub.input module
 -----------------
 
-.. automodule:: apub.clone
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-apub.ebookconvert module
-------------------------
-
-.. automodule:: apub.ebookconvert
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-apub.init module
-----------------
-
-.. automodule:: apub.init
+.. automodule:: apub.input
     :members:
     :undoc-members:
     :show-inheritance:
@@ -62,18 +45,10 @@ apub.make module
     :undoc-members:
     :show-inheritance:
 
-apub.pull module
-----------------
+apub.quickstart module
+----------------------
 
-.. automodule:: apub.pull
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-apub.push module
-----------------
-
-.. automodule:: apub.push
+.. automodule:: apub.quickstart
     :members:
     :undoc-members:
     :show-inheritance:

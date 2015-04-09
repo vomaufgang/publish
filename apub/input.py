@@ -18,12 +18,31 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from .output import Output
-from .html import HtmlOutput
-from .ebookconvert import EbookConvertOutput
-from .json import JsonOutput
+import os
+from .metadata import Project
 
-__all__ = ['Output',
-           'HtmlOutput',
-           'EbookConvertOutput',
-           'JsonOutput']
+
+def read_project(path=None):
+    project_file_path = None
+    default_project_file_name = '.apub.json'
+
+    if not path:
+        project_file_path = os.path.join(
+            os.getcwd(),
+            default_project_file_name)
+    elif os.path.isdir(path):
+        project_file_path = os.path.join(
+            path,
+            default_project_file_name)
+    elif os.path.isfile(path):
+        pass
+
+    with open(project_file_path) as project_file:
+        data = project_file.read()
+
+    return Project.from_json(data)
+
+
+def _build_project(project_data):
+    raise NotImplementedError
+

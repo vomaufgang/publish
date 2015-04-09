@@ -1,29 +1,34 @@
+#!/usr/bin/env python3
+# coding: utf8
+#
+# apub - Python package with cli to turn markdown files into ebooks
+# Copyright (C) 2015  Christopher Knörndel
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
 from abc import ABCMeta, abstractmethod
-import os
 
 
 class Substitution(metaclass=ABCMeta):
-    pass
-
     @abstractmethod
     def apply_to(self, chapter):
         pass
 
-
-class SimpleSubstitution(Substitution):
-    def __init__(self):
-        self.old = ""
-        self.new = ""
-
-    def apply_to(self, text):
-        lines = text.splitlines
-
-        for line in lines:
-            line.replace()
-
-        return os.linesep.join(lines)
+    @staticmethod
+    def from_dict(dict_):
+        # todo implement Substitution.from_dict
+        raise NotImplementedError
 
 
-class RegexSubstitution(Substitution):
-    def apply_to(self, text):
-        pass

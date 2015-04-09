@@ -4,14 +4,6 @@ apub.metadata package
 Submodules
 ----------
 
-apub.metadata.book module
--------------------------
-
-.. automodule:: apub.metadata.book
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 apub.metadata.chapter module
 ----------------------------
 

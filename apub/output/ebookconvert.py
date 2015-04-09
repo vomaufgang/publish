@@ -1,5 +1,25 @@
-from tempfile import mkstemp
+#!/usr/bin/env python3
+# coding: utf8
+#
+# apub - Python package with cli to turn markdown files into ebooks
+# Copyright (C) 2015  Christopher Knörndel
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
 import os
+from tempfile import mkstemp
 
 from .output import Output
 from .html import HtmlOutput
@@ -8,7 +28,11 @@ from .html import HtmlOutput
 justifications = ['original', 'left', 'justify', 'right']
 
 
-class EpubOutput(Output):
+class EbookConvertOutput(Output):
+
+    @staticmethod
+    def from_dict(dict_):
+        pass
 
     def __init__(self, output_path=None, ebookconvert_params=None,
                  css_path=None):

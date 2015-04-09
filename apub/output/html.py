@@ -1,146 +1,120 @@
-import markdown as md
+#!/usr/bin/env python3
+# coding: utf8
+#
+# apub - Python package with cli to turn markdown files into ebooks
+# Copyright (C) 2015  Christopher Knörndel
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
 import os
+import markdown
+
 from apub.output.output import Output
-
-__author__ = 'Christopher'
-
-single_file = 'single_file'
-file_per_book = 'file_per_book'
-file_per_chapter = 'file_per_chapter'
-
-modes = [single_file, file_per_book, file_per_chapter]
 
 
 class HtmlOutput(Output):
-    def __init__(self, output_path, output_range, css_path):
-        super().__init__(output_path, output_range)
-        self.__css_path = css_path
-        self.mode = single_file
+    def __init__(self, path=None, css=None, single_file=False):
+        super().__init__()
+        self.path = path
+        self.css = css
+        self.single_file = single_file
         pass
 
-    @property
-    def css_path(self):
-        return self.__css_path
-
-    @css_path.setter
-    def css_path(self, value):
-        self.__css_path = value
-
-    def make(self, project=None):
-        """
-        If the output range is book:some_book, the book metadata
-        overrides the project metadata for epub generation, i.e. title,
-        subtitle, number of book in series etc.
-
-        :param project:
-        :type project: Project
-        :return: The generated html content.
-        """
-        if project is None:
-            raise AttributeError('project must not be None')
-
-        # everything creates: 1 html with everything, 1 html per book AND 1
-        # html per chapter
-
-        if self.output_range.startswith('everything'):
-            self.everything(project)
-        elif self.output_range.startswith('books'):
-            self.book(project)
-        elif self.output_range.startswith('chapters'):
-            self.chapters(project)
-
-    def everything(self, project):
-        if self.mode == single_file:
-            self.everything_single_file(project)
-        elif self.mode == file_per_book:
-            self.file_per_book(project)
-
-        elif self.mode == file_per_chapter:
-            self.everything_per_chapter(project)
-
-    def chapters(self, project, scope):
+    def make(self, metadata, chapters, substitutions):
+        # todo if not path: return generated html content
+        # todo implement HtmlOutput.make
         raise NotImplementedError
 
-    def file_per_book(self, project, books=None):
-        if books is None:
-            books = project.books
+    @staticmethod
+    def from_dict(dict_):
+        # todo implement HtmlOutput.from_dict
+        raise NotImplementedError
 
-        for book in books:
-            file = _File()
-            file.prefix = self.get_book_file_prefix(book)
-            file.file_name = book.id + ".html"
-            file.file_path = self.output_path
-            file.chapters = book.chapters
-            file.global_substitutions = book.substitutions \
-                + project.substitutions
 
-            file.make()
+class _Html():
+    """Provides methods that return the finished html content for a single
+    chapter, including the application of substitutions."""
+    @staticmethod
+    def from_chapter(chapter, substitutions=None):
+        """Returns the resulting html content of a chapter, applying all
+        substitutions and transforming the contents from markdown to html.
 
-    def everything_per_chapter(self, project):
-        for book in project:
-            for chapter in book.chapters:
-                file = _File()
-                file.prefix = self.get_chapter_file_prefix(book, chapter)
-                file.file_name = chapter.slug
-                file.file_path = self.output_path
-                file.chapters = [chapter]
-                file.global_substitutions = book.substitutions \
-                    + project.substitutions
+        The file that is associated with the chapter must contain markdown
+        content.
 
-                file.make()
+        Optionally a list of substitutions can be supplied. These will be
+        applied to the contents *before* the transformation from markdown to
+        html takes place. For a list of possible substitution types please
+        take a look at the :py:mod:`substitution` package.
+
+        Args:
+            :param chapter: the chapter
+            :type chapter: :class:`Chapter`
+            :param substitutions: the list of substitutions to be applied
+                [optional]
+            :type substitutions: subclass of :class:`Substitution` or None
+
+        :rtype: string containing html
+        """
+        # todo implement HtmlContent.from_chapter
+        raise NotImplementedError
 
     @staticmethod
-    def get_chapter_file_prefix(book, chapter):
-        return "{0}-{1}_".format(book.number, chapter.number)
+    def from_file(path, substitutions=None):
+        """Returns the resulting html content of a file, applying all
+        substitutions and transforming the contents from markdown to html.
+
+        The file must contain markdown content.
+
+        Optionally a list of substitutions can be supplied. These will be
+        applied to the contents *before* the transformation from markdown to
+        html takes place. For a list of possible substitution types please
+        take a look at the :py:mod:`substitution` package.
+
+        Args:
+            :param path: the path to the file
+            :type path: string
+            :param substitutions: the list of substitutions to be applied
+                [optional]
+            :type substitutions: subclass of :class:`Substitution` or None
+
+        :rtype: string containing html
+        """
+        # todo implement HtmlContent.from_file
+        raise NotImplementedError
 
     @staticmethod
-    def get_book_file_prefix(book):
-        return "{0}_".format(book.number)
+    def from_markdown(markdown_, substitutions=None):
+        """Returns the resulting html content of a string containing markdown,
+        applying all substitutions and transforming the contents from markdown
+        to html.
 
-    def everything_single_file(self, project):
-        pass
+        Optionally a list of substitutions can be supplied. These will be
+        applied to the contents *before* the transformation from markdown to
+        html takes place. For a list of possible substitution types please
+        take a look at the :py:mod:`substitution` package.
 
-    def book(self, project):
-        pass
+        Args:
+            :param markdown_: the markdown content
+            :type markdown_: string
+            :param substitutions: the list of substitutions to be applied
+                [optional]
+            :type substitutions: subclass of :class:`Substitution` or None
 
-
-class _File():
-    def __init__(self):
-        self.chapters = []
-        self.global_substitutions = []
-        self.file_name = ""
-        self.prefix = ""
-        self.file_type = ".html"
-        self.file_path = ""
-        self.css = ""
-
-    def make(self):
-        markdown = ""
-        for c in self.chapters:
-            markdown += c.read()
-
-        for s in self.global_substitutions:
-            markdown = s.apply_to(markdown)
-
-        html = md.markdown(markdown)
-
-        name = "{0}{1}{2}{3}".format(self.prefix,
-                                     self.file_name,
-                                     self.suffix,
-                                     self.file_type)
-
-        path = os.path.join(self.file_path, name)
-
-        # todo is join path
-        with open(
-                path,
-                mode='w',
-                encoding='utf-8') as file:
-            file.write(html)
-
-
-class Scope():
-    @staticmethod
-    def parse_scope(self, scope_string):
-        pass
-
+        :rtype: string containing html
+        """
+        import markdown
+        # todo implement HtmlContent.from_markdown
+        raise NotImplementedError
