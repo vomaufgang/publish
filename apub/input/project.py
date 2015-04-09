@@ -21,6 +21,7 @@ class Project():
     def __init__(self):
         super().__init__()
         self.__id = None
+        self.__slug = None
         self.__substitutions = []
         self.__books = []
         self.__outputs = []

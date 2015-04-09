@@ -17,4 +17,24 @@
 import re
 
 id_pattern = re.compile('^[0-9a-zA-Z-_]+$')
-slug_pattern = re.compile('^[0-9a-zA-Z-_]+$')
+slug_pattern = re.compile('^[0-9a-z-_]+$',
+                          re.IGNORECASE)
+uuid_pattern = re.compile(
+    '^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$',
+    re.IGNORECASE)
+
+
+def uuid(uuid_string):
+    return uuid_pattern.match(uuid_string)
+
+
+def slug(slug_string):
+    return slug_pattern.match(slug_string)
+
+
+class ValidationError(ValueError):
+    """
+    Raised when a validator fails to validate its input.
+    """
+    def __init__(self, message='', *args, **kwargs):
+        ValueError.__init__(self, message, *args, **kwargs)

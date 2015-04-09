@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from . import Output
-from . import OutputNotFoundError
+from .output import Output
+from .errors import OutputNotFoundError
 
 
 def make(project, output=None):

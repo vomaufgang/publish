@@ -9,6 +9,11 @@ TODO
           loses its project property. The project will be passed to the
           make() method as a parameter instead.
 
+.. todo:: Incorporate this advice with regards to "type checking is
+          unnessecary":
+          http://stackoverflow.com/questions/9816878/how-do-ruby-programmers-do-type-checking
+
+
 IDEAS
 =====
 
@@ -26,6 +31,19 @@ apub make --outputs=1,2,5
 apub make --outputs=1
 apub make --outputs=1
 apub make --outputs=1
+apub make html
+apub make html,epub chapters:1,2,3
+apub make *
+apub make
+  (equals the above)
+
+apub push
+
+apub pull
+
+apub list
+
+apub init
 
 """
 

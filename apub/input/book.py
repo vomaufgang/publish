@@ -1,14 +1,46 @@
+import validators
+
+
 class Book():
-    def __init__(self):
+    def __init__(self,
+                 id=None,
+                 title=None,
+                 subtitle=None,
+                 slug=None,
+                 language=None,
+                 chapters=None,
+                 substitutions=None,
+                 cover_image_path=None):
         """Creates a new instance of the book class."""
-        self.__language = "UND"
-        self.__cover_image_path = None
+        self.__id = None
         self.__title = None
-        self.__subtitle = None
-        self.__chapters = []
-        self.__series_name = None
+        self.__series = None
         self.__number = None
-        self.__substitutions = []
+        self.__slug = None
+        self.__language = None
+        self.__chapters = None
+        self.__substitutions = None
+        self.__cover_image = None
+
+        self.id = id
+        self.title = title
+        self.subtitle = subtitle
+        self.slug = slug
+        self.language = language
+        self.chapters = chapters
+        self.substitutions = substitutions
+        self.cover_image = cover_image_path
+
+    @property
+    def id(self):
+        return self.__id
+
+    @id.setter
+    def id(self, value):
+        if value and not validators.uuid(value):
+            raise ValueError
+
+        self.__id = value
 
     @property
     def title(self):
@@ -23,8 +55,6 @@ class Book():
     @title.setter
     def title(self, value):
         """:type value: str"""
-        if value is None or value.isspace() or value == "":
-            raise ValueError('title must not be None or empty')
         self.__title = value
 
     @property
@@ -34,11 +64,11 @@ class Book():
         Will be ignored if left unset, set to None or empty.
 
         :type: str"""
-        return self.__subtitle
+        return self.__series
 
     @subtitle.setter
     def subtitle(self, value):
-        self.__subtitle = value
+        self.__series = value
 
     @property
     def chapters(self):
@@ -52,43 +82,18 @@ class Book():
 
     @chapters.setter
     def chapters(self, value):
-        self.__chapters = value
-
-    @property
-    def series_name(self):
-        """Gets or sets the series name.
-
-        Will be ignored if left unset, set to None or empty.
-
-        :type: str"""
-        return self.__series_name
-
-    @series_name.setter
-    def series_name(self, value):
-        self.__series_name = value
-
-    @property
-    def number(self):
-        """Gets or sets the number of this book within the series specified
-        in series_name.
-
-        Will be ignored during processing if series_name is left unset or
-        set to None or empty.
-
-        :type: int"""
-        return self.__number
-
-    @number.setter
-    def number(self, value):
-        self.__number = value
+        if value:
+            self.__chapters = value
+        else:
+            self.__chapters = []
     
     @property
-    def cover_image_path(self):
-        return self.__cover_image_path
+    def cover_image(self):
+        return self.__cover_image
 
-    @cover_image_path.setter
-    def cover_image_path(self, value):
-        self.__cover_image_path = value
+    @cover_image.setter
+    def cover_image(self, value):
+        self.__cover_image = value
 
     @property
     def language(self):
@@ -108,3 +113,15 @@ class Book():
     @property
     def substitutions(self):
         return self.__substitutions
+
+    @substitutions.setter
+    def substitutions(self, value):
+        pass
+
+    @property
+    def slug(self):
+        return self.__slug
+
+    @slug.setter
+    def slug(self, value):
+        self.__slug = value

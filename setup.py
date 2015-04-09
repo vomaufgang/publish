@@ -17,6 +17,7 @@ history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 requirements = [
     'markdown>=2.5.2',
     'wheel>=0.24.0',
+    'validators>=0.7'
 ]
 
 test_requirements = [

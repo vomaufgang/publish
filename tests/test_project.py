@@ -9,6 +9,7 @@ Tests for `apub.model.project` module.
 """
 
 import unittest
+from uuid import UUID
 from apub import Project
 
 
