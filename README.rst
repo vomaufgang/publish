@@ -6,7 +6,7 @@ apub
     :target: http://badge.fury.io/py/apub
     
 .. image:: https://travis-ci.org/vomaufgang/apub.svg?branch=develop
-        :target: https://travis-ci.org/cknoerndel/apub
+        :target: https://travis-ci.org/vomaufgang/apub
 
 .. .. image:: https://pypip.in/d/apub/badge.png
         :target: https://pypi.python.org/pypi/apub
