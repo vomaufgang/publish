@@ -16,30 +16,28 @@ history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
 requirements = [
     'markdown>=2.5.2',
-    'wheel>=0.24.0',
     'validators>=0.7'
 ]
 
 test_requirements = [
-    # TODO: put package test requirements here
+    'nose'
 ]
 
 setup(
     name='apub',
-    version='1.0.0pre',
+    version='1.0.0a0',
     # TODO: put meaningful description here
-    description='Python Boilerplate contains all the boilerplate you need to '
-                'create a Python package.',
+    description='Python package with command line interface to turn markdown '
+                'files into ebooks.',
     long_description=readme + '\n\n' + history,
     author='Christopher Knörndel',
     author_email='cknoerndel@anited.de',
     url='https://github.com/vomaufgang/apub/',
     packages=[
         'apub',
-        'apub.cli',
-        'apub.extensions',
-        'apub.extensions.markdown',
+        'apub.metadata',
         'apub.output',
+        'apub.substitution',
     ],
     entry_points={
         'console_scripts': [
@@ -54,11 +52,11 @@ setup(
     classifiers=[
         'Development Status :: 1 - Planning',
         'Intended Audience :: End Users/Desktop',
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Natural Language :: English',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
     ],
-    test_suite='tests',
+    test_suite='nose.collector',
     tests_require=test_requirements
 )
