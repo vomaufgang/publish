@@ -19,11 +19,17 @@
 
 
 from abc import ABCMeta, abstractmethod
+from .html import HtmlOutput
+from .json import JsonOutput
+from .ebookconvert import EbookConvertOutput
 
 
 class Output(metaclass=ABCMeta):
     def __init__(self):
         self.name = None
+        self.path = None
+        self.css = None
+        self.force_publish = False
         pass
 
     @abstractmethod
@@ -32,6 +38,21 @@ class Output(metaclass=ABCMeta):
 
     @staticmethod
     def from_dict(dict_):
-        # todo implement Output.from_dict
-        raise NotImplementedError
+        output_type = dict_['type']
 
+        if output_type == 'html':
+            return HtmlOutput.from_dict(dict_)
+        elif output_type == 'json':
+            return JsonOutput.from_dict(dict_)
+        elif output_type == 'ebook-convert':
+            return EbookConvertOutput.from_dict(dict_)
+
+        # todo implement Output.from_dict
+        raise NotImplementedError(
+            'Unrecognized output type: {0}'.format(output_type))
+
+    @staticmethod
+    def filter_chapters_by_publish(chapters, publish=True):
+        for chapter in chapters:
+            if chapter.publish == publish:
+                yield chapter

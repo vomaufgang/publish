@@ -17,17 +17,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 # taken from
 # http://chase-seibert.github.io/blog/2014/03/21/python-multilevel-argparse.html
 
 import argparse
 import sys
-import os
-from .input import read_project
 
 make_description = 'Make the configured outputs.'
-make_usage = '''apub make [--project-path] [--output-name=<output_name> | --output-type=<output_type>]
+make_usage = '''apub make [--project-path] [--output=<output_name>]
 
 Important:
     apub defaults to the current directory as the
@@ -37,19 +34,13 @@ Important:
     use the --project-path parameter.
 
 Examples:
-    apub make                           Make all configured outputs.
-    apub make --output-name=my_output   Make the specified output.
-    apub make --output-type=
+    apub make                      Make all configured outputs.
+    apub make --output=my_output   Make the specified output.
 '''
 
 
 class CommandLineInterface():
-    def __init__(self, args, make_=None, quickstart_=None):
-        if make_ is None:
-            from .make import make
-            self.make_ = make
-        else:
-            self.make_ = make_
+    def __init__(self, args):
 
         # todo self.quickstart_ = quickstart_
 
@@ -67,14 +58,19 @@ class CommandLineInterface():
         getattr(self, command)(args)
 
     def make(self, args):
+        from .make import make
+        from .input import read_project
+
         parser = argparse.ArgumentParser(description=make_description,
                                          usage=make_usage)
 
-        parser.add_argument('--project_path')
-        parser.add_argument('--output_name')
-        parser.add_argument('--output_type')
+        parser.add_argument('--project_path', default=None)
+        parser.add_argument('--output', default=None)
         args = parser.parse_args(args[2:])
-        self.make_(args.project_path, args.output_name, args.output_type)
+
+        project = read_project(args.project_path)
+
+        make(project=project, output=args.output)
 
     def quickstart(self, args):
         pass

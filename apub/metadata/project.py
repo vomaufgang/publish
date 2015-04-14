@@ -20,6 +20,7 @@
 
 from .chapter import Chapter
 from ..output import Output
+from ..substitution import Substitution
 
 
 class Project():
@@ -27,8 +28,14 @@ class Project():
         super().__init__()
         self.metadata = {}
         self.chapters = []
-        self.output = []
+        self.outputs = []
         self.substitutions = []
+
+    @property
+    def published_chapters(self):
+        for chapter in self.chapters:
+            if chapter.published:
+                yield chapter
 
     @staticmethod
     def from_file(path):
@@ -45,7 +52,6 @@ class Project():
 
         return Project.from_dict(dict_)
 
-
     @staticmethod
     def from_dict(dict_):
         project = Project()
@@ -53,12 +59,18 @@ class Project():
         project.metadata = dict_.metadata
 
         chapters = []
-
         for chapter_dict in dict_.chapters:
             chapters.append(Chapter.from_dict(chapter_dict))
+        project.chapters = chapters
 
-        output = []
+        outputs = []
+        for output_dict in dict_.outputs:
+            outputs.append(Output.from_dict(output_dict))
+        project.outputs = outputs
 
-        for output_dict in dict_.output:
-            output.append(Output.from_dict(output_dict))
+        substitutions = []
+        for substitution_dict in dict_.substitutions:
+            substitutions.append(Substitution.from_dict(substitution_dict))
+        project.substitutions = substitutions
 
+        return project

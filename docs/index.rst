@@ -19,6 +19,7 @@ Contents:
    todo
    authors
    history
+   thirdparty
 
 Indices and tables
 ==================

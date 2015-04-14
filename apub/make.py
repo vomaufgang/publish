@@ -31,19 +31,28 @@ def make(project, output=None):
         make_every_output(project)
 
     if isinstance(output, Output):
-        output.make(project)
+        output.make(
+            project.metadata,
+            project.chapters,
+            project.substitutions)
         return
 
     try:
         output = find_output(project, output)
-        output.make(project)
+        output.make(
+            project.metadata,
+            project.chapters,
+            project.substitutions)
     except OutputNotFoundError:
         raise
 
 
 def make_every_output(project):
     for output in project.outputs:
-        output.make(project)
+        output.make(
+            project.metadata,
+            project.chapters,
+            project.substitutions)
 
 
 def find_output(project, output_name):
@@ -52,14 +61,3 @@ def find_output(project, output_name):
             return output
     raise OutputNotFoundError("No output using the following name could "
                               "be found: '{0}'".format(output_name))
-
-
-
-# apub make [<output>]
-# apub make everything
-# apub make [<output>] [<scope>]
-# apub make my_html_output chapters:1
-
-
-
-

@@ -23,7 +23,7 @@ class Chapter():
         self.title = None
         self.source = None
         self.url_friendly_title = None
-        self.published = False
+        self.publish = False
 
     @staticmethod
     def from_dict(dict_):

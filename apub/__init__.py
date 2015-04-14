@@ -17,8 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import apub.cli
-
 __author__ = 'Christopher Knörndel'
 __email__ = 'cknoerndel@anited.de'
-__version__ = '1.0.0-pre'
+__version__ = '1.0.0a0'

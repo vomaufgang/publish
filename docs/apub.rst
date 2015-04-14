@@ -37,6 +37,14 @@ apub.input module
     :undoc-members:
     :show-inheritance:
 
+apub.lzstring module
+--------------------
+
+.. automodule:: apub.lzstring
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 apub.make module
 ----------------
 

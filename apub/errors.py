@@ -28,11 +28,3 @@ class MalformedSlugError(Exception):
 
 class OutputNotFoundError(Exception):
     pass
-
-
-class DuplicateChapterNumberError(Exception):
-    pass
-
-
-class DuplicateBookNumberError(Exception):
-    pass

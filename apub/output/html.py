@@ -39,8 +39,12 @@ class HtmlOutput(Output):
 
     @staticmethod
     def from_dict(dict_):
-        # todo implement HtmlOutput.from_dict
-        raise NotImplementedError
+        html_output = HtmlOutput()
+
+        for k, v in dict_:
+            setattr(html_output, k, v)
+
+        return html_output
 
 
 class _Html():
@@ -68,8 +72,7 @@ class _Html():
 
         :rtype: string containing html
         """
-        # todo implement HtmlContent.from_chapter
-        raise NotImplementedError
+        return _Html.from_file(chapter.source, substitutions)
 
     @staticmethod
     def from_file(path, substitutions=None):
@@ -92,11 +95,15 @@ class _Html():
 
         :rtype: string containing html
         """
-        # todo implement HtmlContent.from_file
-        raise NotImplementedError
+        try:
+            with open(path, encoding='utf-8') as file:
+                contents = file.read()
+                return _Html.from_markdown(contents, substitutions)
+        except IOError:
+            raise
 
     @staticmethod
-    def from_markdown(markdown_, substitutions=None):
+    def from_markdown(markdown_content, substitutions=None):
         """Returns the resulting html content of a string containing markdown,
         applying all substitutions and transforming the contents from markdown
         to html.
@@ -107,14 +114,15 @@ class _Html():
         take a look at the :py:mod:`substitution` package.
 
         Args:
-            :param markdown_: the markdown content
-            :type markdown_: string
+            :param markdown_content: the markdown content
+            :type markdown_content: string
             :param substitutions: the list of substitutions to be applied
                 [optional]
             :type substitutions: subclass of :class:`Substitution` or None
 
         :rtype: string containing html
         """
-        import markdown
-        # todo implement HtmlContent.from_markdown
-        raise NotImplementedError
+        for substitution in substitutions:
+            substitution.apply_to(markdown_content)
+
+        return markdown.markdown(markdown_content)

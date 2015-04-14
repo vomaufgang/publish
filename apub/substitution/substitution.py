@@ -30,5 +30,3 @@ class Substitution(metaclass=ABCMeta):
     def from_dict(dict_):
         # todo implement Substitution.from_dict
         raise NotImplementedError
-
-

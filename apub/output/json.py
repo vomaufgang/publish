@@ -24,14 +24,60 @@
 
 from .output import Output
 from .html import _Html
+from ..lzstring import LZString
 
 
 class JsonOutput(Output):
+    lzstring = LZString()
+
+    def __init__(self):
+        super().__init__()
+        self.compress = False
+        # todo: the resulting json contains a field "compressed: value"
+        #   to indicate wether areader has to decompress the html contents
+        #   before passing them to monocle
+
     def make(self, metadata, chapters, substitutions):
         # todo implement JsonOutput.make
+
+        chapter_array = []
+
+        if not self.force_publish:
+            chapters = Output.filter_chapters_by_publish(
+                chapters,
+                publish=True)
+
+        for chapter in chapters:
+            uncompressed_content = _Html.from_chapter(chapter)
+
+            if self.compress:
+                # todo implement content encryption
+                compressed_content = 1
+                content = compressed_content
+            else:
+                content = uncompressed_content
+
+            chapter_dict = {
+                'title': chapter.title,
+                'url_friendly_title': chapter.url_friendly_title,
+                'compressed': self.compress,
+                'content': content
+            }
+
+            chapter_array.append(chapter_dict)
+            pass
+
         raise NotImplementedError
 
     @staticmethod
+    def compress(content):
+        return JsonOutput.lzstring.compressToBase64(content)
+
+    @staticmethod
     def from_dict(dict_):
-        # todo implement JsonOutput.from_dict
-        raise NotImplementedError
+        json_output = JsonOutput()
+
+        for k, v in dict_:
+            setattr(json_output, k, v)
+
+        return json_output

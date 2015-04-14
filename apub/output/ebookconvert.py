@@ -30,10 +30,6 @@ justifications = ['original', 'left', 'justify', 'right']
 
 class EbookConvertOutput(Output):
 
-    @staticmethod
-    def from_dict(dict_):
-        pass
-
     def __init__(self, output_path=None, ebookconvert_params=None,
                  css_path=None):
         super().__init__(output_path)
@@ -55,26 +51,12 @@ class EbookConvertOutput(Output):
         # todo call ebook-convert
         os.remove(temp_file)
         pass
-    
-    @property
-    def change_justification(self):
-        """Gets or sets the justification for *all* text within a project.
 
-        Please consult the official documentation over at `manual.calibre.com
-        <http://manual.calibre-ebook.com/cli/ebook-convert.html#cmdoption-ebook-convert--change-justification>`_
-        to learn about the effects of this parameter.
+    @staticmethod
+    def from_dict(dict_):
+        ebook_convert_output = EbookConvertOutput()
 
-        :type: :class:`Justification`"""
-        return self.__change_justification
-    
-    @change_justification.setter
-    def change_justification(self, value):
-        if value not in justifications:
-            raise AttributeError('value must be either of the following: {0}'.format(justifications))
-        self.__change_justification = value
+        for k, v in dict_:
+            setattr(ebook_convert_output, k, v)
 
-
-
-
-
-# todo force: if true, make will run each time called, if false make will run once per output
+        return ebook_convert_output

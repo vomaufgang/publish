@@ -45,4 +45,3 @@ def read_project(path=None):
 
 def _build_project(project_data):
     raise NotImplementedError
-

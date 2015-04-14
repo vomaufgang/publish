@@ -21,7 +21,7 @@
       "publish": false
     }
   ],
-  "output": [
+  "outputs": [
     {
       "name": "html-single",
       "type": "html",
@@ -34,7 +34,8 @@
       "type": "html",
       "single_file": false,
       "path": "output/html/",
-      "css": "aus.css"
+      "css": "aus.css",
+      "force_publish": true
     },
     {
       "name": "json",
