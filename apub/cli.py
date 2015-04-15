@@ -20,8 +20,9 @@
 # taken from
 # http://chase-seibert.github.io/blog/2014/03/21/python-multilevel-argparse.html
 
-import argparse
+import os
 import sys
+import argparse
 
 make_description = 'Make the configured outputs.'
 make_usage = '''apub make [--project-path] [--output=<output_name>]
@@ -70,11 +71,19 @@ class CommandLineInterface():
 
         project = read_project(args.project_path)
 
+        set_cwd(args.project_path)
+
         make(project=project, output=args.output)
 
     def quickstart(self, args):
         pass
 
+
+def set_cwd(project_path=None):
+    if not project_path:
+        return
+    else:
+        os.chdir(project_path)
 
 if __name__ == '__main__':
     CommandLineInterface(args=sys.argv)
