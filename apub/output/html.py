@@ -21,7 +21,7 @@
 import os
 import markdown
 
-from apub.output.output import Output
+from .output import Output
 
 
 class HtmlOutput(Output):
