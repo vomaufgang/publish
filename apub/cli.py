@@ -71,9 +71,14 @@ class CommandLineInterface():
 
         project = read_project(args.project_path)
 
+        previous_cwd = os.getcwd()
         set_cwd(args.project_path)
-
-        make(project=project, output=args.output)
+        try:
+            make(project=project, output=args.output)
+        except:
+            raise
+        finally:
+            set_cwd(previous_cwd)
 
     def quickstart(self, args):
         pass
