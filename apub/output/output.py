@@ -19,9 +19,6 @@
 
 
 from abc import ABCMeta, abstractmethod
-from .html import HtmlOutput
-from .json import JsonOutput
-from .ebookconvert import EbookConvertOutput
 
 
 class Output(metaclass=ABCMeta):
@@ -41,10 +38,13 @@ class Output(metaclass=ABCMeta):
         output_type = dict_['type']
 
         if output_type == 'html':
+            from .html import HtmlOutput
             return HtmlOutput.from_dict(dict_)
         elif output_type == 'json':
+            from .json import JsonOutput
             return JsonOutput.from_dict(dict_)
         elif output_type == 'ebook-convert':
+            from .ebookconvert import EbookConvertOutput
             return EbookConvertOutput.from_dict(dict_)
 
         # todo implement Output.from_dict
