@@ -75,8 +75,6 @@ class CommandLineInterface():
         set_cwd(args.project_path)
         try:
             make(project=project, output=args.output)
-        except:
-            raise
         finally:
             set_cwd(previous_cwd)
 
