@@ -25,11 +25,9 @@ from .output import Output
 
 
 class HtmlOutput(Output):
-    def __init__(self, path=None, css=None, single_file=False):
+    def __init__(self):
         super().__init__()
-        self.path = path
-        self.css = css
-        self.single_file = single_file
+        self.single_file = False
         pass
 
     def make(self, metadata, chapters, substitutions):

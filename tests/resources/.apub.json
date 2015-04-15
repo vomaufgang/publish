@@ -47,10 +47,11 @@
       "name": "epub",
       "type": "ebook-convert",
       "path": "output/ebook/AUS-vom-Auf-und-Untergang-der-Sterne.epub",
-      "ebookconvert_params": {
-        "cover": "resources/cover/cover_2014_v2.jpg",
-        "level1-toc": "//h:h1"
-      },
+      "ebookconvert_params": [
+        "--cover=resources/cover/cover_2014_v2.jpg",
+        "--level1-toc=//h:h1",
+        "--remove-paragraph-spacing"
+      ],
       "css": "aus.css"
     }
   ],

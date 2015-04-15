@@ -19,38 +19,48 @@
 
 
 import os
+import subprocess
 from tempfile import mkstemp
 
 from .output import Output
 from .html import HtmlOutput
 
 
-justifications = ['original', 'left', 'justify', 'right']
-
-
 class EbookConvertOutput(Output):
 
-    def __init__(self, output_path=None, ebookconvert_params=None,
-                 css_path=None):
-        super().__init__(output_path)
-        self.__change_justification = 'original'
-        self.__css_path = css_path
-        self.__output_path = output_path
-        self.__ebookconvert_params = ebookconvert_params
+    def __init__(self):
+        super().__init__()
+        self.ebookconvert_params = []
 
-    def make(self, project):
-        if self.output_path is None:
-            raise AttributeError("output_path of EpubOutput must not be None")
+    def make(self, metadata, chapters, substitutions):
+        (temp_handle, temp_path) = mkstemp(suffix=".html")
+        try:
+            self._make_html(temp_path, metadata, chapters, substitutions)
 
-        temp_file = mkstemp(suffix=".html")
-        HtmlOutput(
-            output_path=self.output_path,
-            output_range="todo",
-            css_path=self.__css_path
-        ).make()
-        # todo call ebook-convert
-        os.remove(temp_file)
-        pass
+            call_params = [
+                'ebook-convert',
+                temp_path,
+                self.path
+            ]
+
+            custom_params = _dict_to_param_array(self.ebookconvert_params)
+
+            call_params.extend(custom_params)
+
+            subprocess.call(call_params)
+        finally:
+            os.remove(temp_path)
+
+    def _make_html(self, temp_path, metadata, chapters, substitutions):
+        html_output = HtmlOutput()
+
+        html_output.path = temp_path
+        html_output.css = self.css
+        html_output.force_publish = self.force_publish
+
+        html_output.single_file = True
+
+        html_output.make(metadata, chapters, substitutions)
 
     @staticmethod
     def from_dict(dict_):
@@ -60,3 +70,12 @@ class EbookConvertOutput(Output):
             setattr(ebook_convert_output, k, v)
 
         return ebook_convert_output
+
+
+def _dict_to_param_array(dict_):
+    param_array = []
+
+    for k, v in dict_:
+        param_array.append("--{0}={1}".format(k, v))
+
+    return param_array

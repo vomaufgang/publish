@@ -47,7 +47,6 @@ class Output(metaclass=ABCMeta):
             from .ebookconvert import EbookConvertOutput
             return EbookConvertOutput.from_dict(dict_)
 
-        # todo implement Output.from_dict
         raise NotImplementedError(
             'Unrecognized output type: {0}'.format(output_type))
 
