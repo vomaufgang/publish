@@ -46,7 +46,7 @@ setup(
     },
     include_package_data=True,
     install_requires=requirements,
-    license="MIT",
+    license="GPLv3",
     zip_safe=False,
     keywords='apub',
     classifiers=[
