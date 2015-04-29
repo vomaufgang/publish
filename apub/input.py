@@ -23,6 +23,8 @@ from .metadata import Project
 
 
 def read_project(path=None):
+
+    print("path = {0}".format(path))
     project_file_path = None
     default_project_file_name = '.apub.json'
 
@@ -30,12 +32,14 @@ def read_project(path=None):
         project_file_path = os.path.join(
             os.getcwd(),
             default_project_file_name)
-    elif os.path.isdir(path):
+    elif os.path.isdir(os.path.join(os.getcwd(), path)):
         project_file_path = os.path.join(
             path,
             default_project_file_name)
-    elif os.path.isfile(path):
-        pass
+    elif os.path.isfile(os.path.join(os.getcwd(), path)):
+        project_file_path = path
+
+    print("project_file_path = {0}".format(project_file_path))
 
     with open(project_file_path) as project_file:
         data = project_file.read()

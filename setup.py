@@ -41,7 +41,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'apub = apub.cli:main',
+            'apub = apub.cli:run',
         ],
     },
     include_package_data=True,

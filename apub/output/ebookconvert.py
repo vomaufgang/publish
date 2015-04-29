@@ -66,7 +66,7 @@ class EbookConvertOutput(Output):
     def from_dict(dict_):
         ebook_convert_output = EbookConvertOutput()
 
-        for k, v in dict_:
+        for k, v in dict_.items():
             setattr(ebook_convert_output, k, v)
 
         return ebook_convert_output

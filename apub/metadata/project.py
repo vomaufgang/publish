@@ -56,20 +56,20 @@ class Project():
     def from_dict(dict_):
         project = Project()
 
-        project.metadata = dict_.metadata
+        project.metadata = dict_['metadata']
 
         chapters = []
-        for chapter_dict in dict_.chapters:
+        for chapter_dict in dict_['chapters']:
             chapters.append(Chapter.from_dict(chapter_dict))
         project.chapters = chapters
 
         outputs = []
-        for output_dict in dict_.outputs:
+        for output_dict in dict_['outputs']:
             outputs.append(Output.from_dict(output_dict))
         project.outputs = outputs
 
         substitutions = []
-        for substitution_dict in dict_.substitutions:
+        for substitution_dict in dict_['substitutions']:
             substitutions.append(Substitution.from_dict(substitution_dict))
         project.substitutions = substitutions
 

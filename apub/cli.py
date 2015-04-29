@@ -40,8 +40,10 @@ Examples:
 '''
 
 
-class CommandLineInterface():
-    def __init__(self, args):
+class _CommandLineInterface():
+    def __init__(self, args=None):
+        if args is None:
+            args = sys.argv
 
         # todo self.quickstart_ = quickstart_
 
@@ -88,5 +90,6 @@ def set_cwd(project_path=None):
     else:
         os.chdir(project_path)
 
-if __name__ == '__main__':
-    CommandLineInterface(args=sys.argv)
+
+def run(args=None):
+    _CommandLineInterface(args)

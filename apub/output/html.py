@@ -39,7 +39,7 @@ class HtmlOutput(Output):
     def from_dict(dict_):
         html_output = HtmlOutput()
 
-        for k, v in dict_:
+        for k, v in dict_.items():
             setattr(html_output, k, v)
 
         return html_output

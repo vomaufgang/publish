@@ -77,7 +77,7 @@ class JsonOutput(Output):
     def from_dict(dict_):
         json_output = JsonOutput()
 
-        for k, v in dict_:
+        for k, v in dict_.items():
             setattr(json_output, k, v)
 
         return json_output

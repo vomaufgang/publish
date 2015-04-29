@@ -29,7 +29,7 @@ class Chapter():
     def from_dict(dict_):
             chapter = Chapter()
 
-            for key, value in dict_:
+            for key, value in dict_.items():
                 setattr(chapter, key, value)
 
             return chapter
