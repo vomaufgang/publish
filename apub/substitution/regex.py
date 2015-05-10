@@ -22,10 +22,17 @@ from .substitution import Substitution
 
 
 class RegexSubstitution(Substitution):
-    @staticmethod
-    def from_dict(dict_):
-        pass
-
     def apply_to(self, text):
         # todo implement RegexSubstitution.apply_to
         raise NotImplementedError
+
+    @classmethod
+    def from_dict(cls, dict_):
+        regex_substitution = RegexSubstitution()
+
+        # todo move away from this generic solution and set + validate required fields instead
+
+        for k, v in dict_.items():
+            setattr(regex_substitution, k, v)
+
+        return regex_substitution

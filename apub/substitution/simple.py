@@ -36,7 +36,13 @@ class SimpleSubstitution(Substitution):
 
         return os.linesep.join(lines)
 
-    @staticmethod
-    def from_dict(dict_):
-        # todo implement SimpleSubstitution.from_dict
-        raise NotImplementedError
+    @classmethod
+    def from_dict(cls, dict_):
+        simple_substitution = SimpleSubstitution()
+
+        # todo move away from this generic solution and set + validate required fields instead
+
+        for k, v in dict_.items():
+            setattr(simple_substitution, k, v)
+
+        return simple_substitution

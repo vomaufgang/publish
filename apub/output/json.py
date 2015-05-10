@@ -73,9 +73,11 @@ class JsonOutput(Output):
     def compress(content):
         return JsonOutput.lzstring.compressToBase64(content)
 
-    @staticmethod
-    def from_dict(dict_):
+    @classmethod
+    def from_dict(cls, dict_):
         json_output = JsonOutput()
+
+        # todo move away from this generic solution and set + validate required fields instead
 
         for k, v in dict_.items():
             setattr(json_output, k, v)

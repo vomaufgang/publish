@@ -13,12 +13,23 @@ TODO
           unnessecary":
           http://stackoverflow.com/questions/9816878/how-do-ruby-programmers-do-type-checking
 
+.. todo:: Implement logging, don't use print() statements esp. when apub is
+          used as a package and not from the command line:
+          http://stackoverflow.com/questions/6918493/in-python-why-use-logging-instead-of-print
+
 
 IDEAS
 =====
 
 .. todo:: Connect apub to apub-server instances via
           apub-push [*|1-5|1,3,5]
+
+          **rejected**: With my current workload a fully featured server is
+            out of the question. areader will be implemented as a pure
+            html/javascript solution.
+            apub will create json files that can be used as input for areader.
+            You will be able to drop the files anywhere on your webserver as
+            long as you point areader to them.
 
 .. todo:: transfer Markdown inside JSON, let the server parse it via
           http://parsedown.org/

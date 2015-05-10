@@ -26,7 +26,16 @@ class Substitution(metaclass=ABCMeta):
     def apply_to(self, chapter):
         pass
 
-    @staticmethod
-    def from_dict(dict_):
-        # todo implement Substitution.from_dict
-        raise NotImplementedError
+    @classmethod
+    def from_dict(cls, dict_):
+        substitution_type = dict_['type']
+
+        if substitution_type == 'simple':
+            from .simple import SimpleSubstitution
+            return SimpleSubstitution.from_dict(dict_)
+        elif substitution_type == 'regex':
+            from .regex import RegexSubstitution
+            return RegexSubstitution.from_dict(dict_)
+
+        raise NotImplementedError(
+            'Unrecognized substitution type: {0}'.format(substitution_type))

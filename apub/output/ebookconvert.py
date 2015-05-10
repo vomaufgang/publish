@@ -66,6 +66,8 @@ class EbookConvertOutput(Output):
     def from_dict(dict_):
         ebook_convert_output = EbookConvertOutput()
 
+        # todo move away from this generic solution and set + validate required fields instead
+
         for k, v in dict_.items():
             setattr(ebook_convert_output, k, v)
 

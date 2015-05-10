@@ -25,9 +25,11 @@ class Chapter():
         self.url_friendly_title = None
         self.publish = False
 
-    @staticmethod
-    def from_dict(dict_):
+    @classmethod
+    def from_dict(cls, dict_):
             chapter = Chapter()
+
+            # todo move away from this generic solution and set + validate required fields instead
 
             for key, value in dict_.items():
                 setattr(chapter, key, value)

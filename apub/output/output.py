@@ -33,8 +33,8 @@ class Output(metaclass=ABCMeta):
     def make(self, metadata, chapters, substitutions):
         pass
 
-    @staticmethod
-    def from_dict(dict_):
+    @classmethod
+    def from_dict(cls, dict_):
         output_type = dict_['type']
 
         if output_type == 'html':

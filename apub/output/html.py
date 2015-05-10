@@ -35,9 +35,11 @@ class HtmlOutput(Output):
         # todo implement HtmlOutput.make
         raise NotImplementedError
 
-    @staticmethod
-    def from_dict(dict_):
+    @classmethod
+    def from_dict(cls, dict_):
         html_output = HtmlOutput()
+
+        # todo move away from this generic solution and set + validate required fields instead
 
         for k, v in dict_.items():
             setattr(html_output, k, v)
@@ -48,8 +50,8 @@ class HtmlOutput(Output):
 class _Html():
     """Provides methods that return the finished html content for a single
     chapter, including the application of substitutions."""
-    @staticmethod
-    def from_chapter(chapter, substitutions=None):
+    @classmethod
+    def from_chapter(cls, chapter, substitutions=None):
         """Returns the resulting html content of a chapter, applying all
         substitutions and transforming the contents from markdown to html.
 
@@ -72,8 +74,8 @@ class _Html():
         """
         return _Html.from_file(chapter.source, substitutions)
 
-    @staticmethod
-    def from_file(path, substitutions=None):
+    @classmethod
+    def from_file(cls, path, substitutions=None):
         """Returns the resulting html content of a file, applying all
         substitutions and transforming the contents from markdown to html.
 
@@ -100,8 +102,8 @@ class _Html():
         except IOError:
             raise
 
-    @staticmethod
-    def from_markdown(markdown_content, substitutions=None):
+    @classmethod
+    def from_markdown(cls, markdown_content, substitutions=None):
         """Returns the resulting html content of a string containing markdown,
         applying all substitutions and transforming the contents from markdown
         to html.
