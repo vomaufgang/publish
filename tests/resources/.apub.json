@@ -57,6 +57,11 @@
   ],
   "substitutions": [
     {
+      "type": "simple",
+      "find": "Douglas Adams",
+      "replace_with": "Terry Pratchett"
+    },
+    {
       "type": "regex",
       "expression": "^##.*$",
       "replace_with": "<p class='center no_indent'>*</p>"

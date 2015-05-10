@@ -177,14 +177,14 @@ class TestProject(unittest.TestCase):
         self.assertListEqual(project.outputs, [])
 
     def test_from_dict_substitutions_single(self):
-        substitutions = [{'type': 'simple', 'old': 'a'}]
+        substitutions = [{'type': 'simple', 'find': 'a'}]
         dict_ = {
             'substitutions': substitutions
         }
         project = Project.from_dict(dict_)
 
         self.assertEqual(len(project.substitutions), 1)
-        self.assertEqual(project.substitutions[0].old, 'a')
+        self.assertEqual(project.substitutions[0].find, 'a')
 
         self.assertDictEqual(project.metadata, {})
         self.assertListEqual(project.chapters, [])
@@ -192,8 +192,8 @@ class TestProject(unittest.TestCase):
 
     def test_from_dict_substitutions_multiple(self):
         substitutions = [
-            {'type': 'simple', 'old': 'a'},
-            {'type': 'simple', 'old': 'b'}
+            {'type': 'simple', 'find': 'a'},
+            {'type': 'simple', 'find': 'b'}
         ]
         dict_ = {
             'substitutions': substitutions
@@ -201,8 +201,8 @@ class TestProject(unittest.TestCase):
         project = Project.from_dict(dict_)
 
         self.assertEqual(len(project.substitutions), 2)
-        self.assertEqual(project.substitutions[0].old, 'a')
-        self.assertEqual(project.substitutions[1].old, 'b')
+        self.assertEqual(project.substitutions[0].find, 'a')
+        self.assertEqual(project.substitutions[1].find, 'b')
 
         self.assertDictEqual(project.metadata, {})
         self.assertListEqual(project.chapters, [])
@@ -212,7 +212,7 @@ class TestProject(unittest.TestCase):
         metadata = {'title': 'project_title'}
         chapters = [{'title': 'chapter_title'}]
         outputs = [{'type': 'html', 'name': 'test_output'}]
-        substitutions = [{'type': 'simple', 'old': 'a'}]
+        substitutions = [{'type': 'simple', 'find': 'a'}]
 
         dict_ = {
             'metadata': metadata,
@@ -230,7 +230,7 @@ class TestProject(unittest.TestCase):
         self.assertEqual(len(project.outputs), 1)
         self.assertEqual(project.outputs[0].name, 'test_output')
         self.assertEqual(len(project.substitutions), 1)
-        self.assertEqual(project.substitutions[0].old, 'a')
+        self.assertEqual(project.substitutions[0].find, 'a')
 
 
 
