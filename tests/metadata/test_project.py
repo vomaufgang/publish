@@ -233,6 +233,5 @@ class TestProject(unittest.TestCase):
         self.assertEqual(project.substitutions[0].find, 'a')
 
 
-
 if __name__ == '__main__':
     unittest.main()

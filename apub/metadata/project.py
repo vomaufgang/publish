@@ -97,9 +97,7 @@ class Project():
         """
         project = Project()
 
-        if 'metadata' in dict_:
-            project.metadata = dict_['metadata']
-
+        project.metadata = Project._get_metadata_from_dict(dict_)
         project.chapters = Project._get_chapters_from_dict(dict_)
         project.outputs = Project._get_outputs_from_dict(dict_)
         project.substitutions = Project._get_substitutions_from_dict(dict_)
