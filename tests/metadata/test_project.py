@@ -22,6 +22,23 @@ class TestProject(unittest.TestCase):
     def tearDown(self):
         pass
 
+    def test_from_file(self):
+        import os
+        project = Project.from_file(
+            os.path.join(os.path.dirname(__file__),
+                         '../resources/.apub.json'))
+        # todo assertions
+        raise NotImplementedError
+
+    def test_from_file_file_does_not_exist(self):
+        import os
+        this_file_should_not_exist = os.path.join(
+            os.path.dirname(__file__),
+            '../resources/nope.jpeg')
+
+        with self.assertRaises(FileNotFoundError):
+            Project.from_file(this_file_should_not_exist)
+
     def test_from_json_empty_string_raises_malformed_project_json_error(self):
         with self.assertRaises(MalformedProjectJsonError):
             Project.from_json('')

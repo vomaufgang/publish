@@ -81,7 +81,14 @@ class _CommandLineInterface():
             set_cwd(previous_cwd)
 
     def quickstart(self, args):
-        pass
+        from .quickstart import quickstart
+        from .input import read_project
+
+        if read_project(None):
+            # todo a project of this name already exists
+            raise NotImplementedError
+
+        quickstart()
 
 
 def set_cwd(project_path=None):

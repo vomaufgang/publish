@@ -17,8 +17,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Here be dragons.
+import os
+import logging as log
 
 
 def quickstart():
-    pass
+    # todo implement quickstart()
+    raise NotImplementedError
