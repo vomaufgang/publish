@@ -24,6 +24,11 @@ import os
 import sys
 import argparse
 
+import logging
+import logging.config
+log = logging.getLogger(__name__)
+log.addHandler(logging.NullHandler())
+
 make_description = 'Make the configured outputs.'
 make_usage = '''apub make [--project-path] [--output=<output_name>]
 
@@ -42,12 +47,11 @@ Examples:
 
 class _CommandLineInterface():
     def __init__(self, args=None):
+        log.debug('starting command line interface')
+
         if args is None:
             args = sys.argv
 
-        # todo self.quickstart_ = quickstart_
-
-        # todo implement the commands as callbacks instead of class methods
         parser = argparse.ArgumentParser(
             description='Pretends to be apub',
             usage='''apub <command> [<args>]''')
@@ -69,16 +73,20 @@ class _CommandLineInterface():
 
         parser.add_argument('--project_path', default=None)
         parser.add_argument('--output', default=None)
+        _add_log_level_argument(parser)
+
         args = parser.parse_args(args[2:])
+
+        _setup_logging(args.log_level)
 
         project = read_project(args.project_path)
 
         previous_cwd = os.getcwd()
-        set_cwd(args.project_path)
+        _set_cwd(args.project_path)
         try:
             make(project=project, output=args.output)
         finally:
-            set_cwd(previous_cwd)
+            _set_cwd(previous_cwd)
 
     def quickstart(self, args):
         from .quickstart import quickstart
@@ -91,12 +99,61 @@ class _CommandLineInterface():
         quickstart()
 
 
-def set_cwd(project_path=None):
+def _set_cwd(project_path=None):
+    """Sets the current working directory if the provided project_path is
+    not none.
+
+    :param project_path:
+    :return:
+    """
     if not project_path:
         return
     else:
         os.chdir(project_path)
 
 
-def run(args=None):
+def _add_log_level_argument(argument_parser):
+    """Adds the log_level argument to an ArgumentParser instance.
+
+    :param argument_parser:
+    :return:
+    """
+    argument_parser.add_argument('--log_level',
+                                 type=str,
+                                 default='INFO',
+                                 choices=['DEBUG',
+                                          'INFO',
+                                          'WARNING',
+                                          'ERROR',
+                                          'CRITICAL'])
+
+
+def _setup_logging(log_level):
+    """Sets up the python logging block using logging.basiConfig and the
+    provided log_level.
+
+    Can be overridden by a more finely tuned logging output to various logging
+    channels by placing a standard python logging.ini inside the cwd. Please
+    take a look at the chapter [Overriding the default logging configuration]
+    on how to achieve this.
+
+    :param log_level:
+    :return:
+    """
+    # todo Link to the chapter in the documentation.
+    logging_config = 'logging.ini'
+    if os.path.isfile(logging_config):
+        logging.config.fileConfig(
+            'logging.ini',
+            disable_existing_loggers=False)
+        logging.getLogger().setLevel()
+    else:
+        logging.basicConfig(level=log_level)
+
+
+def main(args=None):
     _CommandLineInterface(args)
+
+
+if __name__ == '__main__':
+    main()

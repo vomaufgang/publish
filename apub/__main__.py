@@ -15,4 +15,4 @@ if __name__ == "__main__":
     import apub
     __package__ = 'apub'
     import apub.cli
-    apub.cli.run()
+    apub.cli.main()

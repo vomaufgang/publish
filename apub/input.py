@@ -19,31 +19,44 @@
 
 
 import os
+import logging
+
+log = logging.getLogger(__name__)
+
 from .metadata import Project
 
 
 def read_project(path=None):
-
-    print("path = {0}".format(path))
+    log.debug('start read_project')
+    log.debug('path = {0}'.format(path))
     project_file_path = None
     default_project_file_name = '.apub.json'
 
     if not path:
+        log.debug('path is None, look for {0} in cwd {1}'.format(
+            default_project_file_name,
+            os.getcwd()))
         project_file_path = os.path.join(
             os.getcwd(),
             default_project_file_name)
     elif os.path.isdir(os.path.join(os.getcwd(), path)):
+        log.debug('path is {0}, look for {1}'.format(
+            os.path.join(os.getcwd(), path),
+            default_project_file_name))
         project_file_path = os.path.join(
             path,
             default_project_file_name)
     elif os.path.isfile(os.path.join(os.getcwd(), path)):
         project_file_path = path
+        log.debug('path is {0}, use it')
 
-    print("project_file_path = {0}".format(project_file_path))
-
+    log.debug('reading {0}'.format(project_file_path))
     with open(project_file_path) as project_file:
         data = project_file.read()
+        log.debug('{0} read containing {1}'.format(project_file_path,
+                                                   data))
 
+    log.debug('end read_project')
     return Project.from_json(data)
 
 
