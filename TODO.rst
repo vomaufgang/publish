@@ -35,6 +35,12 @@ IDEAS
           http://parsedown.org/
 
 
+Long Term Goals
+===============
+
+.. todo:: Create a standalone implementation of ebook-convert OR take
+          ebook-convert, remove all gui references and dependencies on calibre
+          and offer it as a pure python package with optional cli.
 
 
 """

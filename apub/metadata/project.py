@@ -25,7 +25,9 @@ from ..output import Output
 from ..substitution import Substitution
 
 
-class Project():
+class Project:
+    default_file_name = '.apub.json'
+
     def __init__(self):
         super().__init__()
         self.metadata = {}
@@ -43,6 +45,14 @@ class Project():
         for chapter in self.chapters:
             if chapter.published:
                 yield chapter
+
+    @classmethod
+    def from_directory(cls, path):
+        import os
+
+        full_path = os.path.join(path, Project.default_file_name)
+
+        return Project.from_file(full_path)
 
     @classmethod
     def from_file(cls, path):

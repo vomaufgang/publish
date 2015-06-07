@@ -24,11 +24,33 @@ class TestProject(unittest.TestCase):
 
     def test_from_file(self):
         import os
+        metadata = {
+            'title': 'Custom Name',
+            'language': 'UND'
+        }
+
         project = Project.from_file(
             os.path.join(os.path.dirname(__file__),
-                         '../resources/.apub.json'))
-        # todo assertions
-        raise NotImplementedError
+                         '../resources/.custom_name.json'))
+
+        self.assertDictEqual(project.metadata, metadata)
+
+    def test_from_directory(self):
+        metadata = {
+            'title': 'Once There Was A Test',
+            'series': 'Testiliscious',
+            'authors': 'Unit Test',
+            'publisher': 'UT',
+            'language': 'UND'
+        }
+
+        project = Project.from_directory('../resources')
+
+        # todo implement the missing assertions
+
+        self.assertDictEqual(project.metadata, metadata)
+
+        pass
 
     def test_from_file_file_does_not_exist(self):
         import os

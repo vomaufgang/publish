@@ -1,11 +1,10 @@
 {
   "metadata": {
-    "title": "AUS",
-    "series": "vom Auf- und Untergang der Sterne",
-    "authors": "Christopher Knörndel",
-    "publisher": "anited.",
-    "language": "de-DE",
-    "dev-comment": "I can read these into dictionaries and then append them as parameters to ebook-convert via '--{0}={1}'.format(metadata.key, metadata.value) - the same goes for the ebookconvert_params below. This saves a ton of work!"
+    "title": "Once There Was A Test",
+    "series": "Testiliscious",
+    "authors": "Unit Test",
+    "publisher": "UT",
+    "language": "UND"
   },
   "chapters": [
     {
@@ -15,51 +14,41 @@
       "publish": true
     },
     {
-      "title": "Der Bauernhof im Wald",
-      "url_friendly_title": "der-bauernhof-im-wald",
-      "source": "./chapters/02-der-bauernhof-im-wald.chapter",
+      "title": "2",
+      "url_friendly_title": "2",
+      "source": "./chapters/02-2.chapter",
       "publish": false
     }
   ],
   "outputs": [
     {
-      "name": "html-single",
+      "name": "html",
       "type": "html",
       "single_file": true,
-      "path": "output/html/aus.htm",
-      "css": "aus.css"
-    },
-    {
-      "name": "html-multi",
-      "type": "html",
-      "single_file": false,
-      "path": "output/html/",
-      "css": "aus.css",
-      "force_publish": true
+      "path": "output/html/test.htm",
+      "css": "test.css"
     },
     {
       "name": "json",
       "type": "json",
-      "path": "output/json/aus.json",
+      "path": "output/json/test.json",
       "compress": true
     },
     {
       "name": "epub",
       "type": "ebook-convert",
-      "path": "output/ebook/AUS-vom-Auf-und-Untergang-der-Sterne.epub",
+      "path": "output/ebook/test.epub",
       "ebookconvert_params": [
-        "--cover=resources/cover/cover_2014_v2.jpg",
-        "--level1-toc=//h:h1",
-        "--remove-paragraph-spacing"
+        "--level1-toc=//h:h1"
       ],
-      "css": "aus.css"
+      "css": "test.css"
     }
   ],
   "substitutions": [
     {
       "type": "simple",
-      "find": "Douglas Adams",
-      "replace_with": "Terry Pratchett"
+      "find": "Test",
+      "replace_with": "Success"
     },
     {
       "type": "regex",
