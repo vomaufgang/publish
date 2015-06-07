@@ -36,6 +36,7 @@ class TestProject(unittest.TestCase):
         self.assertDictEqual(project.metadata, metadata)
 
     def test_from_directory(self):
+        import os
         metadata = {
             'title': 'Once There Was A Test',
             'series': 'Testiliscious',
@@ -44,7 +45,10 @@ class TestProject(unittest.TestCase):
             'language': 'UND'
         }
 
-        project = Project.from_directory('../resources')
+        script_path = os.path.dirname(os.path.abspath(__file__))
+        project_path = os.path.join(script_path, '../resources')
+
+        project = Project.from_directory(project_path)
 
         # todo implement the missing assertions
 
