@@ -32,7 +32,7 @@
       "name": "json",
       "type": "json",
       "path": "output/json/test.json",
-      "compress": true
+      "compress_content": true
     },
     {
       "name": "epub",

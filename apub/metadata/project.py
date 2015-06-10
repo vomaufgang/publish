@@ -35,17 +35,6 @@ class Project:
         self.outputs = []
         self.substitutions = []
 
-    @property
-    def published_chapters(self):
-        """Returns a list containing all *published* chapters of this project.
-
-        :returns: A list containing all published chapters.
-        :rtype: list of [Chapter]
-        """
-        for chapter in self.chapters:
-            if chapter.published:
-                yield chapter
-
     @classmethod
     def from_directory(cls, path):
         import os

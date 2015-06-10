@@ -26,41 +26,57 @@ from .output import Output
 from .html import _Html
 from ..lzstring import LZString
 
+class Anonymous(object):
+    def __init__(self, **kwargs):
+        self.__dict__ = kwargs
 
 class JsonOutput(Output):
-    lzstring = LZString()
-
     def __init__(self):
         super().__init__()
-        self.compress = False
-        # todo: the resulting json contains a field "compressed: value"
+        self.compress_content = False
+        self.__lzstring = None
+        # todo: the resulting json contains a field "is_compressed: value"
         #   to indicate wether areader has to decompress the html contents
         #   before passing them to monocle
 
+    @property
+    def lzstring(self):
+        if not self.__lzstring:
+            self.__lzstring = LZString()
+        return self.__lzstring
+
     def make(self, metadata, chapters, substitutions):
+        """
+
+        :param metadata:
+        :type metadata: dict
+        :param chapters:
+        :type chapters: list[apub.metadata.chapter.Chapter]
+        :param substitutions:
+        :type substitutions: list[apub.substitution.substitution.Substitution]
+        :return:
+        """
         # todo implement JsonOutput.make
 
         chapter_array = []
 
         if not self.force_publish:
-            chapters = Output.filter_chapters_by_publish(
-                chapters,
-                publish=True)
+            chapters = [chapter
+                        for chapter in chapters
+                        if chapter.publish]
 
         for chapter in chapters:
-            uncompressed_content = _Html.from_chapter(chapter)
+            content = _Html.from_chapter(chapter)
 
-            if self.compress:
-                # todo implement content encryption
-                compressed_content = 1
-                content = compressed_content
+            if self.compress_content:
+                content = self.lzstring.compressToBase64(content)
             else:
-                content = uncompressed_content
+                pass
 
             chapter_dict = {
                 'title': chapter.title,
                 'url_friendly_title': chapter.url_friendly_title,
-                'compressed': self.compress,
+                'is_compressed': self.compress_content,
                 'content': content
             }
 
@@ -68,10 +84,6 @@ class JsonOutput(Output):
             pass
 
         raise NotImplementedError
-
-    @staticmethod
-    def compress(content):
-        return JsonOutput.lzstring.compressToBase64(content)
 
     @classmethod
     def from_dict(cls, dict_):
