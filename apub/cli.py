@@ -45,7 +45,7 @@ Examples:
 '''
 
 
-class _CommandLineInterface():
+class _CommandLineInterface:
     def __init__(self, args=None):
         log.debug('starting command line interface')
 
@@ -65,6 +65,11 @@ class _CommandLineInterface():
         getattr(self, command)(args)
 
     def make(self, args):
+        """Welp.
+
+        Args:
+            args:
+        """
         from .make import make
         from .input import read_project
 
@@ -89,6 +94,11 @@ class _CommandLineInterface():
             _set_cwd(previous_cwd)
 
     def quickstart(self, args):
+        """Welp.
+
+        Args:
+            args: list
+        """
         from .quickstart import quickstart
         from .input import read_project
 
@@ -104,7 +114,6 @@ def _set_cwd(project_path=None):
     not none.
 
     :param project_path:
-    :return:
     """
     if not project_path:
         return
@@ -116,7 +125,6 @@ def _add_log_level_argument(argument_parser):
     """Adds the log_level argument to an ArgumentParser instance.
 
     :param argument_parser:
-    :return:
     """
     argument_parser.add_argument('--log_level',
                                  type=str,
@@ -144,7 +152,7 @@ def _setup_logging(log_level):
     logging_config = 'logging.ini'
     if os.path.isfile(logging_config):
         logging.config.fileConfig(
-            'logging.ini',
+            logging_config,
             disable_existing_loggers=False)
         logging.getLogger().setLevel()
     else:

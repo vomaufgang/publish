@@ -25,6 +25,7 @@ from .errors import OutputNotFoundError
 def make(project, output=None):
     """
 
+    :param output:
     :type project: :class:`apub.metadata.Project`
     """
     if output is None:

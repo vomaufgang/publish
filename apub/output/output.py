@@ -27,10 +27,9 @@ class Output(metaclass=ABCMeta):
         self.path = None
         self.css = None
         self.force_publish = False
-        pass
 
     @abstractmethod
-    def make(self, metadata, chapters, substitutions):
+    def make(self, project):
         pass
 
     @classmethod
@@ -39,16 +38,23 @@ class Output(metaclass=ABCMeta):
 
         if output_type == 'html':
             from .html import HtmlOutput
-            return HtmlOutput.from_dict(dict_)
+            output = HtmlOutput.from_dict(dict_)
         elif output_type == 'json':
             from .json import JsonOutput
-            return JsonOutput.from_dict(dict_)
+            output = JsonOutput.from_dict(dict_)
         elif output_type == 'ebook-convert':
             from .ebookconvert import EbookConvertOutput
-            return EbookConvertOutput.from_dict(dict_)
+            output = EbookConvertOutput.from_dict(dict_)
+        else:
+            raise NotImplementedError(
+                'Unrecognized output type: {0}'.format(output_type))
 
-        raise NotImplementedError(
-            'Unrecognized output type: {0}'.format(output_type))
+        output.name = dict_['name']
+        output.path = dict_['path']
+        output.css = dict_['css']
+        output.force_publish = dict_['force_publish']
+
+        return output
 
     @staticmethod
     def filter_chapters_by_publish(chapters, publish=True):

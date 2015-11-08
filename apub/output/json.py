@@ -22,72 +22,68 @@
 # the contents where changed and an update is in order.
 # This keeps the data that gets transfered during a update check to a minimum.
 
+import json
+
 from .output import Output
-from .html import _Html
+from .html import Html
 from ..lzstring import LZString
 
-class Anonymous(object):
-    def __init__(self, **kwargs):
-        self.__dict__ = kwargs
 
 class JsonOutput(Output):
     def __init__(self):
         super().__init__()
         self.compress_content = False
-        self.__lzstring = None
         # todo: the resulting json contains a field "is_compressed: value"
         #   to indicate wether areader has to decompress the html contents
         #   before passing them to monocle
 
-    @property
-    def lzstring(self):
-        if not self.__lzstring:
-            self.__lzstring = LZString()
-        return self.__lzstring
+    def make(self, project):
+        json_ = self._generate_json(project)
+        self._write(json_)
 
-    def make(self, metadata, chapters, substitutions):
-        """
+    def _generate_json(self, project):
+        metadata = project.metadata
+        chapters = project.chapters
 
-        :param metadata:
-        :type metadata: dict
-        :param chapters:
-        :type chapters: list[apub.metadata.chapter.Chapter]
-        :param substitutions:
-        :type substitutions: list[apub.substitution.substitution.Substitution]
-        :return:
-        """
-        # todo implement JsonOutput.make
-
-        chapter_array = []
+        output = metadata.copy()
+        output['chapters'] = []
 
         if not self.force_publish:
             chapters = [chapter
                         for chapter in chapters
                         if chapter.publish]
 
+        lzstring = LZString()
+
         for chapter in chapters:
-            content = _Html.from_chapter(chapter)
+            content = Html.from_chapter(chapter)
 
             if self.compress_content:
-                content = self.lzstring.compressToBase64(content)
+                content = lzstring.compressToUTF16(content)
             else:
                 pass
 
             chapter_dict = {
                 'title': chapter.title,
                 'url_friendly_title': chapter.url_friendly_title,
-                'is_compressed': self.compress_content,
-                'content': content
+                'content': content,
+                'is_compressed': self.compress_content
             }
 
-            chapter_array.append(chapter_dict)
-            pass
+            output['chapters'].append(chapter_dict)
 
-        raise NotImplementedError
+        return json.dumps(output)
+
+    def _write(self, json_output):
+        with open(self.path, 'w') as file:
+            file.write(json_output)
 
     @classmethod
     def from_dict(cls, dict_):
         json_output = JsonOutput()
+
+
+
 
         # todo move away from this generic solution and set + validate required fields instead
 

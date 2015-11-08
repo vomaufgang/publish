@@ -18,7 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-class Chapter():
+class Chapter:
     def __init__(self):
         self.title = None
         self.source = None
@@ -29,9 +29,9 @@ class Chapter():
     def from_dict(cls, dict_):
             chapter = Chapter()
 
-            # todo move away from this generic solution and set + validate required fields instead
-
-            for key, value in dict_.items():
-                setattr(chapter, key, value)
+            chapter.title = dict_['title']
+            chapter.source = dict_['source']
+            chapter.url_friendly_title = dict_['url_friendly_title']
+            chapter.publish = dict_['publish']
 
             return chapter

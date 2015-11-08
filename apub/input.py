@@ -17,16 +17,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+"""Package level docstring."""
+
+from apub import metadata
 
 import os
 import logging
 
 log = logging.getLogger(__name__)
 
-from .metadata import Project
-
 
 def read_project(path=None):
+    """Welp
+
+    Args:
+        path (str): Optional
+
+    Returns:
+        Something.
+    """
     log.debug('start read_project')
     log.debug('path = {0}'.format(path))
     project_file_path = None
@@ -57,7 +66,7 @@ def read_project(path=None):
                                                    data))
 
     log.debug('end read_project')
-    return Project.from_json(data)
+    return metadata.Project.from_json(data)
 
 
 def _build_project(project_data):

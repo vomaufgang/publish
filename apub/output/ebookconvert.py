@@ -25,6 +25,13 @@ from tempfile import mkstemp
 from .output import Output
 from .html import HtmlOutput
 
+# todo append remaining metadata supported by ebookconvert
+supported_metadata = ['title',
+                      'series',
+                      'authors',
+                      'publisher',
+                      'language']
+
 
 class EbookConvertOutput(Output):
 
@@ -32,10 +39,10 @@ class EbookConvertOutput(Output):
         super().__init__()
         self.ebookconvert_params = []
 
-    def make(self, metadata, chapters, substitutions):
+    def make(self, project):
         (temp_handle, temp_path) = mkstemp(suffix=".html")
         try:
-            self._make_html(temp_path, metadata, chapters, substitutions)
+            self._make_html(temp_path, project)
 
             call_params = [
                 'ebook-convert',

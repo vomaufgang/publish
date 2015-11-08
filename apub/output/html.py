@@ -23,16 +23,39 @@ import markdown
 
 from .output import Output
 
+from apub.errors import NoChaptersFoundError
+
 
 class HtmlOutput(Output):
+
     def __init__(self):
         super().__init__()
         self.single_file = False
         pass
 
-    def make(self, metadata, chapters, substitutions):
+    def make(self, project):
         # todo if not path: return generated html content
         # todo implement HtmlOutput.make
+        """
+
+        Args:
+            project (apub.metadata.Project):
+        """
+
+        from ..metadata import Project, Chapter
+        if not project:
+            raise AttributeError("project must not be None")
+
+        if not project.chapters or len(project.chapters) <= 0:
+            raise NoChaptersFoundError()
+
+        html = []
+        for chapter in project.chapters:
+            html.append(Html.from_chapter(chapter))
+
+
+        Html.from_chapter(Chapter())
+        Html.from_file("")
         raise NotImplementedError
 
     @classmethod
@@ -47,7 +70,7 @@ class HtmlOutput(Output):
         return html_output
 
 
-class _Html():
+class Html:
     """Provides methods that return the finished html content for a single
     chapter, including the application of substitutions."""
     @classmethod
@@ -64,15 +87,14 @@ class _Html():
         take a look at the :py:mod:`substitution` package.
 
         Args:
-            :param chapter: the chapter
-            :type chapter: :class:`Chapter`
-            :param substitutions: the list of substitutions to be applied
-                [optional]
-            :type substitutions: subclass of :class:`Substitution` or None
+            chapter (apub.metadata.Chapter): The chapter.
+            substitutions (apub.substitution.Substitution): The list of
+                substitutions to be applied. Defaults to None. [optional]
 
-        :rtype: string containing html
+        Returns:
+            str: the resulting html
         """
-        return _Html.from_file(chapter.source, substitutions)
+        return Html.from_file(chapter.source, substitutions)
 
     @classmethod
     def from_file(cls, path, substitutions=None):
@@ -98,7 +120,7 @@ class _Html():
         try:
             with open(path, encoding='utf-8') as file:
                 contents = file.read()
-                return _Html.from_markdown(contents, substitutions)
+                return Html.from_markdown(contents, substitutions)
         except IOError:
             raise
 

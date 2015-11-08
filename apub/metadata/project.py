@@ -17,12 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from os import linesep
-
 from ..errors import MalformedProjectJsonError
 from .chapter import Chapter
-from ..output import Output
-from ..substitution import Substitution
 
 
 class Project:
@@ -71,13 +67,14 @@ class Project:
         :rtype: Project
         """
         import json
+        from os import linesep
 
         try:
             dict_ = json.loads(json_)
         except ValueError as error:
             raise MalformedProjectJsonError(
                 "The provided project json contained malformed data. "
-                "Excpected a valid json object, got{0}'{1}'{0}"
+                "Expected a valid json object, got{0}'{1}'{0}"
                 "Take a look at the enclosed ValueError for more information."
                 .format(linesep, json_)) from error
 
@@ -151,6 +148,8 @@ class Project:
         :returns: A list of Output objects or an empty list.
         :rtype: list of [Output]
         """
+        from ..output import Output
+
         if 'outputs' in project_dict:
             outputs = []
             for output_dict in project_dict['outputs']:
@@ -171,6 +170,8 @@ class Project:
         :returns: A list of Substitution objects or an empty list.
         :rtype: list of [Substitution]
         """
+        from ..substitution import Substitution
+
         if 'substitutions' in project_dict:
             substitutions = []
             for substitution_dict in project_dict['substitutions']:

@@ -32,3 +32,7 @@ class OutputNotFoundError(Exception):
 
 class MalformedProjectJsonError(Exception):
     pass
+
+
+class NoChaptersFoundError(Exception):
+    pass
