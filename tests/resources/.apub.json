@@ -36,7 +36,8 @@
       "type": "json",
       "url_friendly_title": "otwat",
       "path": "output/json/test.json",
-      "compress_content": true
+      "compress_content": true,
+      "css": "test.css"
     },
     {
       "name": "epub",

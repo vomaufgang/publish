@@ -64,7 +64,8 @@ class Chapter:
         chapter = Chapter(title=dict_['title'],
                           source=dict_['source'])
 
-        chapter.url_friendly_title = dict_['url_friendly_title']
+        if 'url_friendly_title' in dict_:
+            chapter.url_friendly_title = dict_['url_friendly_title']
 
         if 'publish' in dict_ and dict_['publish'] is not None:
             chapter.publish = dict_['publish']

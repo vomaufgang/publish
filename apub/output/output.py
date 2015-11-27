@@ -52,7 +52,8 @@ class Output(metaclass=ABCMeta):
         output.name = dict_['name']
         output.path = dict_['path']
         output.css = dict_['css']
-        output.force_publish = dict_['force_publish']
+        if 'force_publish' in dict_:
+            output.force_publish = dict_['force_publish']
 
         return output
 

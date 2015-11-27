@@ -43,7 +43,9 @@ class TestProject(unittest.TestCase):
             'series': 'Testiliscious',
             'authors': 'Unit Test',
             'publisher': 'UT',
-            'language': 'UND'
+            'language': 'UND',
+            'genre': '',
+            'state': 'ongoing'
         }
 
         script_path = os.path.dirname(os.path.abspath(__file__))
@@ -129,7 +131,7 @@ class TestProject(unittest.TestCase):
         self.assertListEqual(project.substitutions, [])
 
     def test_from_dict_chapters_single(self):
-        chapters = [{'title': 'test'}]
+        chapters = [{'title': 'test', 'source': 'source'}]
         dict_ = {
             'chapters': chapters
         }
@@ -144,8 +146,8 @@ class TestProject(unittest.TestCase):
 
     def test_from_dict_chapters_multiple(self):
         chapters = [
-            {'title': 'first_chapter'},
-            {'title': 'second_chapter'}
+            {'title': 'first_chapter', 'source': 'source'},
+            {'title': 'second_chapter', 'source': 'source'}
         ]
         dict_ = {
             'chapters': chapters
@@ -176,7 +178,12 @@ class TestProject(unittest.TestCase):
         self.assertListEqual(project.substitutions, [])
 
     def test_from_dict_outputs_single(self):
-        outputs = [{'type': 'html', 'name': 'test_output'}]
+        outputs = [{
+                'type': 'html',
+                'name': 'test_output',
+                'path': 'output_path',
+                'css': 'output_css'
+            }]
         dict_ = {
             'outputs': outputs
         }
@@ -191,8 +198,18 @@ class TestProject(unittest.TestCase):
 
     def test_from_dict_outputs_multiple(self):
         outputs = [
-            {'type': 'html', 'name': 'first_output'},
-            {'type': 'html', 'name': 'second_output'}
+            {
+                'type': 'html',
+                'name': 'first_output',
+                'path': 'output_path',
+                'css': 'output_css'
+            },
+            {
+                'type': 'html',
+                'name': 'second_output',
+                'path': 'output_path',
+                'css': 'output_css'
+            }
         ]
         dict_ = {
             'outputs': outputs
@@ -254,8 +271,15 @@ class TestProject(unittest.TestCase):
 
     def test_from_dict(self):
         metadata = {'title': 'project_title'}
-        chapters = [{'title': 'chapter_title'}]
-        outputs = [{'type': 'html', 'name': 'test_output'}]
+        chapters = [{'title': 'chapter_title', 'source': 'chapter_source'}]
+        outputs = [
+            {
+                'type': 'html',
+                'name': 'test_output',
+                'path': 'output_path',
+                'css': 'output_css'
+            }
+        ]
         substitutions = [{'type': 'simple', 'find': 'a'}]
 
         dict_ = {
