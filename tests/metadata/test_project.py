@@ -14,6 +14,7 @@ from apub.metadata import Project
 
 
 class TestProject(unittest.TestCase):
+    # todo: Write tests for mandatory properties
 
     def setUp(self):
         self.project = Project()

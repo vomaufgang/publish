@@ -46,9 +46,11 @@ class Project:
         The file at the provided path must be an apub project file and the
         contents must be a json object following the apub project structure.
 
-        :param path: Path to the apub project file.
-        :type path: str
-        :returns: A new project created from the apub project file.
+        Args:
+            path (str): Path to the apub project file.
+
+        Returns:
+            Project: A new project created from the apub project file.
         """
         with open(path) as file:
             json = file.read()
@@ -61,10 +63,11 @@ class Project:
 
         The JSON string must follow the apub project format.
 
-        :param json_: The JSON string to translate into a Project object.
-        :type json_: str
-        :returns: A new Project created from the json string.
-        :rtype: Project
+        Args:
+            json_ (str): The JSON string to translate into a Project object.
+
+        Returns:
+            Project: A new Project created from the json string.
         """
         import json
         from os import linesep
@@ -87,9 +90,11 @@ class Project:
         The structure and contents of the dictionary must be equivalent to
         the apub JSON project format.
 
-        :param dict_: The dictionary to translate into a Project object.
-        :type dict_: A standard python dictionary. The inner structure must
-                     mirror the apub JSON project format.
+        Args:
+            dict_ (dict): The dictionary to translate into a Project object.
+
+        Returns:
+            Project: A new Project created from the dictionary.
         """
         project = Project()
 
@@ -104,12 +109,11 @@ class Project:
     def _get_metadata_from_dict(cls, project_dict):
         """Returns the metadata dictionary contained in the project dictionary.
 
-        :param project_dict: The project dictionary.
-          The inner structure of the dictionary must
-          mirror the apub JSON project format.
-        :type project_dict: dict
-        :returns: A dictionary containing the project metadata.
-        :rtype: dict of [str, str]
+        Args:
+            project_dict (dict): The project dictionary.
+
+        Returns:
+            dict: A dictionary containing the project metadata.
         """
         if 'metadata' in project_dict:
             return project_dict['metadata']
@@ -118,15 +122,14 @@ class Project:
 
     @classmethod
     def _get_chapters_from_dict(cls, project_dict):
-        """Returns the chapters contained in the project dictionary as  a list
+        """Returns the chapters contained in the project dictionary as a list
         of Chapter objects.
 
-        :param project_dict: The project dictionary.
-          The inner structure of the dictionary must
-          mirror the apub JSON project format.
-        :type project_dict: dict
-        :returns: A list of Chapter objects or an empty list.
-        :rtype: list of [Chapter]
+        Args:
+            project_dict (dict): The project dictionary.
+
+        Returns:
+            list[Chapter]: A list of Chapter objects or an empty list.
         """
         if 'chapters' in project_dict:
             chapters = []
@@ -138,15 +141,14 @@ class Project:
 
     @classmethod
     def _get_outputs_from_dict(cls, project_dict):
-        """Returns the outputs contained in the project dictionary as  a list
+        """Returns the outputs contained in the project dictionary as a list
         of Output objects.
 
-        :param project_dict: The project dictionary.
-          The inner structure of the dictionary must
-          mirror the apub JSON project format.
-        :type project_dict: dict
-        :returns: A list of Output objects or an empty list.
-        :rtype: list of [Output]
+        Args:
+            project_dict (dict): The project dictionary.
+
+        Returns:
+            list[Output]: A list of Output objects or an empty list.
         """
         from ..output import Output
 
@@ -160,15 +162,14 @@ class Project:
 
     @classmethod
     def _get_substitutions_from_dict(cls, project_dict):
-        """Returns the substitutions contained in the project dictionary as a
-        list of Substitution objects.
+        """Returns the substitutions contained in the project dictionary as
+        a list of Output objects.
 
-        :param project_dict: The project dictionary.
-          The inner structure of the dictionary must
-          mirror the apub JSON project format.
-        :type project_dict: dict
-        :returns: A list of Substitution objects or an empty list.
-        :rtype: list of [Substitution]
+        Args:
+            project_dict (dict): The project dictionary.
+
+        Returns:
+            list[Substitution]: A list of Substitution objects or an empty list.
         """
         from ..substitution import Substitution
 

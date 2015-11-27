@@ -19,19 +19,54 @@
 
 
 class Chapter:
-    def __init__(self):
-        self.title = None
-        self.source = None
+    """Description for class.
+
+    Args:
+        title (str): The title
+        source (str): File name of the source file
+
+    Attributes:
+        title (str): The title
+        source (str): File name of the source file
+        url_friendly_title(str): Url friendly representation of the title
+
+            Mandatory if you use JsonOutput or HtmlOutput, optional for all
+            other outputs.
+        publish (bool): Determines wether the chapter will be included
+            in the resulting output or not.
+
+            Defaults to True
+    """
+
+    def __init__(self, title, source):
+
+        if not title:
+            raise AttributeError('title must not be None or empty')
+
+        if not source:
+            raise AttributeError('source must not be None or empty')
+
+        self.title = title
+        self.source = source
         self.url_friendly_title = None
-        self.publish = False
+        self.publish = True
 
     @classmethod
     def from_dict(cls, dict_):
-            chapter = Chapter()
+        """Creates a new Chapter object from the provided python dictionary.
 
-            chapter.title = dict_['title']
-            chapter.source = dict_['source']
-            chapter.url_friendly_title = dict_['url_friendly_title']
+        The structure and contents of the dictionary must be equivalent to
+        the apub JSON chapter format.
+
+        Args:
+            dict_ (dict): The dictionary to translate into a Chapter object.
+        """
+        chapter = Chapter(title=dict_['title'],
+                          source=dict_['source'])
+
+        chapter.url_friendly_title = dict_['url_friendly_title']
+
+        if 'publish' in dict_ and dict_['publish'] is not None:
             chapter.publish = dict_['publish']
 
-            return chapter
+        return chapter
