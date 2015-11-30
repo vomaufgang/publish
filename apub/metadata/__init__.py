@@ -18,8 +18,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from .project import Project
+from .project import Book
 from .chapter import Chapter
 
-__all__ = ['Project',
+__all__ = ['Book',
            'Chapter']

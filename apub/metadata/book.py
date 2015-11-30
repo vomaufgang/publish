@@ -21,23 +21,29 @@ from ..errors import MalformedProjectJsonError
 from .chapter import Chapter
 
 
-class Project:
+class Book:
     default_file_name = '.apub.json'
 
     def __init__(self):
         super().__init__()
         self.metadata = {}
         self.chapters = []
-        self.outputs = []
-        self.substitutions = []
+        # self.outputs = []
+        # self.substitutions = []
+        # todo remove dependency on outputs and substitutions
+        # todo input.py will return the project, the outputs and the
+        #      substitutions as seperate entities / as a tuple
+
+
+    # todo refactor this into input.py as factory methods
 
     @classmethod
     def from_directory(cls, path):
         import os
 
-        full_path = os.path.join(path, Project.default_file_name)
+        full_path = os.path.join(path, Book.default_file_name)
 
-        return Project.from_file(full_path)
+        return Book.from_file(full_path)
 
     @classmethod
     def from_file(cls, path):
@@ -50,12 +56,12 @@ class Project:
             path (str): Path to the apub project file.
 
         Returns:
-            Project: A new project created from the apub project file.
+            Book: A new project created from the apub project file.
         """
         with open(path) as file:
             json = file.read()
 
-        return Project.from_json(json)
+        return Book.from_json(json)
 
     @classmethod
     def from_json(cls, json_):
@@ -67,7 +73,7 @@ class Project:
             json_ (str): The JSON string to translate into a Project object.
 
         Returns:
-            Project: A new Project created from the json string.
+            Book: A new Project created from the json string.
         """
         import json
         from os import linesep
@@ -81,7 +87,7 @@ class Project:
                 "Take a look at the enclosed ValueError for more information."
                 .format(linesep, json_)) from error
 
-        return Project.from_dict(dict_)
+        return Book.from_dict(dict_)
 
     @classmethod
     def from_dict(cls, dict_):
@@ -94,14 +100,14 @@ class Project:
             dict_ (dict): The dictionary to translate into a Project object.
 
         Returns:
-            Project: A new Project created from the dictionary.
+            Book: A new Project created from the dictionary.
         """
-        project = Project()
+        project = Book()
 
-        project.metadata = Project._get_metadata_from_dict(dict_)
-        project.chapters = Project._get_chapters_from_dict(dict_)
-        project.outputs = Project._get_outputs_from_dict(dict_)
-        project.substitutions = Project._get_substitutions_from_dict(dict_)
+        project.metadata = Book._get_metadata_from_dict(dict_)
+        project.chapters = Book._get_chapters_from_dict(dict_)
+        project.outputs = Book._get_outputs_from_dict(dict_)
+        project.substitutions = Book._get_substitutions_from_dict(dict_)
 
         return project
 
@@ -150,7 +156,7 @@ class Project:
         Returns:
             list[Output]: A list of Output objects or an empty list.
         """
-        from ..output import Output
+        from apub.output import Output
 
         if 'outputs' in project_dict:
             outputs = []
@@ -171,7 +177,7 @@ class Project:
         Returns:
             list[Substitution]: A list of Substitution objects or an empty list.
         """
-        from ..substitution import Substitution
+        from apub.substitution import Substitution
 
         if 'substitutions' in project_dict:
             substitutions = []

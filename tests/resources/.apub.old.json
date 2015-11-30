@@ -1,28 +1,27 @@
 {
-  "book":
-  {
+  "metadata": {
     "title": "Once There Was A Test",
     "series": "Testiliscious",
     "authors": "Unit Test",
     "publisher": "UT",
     "language": "UND",
     "genre": "",
-    "state": "ongoing",
-    "chapters": [
-      {
-        "title": "1",
-        "url_friendly_title": "1",
-        "source": "./chapters/01-1.chapter",
-        "publish": true
-      },
-      {
-        "title": "2",
-        "url_friendly_title": "2",
-        "source": "./chapters/02-2.chapter",
-        "publish": false
-      }
-    ]
+    "state": "ongoing"
   },
+  "chapters": [
+    {
+      "title": "1",
+      "url_friendly_title": "1",
+      "source": "./chapters/01-1.chapter",
+      "publish": true
+    },
+    {
+      "title": "2",
+      "url_friendly_title": "2",
+      "source": "./chapters/02-2.chapter",
+      "publish": false
+    }
+  ],
   "outputs": [
     {
       "name": "html",

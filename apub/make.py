@@ -26,7 +26,7 @@ def make(project, output=None):
     """
 
     :param output:
-    :type project: :class:`apub.metadata.Project`
+    :type project: :class:`apub.metadata.Book`
     """
     if output is None:
         make_every_output(project)

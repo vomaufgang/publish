@@ -21,9 +21,15 @@
 import os
 import markdown
 
-from .output import Output
-
+from apub.output import Output
 from apub.errors import NoChaptersFoundError
+from apub.metadata import Book, Chapter
+
+import logging
+import logging.config
+log = logging.getLogger(__name__)
+log.addHandler(logging.NullHandler())
+
 
 
 class HtmlOutput(Output):
@@ -39,10 +45,10 @@ class HtmlOutput(Output):
         """
 
         Args:
-            project (apub.metadata.Project):
+            project (Book):
         """
 
-        from ..metadata import Project, Chapter
+        from ..metadata import Book, Chapter
         if not project:
             raise AttributeError("project must not be None")
 

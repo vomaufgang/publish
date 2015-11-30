@@ -66,7 +66,7 @@ def read_project(path=None):
                                                    data))
 
     log.debug('end read_project')
-    return metadata.Project.from_json(data)
+    return metadata.Book.from_json(data)
 
 
 def _build_project(project_data):

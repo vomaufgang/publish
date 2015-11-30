@@ -10,14 +10,14 @@ Tests for `apub.model.project` module.
 
 import unittest
 from apub.errors import MalformedProjectJsonError
-from apub.metadata import Project
+from apub.metadata import Book
 
 
 class TestProject(unittest.TestCase):
     # todo: Write tests for mandatory properties
 
     def setUp(self):
-        self.project = Project()
+        self.project = Book()
         pass
 
     def tearDown(self):
@@ -30,7 +30,7 @@ class TestProject(unittest.TestCase):
             'language': 'UND'
         }
 
-        project = Project.from_file(
+        project = Book.from_file(
             os.path.join(os.path.dirname(__file__),
                          '../resources/.custom_name.json'))
 
@@ -51,7 +51,7 @@ class TestProject(unittest.TestCase):
         script_path = os.path.dirname(os.path.abspath(__file__))
         project_path = os.path.join(script_path, '../resources')
 
-        project = Project.from_directory(project_path)
+        project = Book.from_directory(project_path)
 
         # todo implement the missing assertions
 
@@ -66,18 +66,18 @@ class TestProject(unittest.TestCase):
             '../resources/nope.jpeg')
 
         with self.assertRaises(FileNotFoundError):
-            Project.from_file(this_file_should_not_exist)
+            Book.from_file(this_file_should_not_exist)
 
     def test_from_json_empty_string_raises_malformed_project_json_error(self):
         with self.assertRaises(MalformedProjectJsonError):
-            Project.from_json('')
+            Book.from_json('')
 
     def test_from_json_malformed_json_raises_malformed_project_json_error(self):
         with self.assertRaises(MalformedProjectJsonError):
-            Project.from_json('{[}')
+            Book.from_json('{[}')
 
     def test_from_json_empty_json_object(self):
-        project = Project.from_json('{}')
+        project = Book.from_json('{}')
 
         self.assertDictEqual(project.metadata, {})
         self.assertListEqual(project.chapters, [])
@@ -85,7 +85,7 @@ class TestProject(unittest.TestCase):
         self.assertListEqual(project.substitutions, [])
 
     def test_from_dict_empty_dict(self):
-        project = Project.from_dict({})
+        project = Book.from_dict({})
 
         self.assertDictEqual(project.metadata, {})
         self.assertListEqual(project.chapters, [])
@@ -97,7 +97,7 @@ class TestProject(unittest.TestCase):
         dict_ = {
             'metadata': metadata
         }
-        project = Project.from_dict(dict_)
+        project = Book.from_dict(dict_)
 
         self.assertDictEqual(project.metadata, {})
 
@@ -112,7 +112,7 @@ class TestProject(unittest.TestCase):
         dict_ = {
             'metadata': metadata
         }
-        project = Project.from_dict(dict_)
+        project = Book.from_dict(dict_)
 
         self.assertDictEqual(project.metadata, metadata)
         self.assertEqual(project.metadata['title'], 'test')
@@ -122,7 +122,7 @@ class TestProject(unittest.TestCase):
         dict_ = {
             'chapters': chapters
         }
-        project = Project.from_dict(dict_)
+        project = Book.from_dict(dict_)
 
         self.assertListEqual(project.chapters, [])
 
@@ -135,7 +135,7 @@ class TestProject(unittest.TestCase):
         dict_ = {
             'chapters': chapters
         }
-        project = Project.from_dict(dict_)
+        project = Book.from_dict(dict_)
 
         self.assertEqual(len(project.chapters), 1)
         self.assertEqual(project.chapters[0].title, 'test')
@@ -152,7 +152,7 @@ class TestProject(unittest.TestCase):
         dict_ = {
             'chapters': chapters
         }
-        project = Project.from_dict(dict_)
+        project = Book.from_dict(dict_)
 
         self.assertEqual(len(project.chapters), 2)
 
@@ -169,7 +169,7 @@ class TestProject(unittest.TestCase):
         dict_ = {
             'outputs': outputs
         }
-        project = Project.from_dict(dict_)
+        project = Book.from_dict(dict_)
 
         self.assertListEqual(project.outputs, [])
 
@@ -187,7 +187,7 @@ class TestProject(unittest.TestCase):
         dict_ = {
             'outputs': outputs
         }
-        project = Project.from_dict(dict_)
+        project = Book.from_dict(dict_)
 
         self.assertEqual(len(project.outputs), 1)
         self.assertEqual(project.outputs[0].name, 'test_output')
@@ -214,7 +214,7 @@ class TestProject(unittest.TestCase):
         dict_ = {
             'outputs': outputs
         }
-        project = Project.from_dict(dict_)
+        project = Book.from_dict(dict_)
 
         self.assertEqual(len(project.outputs), 2)
         self.assertEqual(project.outputs[0].name, 'first_output')
@@ -229,7 +229,7 @@ class TestProject(unittest.TestCase):
         dict_ = {
             'substitutions': substitutions
         }
-        project = Project.from_dict(dict_)
+        project = Book.from_dict(dict_)
 
         self.assertListEqual(project.substitutions, [])
 
@@ -242,7 +242,7 @@ class TestProject(unittest.TestCase):
         dict_ = {
             'substitutions': substitutions
         }
-        project = Project.from_dict(dict_)
+        project = Book.from_dict(dict_)
 
         self.assertEqual(len(project.substitutions), 1)
         self.assertEqual(project.substitutions[0].find, 'a')
@@ -259,7 +259,7 @@ class TestProject(unittest.TestCase):
         dict_ = {
             'substitutions': substitutions
         }
-        project = Project.from_dict(dict_)
+        project = Book.from_dict(dict_)
 
         self.assertEqual(len(project.substitutions), 2)
         self.assertEqual(project.substitutions[0].find, 'a')
@@ -289,7 +289,7 @@ class TestProject(unittest.TestCase):
             'substitutions': substitutions
         }
 
-        project = Project.from_dict(dict_)
+        project = Book.from_dict(dict_)
 
         self.assertEqual(len(project.metadata), 1)
         self.assertEqual(project.metadata['title'], 'project_title')

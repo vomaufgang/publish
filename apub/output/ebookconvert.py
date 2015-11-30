@@ -18,6 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import logging
 import os
 import subprocess
 from tempfile import mkstemp
@@ -31,6 +32,9 @@ supported_metadata = ['title',
                       'authors',
                       'publisher',
                       'language']
+
+log = logging.Logger(__name__)
+log.debug('Logger for module {0} initialized', __name__)
 
 
 class EbookConvertOutput(Output):
@@ -50,15 +54,28 @@ class EbookConvertOutput(Output):
                 self.path
             ]
 
+            metadata = project.metadata
+            valid_metadata = {}
+
+            for metadata_key in metadata:
+                if metadata_key in supported_metadata:
+                    valid_metadata[metadata_key] = metadata[metadata_key]
+                else:
+                    log.warning('The metadata parameter {0} is not supported '
+                                'by ebook-convert and will thus be omitted',
+                                metadata_key)
+
+            metadata_params = _dict_to_param_array(project.metadata)
             custom_params = _dict_to_param_array(self.ebookconvert_params)
 
+            call_params.extend(metadata_params)
             call_params.extend(custom_params)
 
             subprocess.call(call_params)
         finally:
             os.remove(temp_path)
 
-    def _make_html(self, temp_path, metadata, chapters, substitutions):
+    def _make_html(self, temp_path, project):
         html_output = HtmlOutput()
 
         html_output.path = temp_path
@@ -67,10 +84,10 @@ class EbookConvertOutput(Output):
 
         html_output.single_file = True
 
-        html_output.make(metadata, chapters, substitutions)
+        html_output.make(project)
 
-    @staticmethod
-    def from_dict(dict_):
+    @classmethod
+    def from_dict(cls, dict_):
         ebook_convert_output = EbookConvertOutput()
 
         # todo move away from this generic solution and set + validate required fields instead
@@ -85,6 +102,6 @@ def _dict_to_param_array(dict_):
     param_array = []
 
     for k, v in dict_:
-        param_array.append("--{0}={1}".format(k, v))
+        param_array.append("--{0}=\"{1}\"".format(k, v))
 
     return param_array
