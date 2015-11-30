@@ -23,6 +23,7 @@
 import os
 import sys
 import argparse
+import json
 
 import logging
 import logging.config
@@ -58,7 +59,7 @@ class _CommandLineInterface:
         parser.add_argument('command', help='Subcommand to run')
 
         command = parser.parse_args(args[1:2]).command
-        if not hasattr(self, command):
+        if not hasattr(self, command) or command == '__init__':
             print('Unrecognized command')
             parser.print_help()
             return
@@ -136,7 +137,7 @@ def _add_log_level_argument(argument_parser):
                                           'CRITICAL'])
 
 
-def _setup_logging(log_level):
+def _setup_logging(log_level=logging.INFO):
     """Sets up the python logging block using logging.basiConfig and the
     provided log_level.
 
@@ -149,11 +150,12 @@ def _setup_logging(log_level):
     :return:
     """
     # todo Link to the chapter in the documentation.
-    logging_config = 'logging.ini'
+    logging_config = 'logging.json'
     if os.path.isfile(logging_config):
-        logging.config.fileConfig(
-            logging_config,
-            disable_existing_loggers=False)
+        if os.path.exists(logging_config):
+            with open(logging_config, 'rt') as f:
+                config = json.load(f)
+            logging.config.dictConfig(config)
         logging.getLogger().setLevel()
     else:
         logging.basicConfig(level=log_level)

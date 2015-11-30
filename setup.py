@@ -25,7 +25,7 @@ test_requirements = [
 
 setup(
     name='apub',
-    version='1.0.0a0',
+    version='1.0.0-alpha.0',
     # TODO: put meaningful description here
     description='Python package with command line interface to turn markdown '
                 'files into ebooks.',
@@ -41,7 +41,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'apub = apub.cli:run',
+            'apub = apub.cli:main',
         ],
     },
     include_package_data=True,
@@ -56,6 +56,7 @@ setup(
         'Natural Language :: English',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
     ],
     test_suite='nose.collector',
     tests_require=test_requirements
