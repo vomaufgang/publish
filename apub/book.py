@@ -18,6 +18,77 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+class Book:
+    default_file_name = '.apub.json'
+
+    def __init__(self):
+        super().__init__()
+        self.metadata = {}
+        self.chapters = []
+        # self.outputs = []
+        # self.substitutions = []
+        # todo remove dependency on outputs and substitutions
+        # todo input.py will return the project, the outputs and the
+        #      substitutions as seperate entities / as a tuple
+
+
+    # todo refactor this into input.py as factory methods
+
+    @classmethod
+    def from_dict(cls, dict_):
+        """Creates a new Project object from the provided python dictionary.
+
+        The structure and contents of the dictionary must be equivalent to
+        the apub JSON project format.
+
+        Args:
+            dict_ (dict): The dictionary to translate into a Project object.
+
+        Returns:
+            Book: A new Project created from the dictionary.
+        """
+        project = Book()
+
+        project.metadata = Book._get_metadata_from_dict(dict_)
+        project.chapters = Book._get_chapters_from_dict(dict_)
+
+        return project
+
+    @classmethod
+    def _get_metadata_from_dict(cls, project_dict):
+        """Returns the metadata dictionary contained in the project dictionary.
+
+        Args:
+            project_dict (dict): The project dictionary.
+
+        Returns:
+            dict: A dictionary containing the project metadata.
+        """
+        if 'metadata' in project_dict:
+            return project_dict['metadata']
+
+        return {}
+
+    @classmethod
+    def _get_chapters_from_dict(cls, project_dict):
+        """Returns the chapters contained in the project dictionary as a list
+        of Chapter objects.
+
+        Args:
+            project_dict (dict): The project dictionary.
+
+        Returns:
+            list[Chapter]: A list of Chapter objects or an empty list.
+        """
+        if 'chapters' in project_dict:
+            chapters = []
+            for chapter_dict in project_dict['chapters']:
+                chapters.append(Chapter.from_dict(chapter_dict))
+            return chapters
+
+        return []
+
+
 class Chapter:
     """Description for class.
 

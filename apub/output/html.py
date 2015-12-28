@@ -23,13 +23,13 @@ import markdown
 
 from apub.output import Output
 from apub.errors import NoChaptersFoundError
-from apub.metadata import Book, Chapter
+from apub.book import Book, Chapter
+from apub.substitution import Substitution
 
 import logging
 import logging.config
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
-
 
 
 class HtmlOutput(Output):
@@ -39,30 +39,42 @@ class HtmlOutput(Output):
         self.single_file = False
         pass
 
-    def make(self, project):
-        # todo if not path: return generated html content
-        # todo implement HtmlOutput.make
+    def make(self, book, substitutions):
         """
 
         Args:
-            project (Book):
+            substitutions (list[Substitution]): todo
+            book (Book): todo
         """
+        # todo if not path: return generated html content
+        # todo implement HtmlOutput.make
+        # todo docstring
 
-        from ..metadata import Book, Chapter
-        if not project:
-            raise AttributeError("project must not be None")
+        if not book:
+            raise AttributeError("book must not be None")
+        if not substitutions or hasattr(substitutions, "__iter__"):
+            log.warn("")
 
-        if not project.chapters or len(project.chapters) <= 0:
+        chapters = book.chapters
+        markdown_ = {}
+
+        if not book.chapters or len(book.chapters) <= 0:
             raise NoChaptersFoundError()
 
-        html = []
-        for chapter in project.chapters:
-            html.append(Html.from_chapter(chapter))
+        for chapter in chapters:
+            with open(chapter.source) as file:
+                markdown_[chapter] = file.read()
 
+        html_ = {}
+        for chapter in book.chapters:
+            html_[chapter] = Html.from_markdown(
+                    markdown_[chapter],
+                    substitutions)
 
-        Html.from_chapter(Chapter())
-        Html.from_file("")
-        raise NotImplementedError
+        if self.single_file:
+            raise NotImplementedError
+        else:
+            raise NotImplementedError
 
     @classmethod
     def from_dict(cls, dict_):
@@ -151,6 +163,6 @@ class Html:
         :rtype: string containing html
         """
         for substitution in substitutions:
-            substitution.apply_to(markdown_content)
+            markdown_content = substitution.apply_to(markdown_content)
 
         return markdown.markdown(markdown_content)

@@ -37,6 +37,8 @@ Features
 
   A simple project might look like this:
 
+.. todo:: Update example json to new json format
+
 .. code-block:: javascript
 
     {

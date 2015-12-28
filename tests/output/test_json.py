@@ -25,7 +25,7 @@ class TestJsonOutput(unittest.TestCase):
     def test_make(self):
         json_output = JsonOutput()
         json_output._write = MagicMock(name='_write')
-        from apub.metadata import Book
+        from apub.book import Book
 
         result = json_output.make(Book())
 

@@ -22,19 +22,36 @@ from abc import ABCMeta, abstractmethod
 
 
 class Substitution(metaclass=ABCMeta):
+
     @abstractmethod
-    def apply_to(self, chapter):
-        pass
+    def apply_to(self, text):
+        """
+        Args:
+            text (str): The text to apply this simple substitution to.
+
+        Notes:
+            The current implementation schema of apply_to might prove
+            inefficient, because every single substitution leads to an
+            additional iteration the splitted lines of text.
+
+            If this proves true, the implementation should be changed to an
+            approach that is based on a single split and a single iteration
+            over all lines, diring which all substitutions get applied to a
+            line at the same time while retaining the order of application
+            defined in the json project.
+        """
+        raise NotImplementedError
 
     @classmethod
     def from_dict(cls, dict_):
         substitution_type = dict_['type']
 
         if substitution_type == 'simple':
-            from .simple import SimpleSubstitution
+            from apub.substitution.simple import SimpleSubstitution
             return SimpleSubstitution.from_dict(dict_)
+
         elif substitution_type == 'regex':
-            from .regex import RegexSubstitution
+            from apub.substitution.regex import RegexSubstitution
             return RegexSubstitution.from_dict(dict_)
 
         raise NotImplementedError(

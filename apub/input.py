@@ -16,15 +16,15 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-"""Package level docstring."""
-
-from apub import metadata
-
-import os
+import json
 import logging
+import os
+
+from apub.errors import MalformedProjectJsonError
+from apub.project import Project
 
 log = logging.getLogger(__name__)
+log.addHandler(logging.NullHandler)
 
 
 def read_project(path=None):
@@ -64,10 +64,16 @@ def read_project(path=None):
         data = project_file.read()
         log.debug('{0} read containing {1}'.format(project_file_path,
                                                    data))
+    try:
+        dict_ = json.loads(data)
+    except ValueError as value_error:
+        raise MalformedProjectJsonError(
+            "The provided project json contained malformed data. "
+            "Expected a valid json object, got{0}'{1}'{0}"
+            "Inspect the enclosed ValueError for more information."
+            .format(os.linesep, data)) from value_error
+
+    # todo: validate the data before calling the factory chain
 
     log.debug('end read_project')
-    return metadata.Book.from_json(data)
-
-
-def _build_project(project_data):
-    raise NotImplementedError
+    return Project.from_dict(dict_)

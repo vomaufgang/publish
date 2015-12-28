@@ -19,6 +19,10 @@
 
 
 from abc import ABCMeta, abstractmethod
+import logging
+
+log = logging.getLogger(__name__)
+log.addHandler(logging.NullHandler)
 
 
 class Output(metaclass=ABCMeta):
@@ -29,7 +33,7 @@ class Output(metaclass=ABCMeta):
         self.force_publish = False
 
     @abstractmethod
-    def make(self, project):
+    def make(self, book, substitutions):
         pass
 
     @classmethod

@@ -9,7 +9,7 @@ Tests for `apub.model.chapter` module.
 """
 
 import unittest
-from apub.metadata import Chapter
+from apub.book import Chapter
 import validators
 
 

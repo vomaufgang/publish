@@ -26,7 +26,6 @@ test_requirements = [
 setup(
     name='apub',
     version='1.0.0-alpha.0',
-    # TODO: put meaningful description here
     description='Python package with command line interface to turn markdown '
                 'files into ebooks.',
     long_description=readme + '\n\n' + history,
@@ -35,7 +34,6 @@ setup(
     url='https://github.com/vomaufgang/apub/',
     packages=[
         'apub',
-        'apub.metadata',
         'apub.output',
         'apub.substitution',
     ],

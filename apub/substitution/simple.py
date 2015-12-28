@@ -29,18 +29,33 @@ class SimpleSubstitution(Substitution):
         self.new = ""
 
     def apply_to(self, text):
+        """
+        Args:
+            text (str): The text to apply this simple substitution to.
+
+        Notes:
+            The current implementation schema of apply_to might prove
+            inefficient, because every single substitution leads to an
+            additional iteration the splitted lines of text.
+
+            If this proves true, the implementation should be changed to an
+            approach that is based on a single split and a single iteration
+            over all lines, diring which all substitutions get applied to a
+            line at the same time while retaining the order of application
+            defined in the json project.
+        """
         lines = text.splitlines
 
-        for line in lines:
-            line.replace()
+        altered_lines = [line.replace(self.old, self.new) for line in lines]
 
-        return os.linesep.join(lines)
+        return os.linesep.join(altered_lines)
 
     @classmethod
     def from_dict(cls, dict_):
         simple_substitution = SimpleSubstitution()
 
-        # todo move away from this generic solution and set + validate required fields instead
+        # todo move away from this generic solution and set+validate required
+        #      fields instead
 
         for k, v in dict_.items():
             setattr(simple_substitution, k, v)
