@@ -1,5 +1,5 @@
 The Project class
 =================
 
-.. autoclass:: apub.Project
+.. autoclass:: apub.project.Project
     :members:

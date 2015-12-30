@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# taken from
+# cli pattern taken from
 # http://chase-seibert.github.io/blog/2014/03/21/python-multilevel-argparse.html
 
 import os
@@ -29,6 +29,14 @@ import logging
 import logging.config
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
+
+apub_description = 'Command line interface to turn markdown files into ebooks'
+apub_usage = '''apub <command> [<args>]
+
+Commands:
+    make
+    quickstart
+'''
 
 make_description = 'Make the configured outputs.'
 make_usage = '''apub make [--project-path] [--output=<output_name>]
@@ -54,8 +62,8 @@ class _CommandLineInterface:
             args = sys.argv
 
         parser = argparse.ArgumentParser(
-            description='Pretends to be apub',
-            usage='''apub <command> [<args>]''')
+            description=apub_description,
+            usage=apub_usage)
         parser.add_argument('command', help='Subcommand to run')
 
         command = parser.parse_args(args[1:2]).command
@@ -104,7 +112,7 @@ class _CommandLineInterface:
         from .input import read_project
 
         if read_project(None):
-            # todo a project of this name already exists
+            # todo a project already exists in the working directory
             raise NotImplementedError
 
         quickstart()

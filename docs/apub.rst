@@ -6,12 +6,19 @@ Subpackages
 
 .. toctree::
 
-    apub.metadata
     apub.output
     apub.substitution
 
 Submodules
 ----------
+
+apub.book module
+----------------
+
+.. automodule:: apub.book
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 apub.cli module
 ---------------
@@ -49,6 +56,14 @@ apub.make module
 ----------------
 
 .. automodule:: apub.make
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+apub.project module
+-------------------
+
+.. automodule:: apub.project
     :members:
     :undoc-members:
     :show-inheritance:

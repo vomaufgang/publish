@@ -7,5 +7,5 @@ describing a project.
 The Chapter class
 -----------------
 
-.. autoclass:: apub.Chapter
+.. autoclass:: apub.book.Chapter
     :members:

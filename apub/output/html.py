@@ -18,7 +18,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import os
 import markdown
 
 from apub.output import Output
@@ -39,14 +38,16 @@ class HtmlOutput(Output):
         self.single_file = False
         pass
 
-    def make(self, book, substitutions):
+    def make(
+            self,
+            book,
+            substitutions):
         """
 
         Args:
             substitutions (list[Substitution]): todo
             book (Book): todo
         """
-        # todo if not path: return generated html content
         # todo implement HtmlOutput.make
         # todo docstring
 
@@ -55,26 +56,73 @@ class HtmlOutput(Output):
         if not substitutions or hasattr(substitutions, "__iter__"):
             log.warn("")
 
-        chapters = book.chapters
-        markdown_ = {}
+        chapters_html = HtmlOutput.get_chapters_html(book, substitutions)
 
+        if self.single_file:
+            self.write_single_file(chapters_html)
+        else:
+            self.write_file_per_chapter(chapters_html)
+
+    def write_single_file(self, chapters_html):
+        with open(self.path, 'w') as file:
+            for chapter in chapters_html:
+                if chapter.publish or self.force_publish:
+                    file.writelines(chapters_html[chapter])
+
+    def write_file_per_chapter(self, html_):
+        # todo remember to implement force_publish vs false
+        raise NotImplementedError
+
+    @classmethod
+    def get_chapters_html(cls, book, substitutions):
+        """
+
+        Args:
+            book:
+            substitutions:
+
+        Returns:
+            dict[Chapter,str]:
+        """
+        chapters_markdown = HtmlOutput._read_chapters_markdown(book)
+
+        chapters_markdown = HtmlOutput._apply_substitutions(
+                chapters_markdown,
+                substitutions)
+
+        chapters_html = HtmlOutput._transform_markdown_to_html(
+                chapters_markdown)
+
+        return chapters_html
+
+    @classmethod
+    def _read_chapters_markdown(cls, book):
+        chapters_markdown = {}
         if not book.chapters or len(book.chapters) <= 0:
             raise NoChaptersFoundError()
 
-        for chapter in chapters:
-            with open(chapter.source) as file:
-                markdown_[chapter] = file.read()
-
-        html_ = {}
         for chapter in book.chapters:
-            html_[chapter] = Html.from_markdown(
-                    markdown_[chapter],
-                    substitutions)
+            with open(chapter.source, 'r') as file:
+                chapters_markdown[chapter] = file.read()
 
-        if self.single_file:
-            raise NotImplementedError
-        else:
-            raise NotImplementedError
+        return chapters_markdown
+
+    @classmethod
+    def _transform_markdown_to_html(cls, markdown_):
+        html_ = {}
+        for chapter in markdown_:
+            html_[chapter] = Html.from_markdown(
+                    markdown_[chapter])
+        return html_
+
+    @classmethod
+    def _apply_substitutions(cls, markdown_, substitutions):
+        for chapter in markdown_:
+            for substitution in substitutions:
+                markdown_[chapter] = substitution.apply_to(
+                        markdown_[chapter])
+
+        return markdown_
 
     @classmethod
     def from_dict(cls, dict_):
@@ -143,7 +191,7 @@ class Html:
             raise
 
     @classmethod
-    def from_markdown(cls, markdown_content, substitutions=None):
+    def from_markdown(cls, markdown_content):
         """Returns the resulting html content of a string containing markdown,
         applying all substitutions and transforming the contents from markdown
         to html.
@@ -156,13 +204,7 @@ class Html:
         Args:
             :param markdown_content: the markdown content
             :type markdown_content: string
-            :param substitutions: the list of substitutions to be applied
-                [optional]
-            :type substitutions: subclass of :class:`Substitution` or None
 
         :rtype: string containing html
         """
-        for substitution in substitutions:
-            markdown_content = substitution.apply_to(markdown_content)
-
         return markdown.markdown(markdown_content)

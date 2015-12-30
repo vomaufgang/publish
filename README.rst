@@ -2,16 +2,6 @@
 apub
 ====
 
-.. .. image:: https://badge.fury.io/py/apub.png
-    :target: http://badge.fury.io/py/apub
-    
-.. image:: https://travis-ci.org/vomaufgang/apub.svg?branch=develop
-        :target: https://travis-ci.org/vomaufgang/apub
-
-.. .. image:: https://pypip.in/d/apub/badge.png
-        :target: https://pypi.python.org/pypi/apub
-
-
 Python package with command line interface to turn markdown files into ebooks.
 
 Created to make publishing stories a lot easier for myself.
@@ -19,6 +9,24 @@ Created to make publishing stories a lot easier for myself.
 * **Free software**: `GPLv3 <http://www.gnu.org/licenses/gpl-3.0>`_
 * **Official page**: http://anited.de/apub
 * **Documentation**: http://apub.readthedocs.org.
+
+.. .. image:: https://badge.fury.io/py/apub.png
+        :target: http://badge.fury.io/py/apub
+
+.. .. image:: https://pypip.in/d/apub/badge.png
+        :target: https://pypi.python.org/pypi/apub
+
+Build status
+------------
+
+* develop: |develop|
+* master: |master|
+
+.. |DEVELOP| image:: https://travis-ci.org/vomaufgang/apub.svg?branch=develop
+               :target: https://travis-ci.org/vomaufgang/apub/branches
+
+.. |MASTER| image:: https://travis-ci.org/vomaufgang/apub.svg?branch=master
+               :target: https://travis-ci.org/vomaufgang/apub/branches
 
 Features
 --------

@@ -25,11 +25,15 @@
 import json
 
 from .output import Output
-from .html import Html
+from .html import HtmlOutput
 from ..lzstring import LZString
 
 
 class JsonOutput(Output):
+    """
+
+    """
+
     def __init__(self):
         super().__init__()
         self.compress_content = False
@@ -37,31 +41,30 @@ class JsonOutput(Output):
         #   to indicate wether areader has to decompress the html contents
         #   before passing them to monocle
 
-    def make(self, project):
-        json_ = self._generate_json(project)
+    def make(self, book, substitutions):
+        json_ = self._get_json(book, substitutions)
         self._write(json_)
 
-    def _generate_json(self, project):
-        metadata = project.metadata
-        chapters = project.chapters
+    def _get_json(self, book, substitutions):
+        metadata = book.metadata
 
-        output = metadata.copy()
-        output['chapters'] = []
-
-        if not self.force_publish:
-            chapters = [chapter
-                        for chapter in chapters
-                        if chapter.publish]
+        # todo metadata -> attributes
+        # todo calculate word count?
+        json_ = metadata.copy()
+        json_['chapters'] = []
 
         lzstring = LZString()
 
-        for chapter in chapters:
-            content = Html.from_chapter(chapter)
+        chapters_html = HtmlOutput.get_chapters_html(book, substitutions)
+
+        for chapter in chapters_html:
+            if not chapter.publish and not self.force_publish:
+                continue
 
             if self.compress_content:
-                content = lzstring.compressToUTF16(content)
+                content = lzstring.compressToUTF16(chapters_html[chapter])
             else:
-                pass
+                content = chapters_html[chapter]
 
             chapter_dict = {
                 'title': chapter.title,
@@ -70,9 +73,9 @@ class JsonOutput(Output):
                 'is_compressed': self.compress_content
             }
 
-            output['chapters'].append(chapter_dict)
+            json_['chapters'].append(chapter_dict)
 
-        return json.dumps(output)
+        return json.dumps(json_)
 
     def _write(self, json_output):
         with open(self.path, 'w') as file:
