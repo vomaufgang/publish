@@ -30,7 +30,8 @@ class RegexSubstitution(Substitution):
     def from_dict(cls, dict_):
         regex_substitution = RegexSubstitution()
 
-        # todo move away from this generic solution and set + validate required fields instead
+        # todo move away from this generic solution and set + validate
+        #      required fields instead
 
         for k, v in dict_.items():
             setattr(regex_substitution, k, v)

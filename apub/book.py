@@ -34,20 +34,27 @@ class Book(FromDict):
 
     def __init__(self):
         # todo document attributes class docstring
-        # todo reference http://manual.calibre-ebook.com/cli/ebook-convert.html#metadata as source for metadata attribute documentation
+        # todo reference
+        # http://manual.calibre-ebook.com/cli/ebook-convert.html#metadata
+        # as source for metadata attribute documentation
         # attributes supported as metadata by ebook-convert:
         self.author_sort = ""
         self.authors = ""
         self.book_producer = ""
         self.comments = ""
-        self.cover = ""  # todo handling ebook-convert vs json - bundle cover as
-        #                      base64 encoded image into the json via
-        #                      embed_cover option?
-        self.isbn = ""  # todo ignore in json and html outputs - nah, keep it for when someone wants to look a book up
+        self.cover = ""
+        # todo handling ebook-convert vs json - bundle cover as
+        #      base64 encoded image into the json via
+        #      embed_cover option?
+        self.isbn = ""
+        # todo ignore in json and html outputs - nah, keep it for
+        #      when someone wants to look a book up
         self.language = ""
-        self.pubdate = ""  # todo set to current date if not specified?
-        #                    todo find out what ebook-convert defaults this to and implement it accordingly for areader
-        #                    todo expects ISO 8601 YYYY-MM-DD
+        self.pubdate = ""
+        # todo set to current date if not specified?
+        # todo find out what ebook-convert defaults this to and
+        #      implement it accordingly for areader
+        # todo expects ISO 8601 YYYY-MM-DD
         self.publisher = ""
         self.rating = ""  # todo numeric between 1 and 5
         self.series = ""
@@ -59,6 +66,8 @@ class Book(FromDict):
         # todo document attributes and allowed values in class docstring
         self.genres = ""  # todo use in JsonOutput
         self.state = ""  # todo use in JsonOutput
+
+        self.chapters = []
 
     @classmethod
     def from_dict(cls, dict_):
@@ -79,7 +88,8 @@ class Book(FromDict):
         #      the needs of the concrete output
         book.author_sort = cls.get_attribute_from_dict('author_sort', dict_)
         book.authors = cls.get_attribute_from_dict('authors', dict_)
-        book.book_producer = cls.get_attribute_from_dict('book_producer', dict_)
+        book.book_producer = cls.get_attribute_from_dict(
+                'book_producer', dict_)
         book.comments = cls.get_attribute_from_dict('comments', dict_)
         book.cover = cls.get_attribute_from_dict('cover', dict_)
         book.isbn = cls.get_attribute_from_dict('isbn', dict_)
@@ -136,12 +146,19 @@ class Chapter(FromDict):
     """
 
     def __init__(self):
-        self.title = None  # todo docs: This is what gets displayed in areader - it isn't used anywhere else
+        self.title = None
+        # todo docs: This is what gets displayed in areader - it isn't used
+        #      anywhere else
         self.source = None
-        self.url_friendly_title = None  # todo docs This is used in areader (for the url) and html file names in html multi file mode
-        #                                 todo HtmlOutput: additional attribute that determines wether the url_friendly_title is used as the file name
-        #                                 todo HtmlOutput: decide on a file name scheme for multi file output in abscence of url friendly title
-        #                                 todo HtmlOutput: additional attribute to optionally generate forward and back links in multi file mode
+        self.url_friendly_title = None
+        # todo docs This is used in areader (for the url) and html file
+        #      names in html multi file mode
+        # todo HtmlOutput: additional attribute that determines wether the
+        #      url_friendly_title is used as the file name
+        # todo HtmlOutput: decide on a file name scheme for multi file
+        #      output in abscence of url friendly title
+        # todo HtmlOutput: additional attribute to optionally generate
+        #      forward and back links in multi file mode
         self.publish = True
 
     @classmethod

@@ -85,10 +85,8 @@ class JsonOutput(Output):
     def from_dict(cls, dict_):
         json_output = JsonOutput()
 
-
-
-
-        # todo move away from this generic solution and set + validate required fields instead
+        # todo move away from this generic solution and set + validate
+        #      required fields instead
 
         for k, v in dict_.items():
             setattr(json_output, k, v)

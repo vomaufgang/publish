@@ -61,7 +61,7 @@ class EbookConvertOutput(Output):
             # metadata_params = _dict_to_param_array(project.metadata)
             custom_params = _dict_to_param_array(self.ebookconvert_params)
 
-            call_params.extend(metadata_params)
+            # call_params.extend(metadata_params)
             call_params.extend(custom_params)
 
             subprocess.call(call_params)
@@ -83,7 +83,8 @@ class EbookConvertOutput(Output):
     def from_dict(cls, dict_):
         ebook_convert_output = EbookConvertOutput()
 
-        # todo move away from this generic solution and set + validate required fields instead
+        # todo move away from this generic solution and set + validate
+        #      required fields instead
 
         for k, v in dict_.items():
             setattr(ebook_convert_output, k, v)

@@ -22,8 +22,6 @@ import markdown
 
 from apub.output import Output
 from apub.errors import NoChaptersFoundError
-from apub.book import Book, Chapter
-from apub.substitution import Substitution
 
 import logging
 import logging.config
@@ -45,8 +43,8 @@ class HtmlOutput(Output):
         """
 
         Args:
-            substitutions (list[Substitution]): todo
-            book (Book): todo
+            substitutions (list[apub.substitution.Substitution]): todo
+            book (apub.book.Book): todo
         """
         # todo implement HtmlOutput.make
         # todo docstring
@@ -78,11 +76,11 @@ class HtmlOutput(Output):
         """
 
         Args:
-            book:
+            book (apub.book.Book):
             substitutions:
 
         Returns:
-            dict[Chapter,str]:
+            dict[apub.book.Chapter,str]:
         """
         chapters_markdown = HtmlOutput._read_chapters_markdown(book)
 
@@ -97,6 +95,12 @@ class HtmlOutput(Output):
 
     @classmethod
     def _read_chapters_markdown(cls, book):
+        """
+
+        Args:
+            book (apub.book.Book):
+
+        """
         chapters_markdown = {}
         if not book.chapters or len(book.chapters) <= 0:
             raise NoChaptersFoundError()
@@ -128,7 +132,8 @@ class HtmlOutput(Output):
     def from_dict(cls, dict_):
         html_output = HtmlOutput()
 
-        # todo move away from this generic solution and set + validate required fields instead
+        # todo move away from this generic solution and set + validate
+        #      required fields instead
 
         for k, v in dict_.items():
             setattr(html_output, k, v)
@@ -153,7 +158,7 @@ class Html:
         take a look at the :py:mod:`substitution` package.
 
         Args:
-            chapter (apub.metadata.Chapter): The chapter.
+            chapter (apub.book.Chapter): The chapter.
             substitutions (apub.substitution.Substitution): The list of
                 substitutions to be applied. Defaults to None. [optional]
 

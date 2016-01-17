@@ -105,7 +105,8 @@ class Project:
             project_dict (dict): The project dictionary.
 
         Returns:
-            list[Substitution]: A list of Substitution objects or an empty list.
+            list[Substitution]: A list of Substitution objects or an empty
+                list.
         """
         from apub.substitution import Substitution
 
@@ -162,7 +163,7 @@ def read_project(path=None):
                 "The provided project json contained malformed data. "
                 "Expected a valid json object, got{0}'{1}'{0}"
                 "Inspect the enclosed ValueError for more information."
-                    .format(os.linesep, data)) from value_error
+                .format(os.linesep, data)) from value_error
 
     # todo: validate the data before calling the factory chain
 
