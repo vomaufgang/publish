@@ -81,7 +81,7 @@ class _CommandLineInterface:
             args:
         """
         from .make import make
-        from .input import read_project
+        from .project import read_project
 
         parser = argparse.ArgumentParser(description=make_description,
                                          usage=make_usage)
@@ -110,7 +110,7 @@ class _CommandLineInterface:
             args: list
         """
         from .quickstart import quickstart
-        from .input import read_project
+        from .project import read_project
 
         if read_project(None):
             # todo a project already exists in the working directory

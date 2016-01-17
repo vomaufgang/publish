@@ -122,10 +122,6 @@ class Book(FromDict):
 class Chapter(FromDict):
     """Description for class.
 
-    Args:
-        title (str): The title
-        source (str): File name of the source file
-
     Attributes:
         title (str): The title
         source (str): File name of the source file
@@ -139,15 +135,9 @@ class Chapter(FromDict):
             Defaults to True
     """
 
-    def __init__(self, title, source):
-        if not title:
-            raise AttributeError('title must not be None or empty')
-
-        if not source:
-            raise AttributeError('source must not be None or empty')
-
-        self.title = title  # todo docs: This is what gets displayed in areader - it isn't used anywhere else
-        self.source = source
+    def __init__(self):
+        self.title = None  # todo docs: This is what gets displayed in areader - it isn't used anywhere else
+        self.source = None
         self.url_friendly_title = None  # todo docs This is used in areader (for the url) and html file names in html multi file mode
         #                                 todo HtmlOutput: additional attribute that determines wether the url_friendly_title is used as the file name
         #                                 todo HtmlOutput: decide on a file name scheme for multi file output in abscence of url friendly title
@@ -164,12 +154,10 @@ class Chapter(FromDict):
         Args:
             dict_ (dict): The dictionary to translate into a Chapter object.
         """
-        title = cls.get_attribute_from_dict('title', dict_)
-        source = cls.get_attribute_from_dict('source', dict_)
+        chapter = Chapter()
 
-        chapter = Chapter(title=title,
-                          source=source)
-
+        chapter.title = cls.get_attribute_from_dict('title', dict_)
+        chapter.source = cls.get_attribute_from_dict('source', dict_)
         chapter.publish = cls.get_attribute_from_dict(
                 'publish', dict_, default=True)
         chapter.url_friendly_title = cls.get_attribute_from_dict(
