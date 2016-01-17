@@ -15,13 +15,6 @@ from apub.book import Book
 class TestProject(unittest.TestCase):
     # todo: Write tests for mandatory properties
 
-    def setUp(self):
-        self.book = Book()
-        pass
-
-    def tearDown(self):
-        pass
-
     def test_from_directory(self):
         pass
         # todo reuse this to test input.py read_project

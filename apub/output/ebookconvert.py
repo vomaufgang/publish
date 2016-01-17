@@ -33,6 +33,7 @@ supported_metadata = ['title',
                       'publisher',
                       'language']
 
+
 log = logging.Logger(__name__)
 log.debug('Logger for module {0} initialized', __name__)
 
@@ -43,10 +44,10 @@ class EbookConvertOutput(Output):
         super().__init__()
         self.ebookconvert_params = []
 
-    def make(self, project):
+    def make(self, book, substitutions):
         (temp_handle, temp_path) = mkstemp(suffix=".html")
         try:
-            self._make_html(temp_path, project)
+            self._make_html(temp_path, book, substitutions)
 
             call_params = [
                 'ebook-convert',
@@ -54,18 +55,10 @@ class EbookConvertOutput(Output):
                 self.path
             ]
 
-            metadata = project.metadata
-            valid_metadata = {}
+            # todo validate mandatory book attributes
 
-            for metadata_key in metadata:
-                if metadata_key in supported_metadata:
-                    valid_metadata[metadata_key] = metadata[metadata_key]
-                else:
-                    log.warning('The metadata parameter {0} is not supported '
-                                'by ebook-convert and will thus be omitted',
-                                metadata_key)
-
-            metadata_params = _dict_to_param_array(project.metadata)
+            # todo transform book object into param array
+            # metadata_params = _dict_to_param_array(project.metadata)
             custom_params = _dict_to_param_array(self.ebookconvert_params)
 
             call_params.extend(metadata_params)
@@ -75,7 +68,7 @@ class EbookConvertOutput(Output):
         finally:
             os.remove(temp_path)
 
-    def _make_html(self, temp_path, project):
+    def _make_html(self, temp_path, book, substitutions):
         html_output = HtmlOutput()
 
         html_output.path = temp_path
@@ -84,7 +77,7 @@ class EbookConvertOutput(Output):
 
         html_output.single_file = True
 
-        html_output.make(project)
+        html_output.make(book, substitutions)
 
     @classmethod
     def from_dict(cls, dict_):

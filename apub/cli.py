@@ -27,6 +27,7 @@ import json
 
 import logging
 import logging.config
+
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 

@@ -18,13 +18,7 @@ class TestChapter(unittest.TestCase):
     # todo test default values
     # todo test mandatory __init__ args and resulting ArgumentErrors
 
-    def setUp(self):
-        pass
-
     def test_read(self):
-        pass
-
-    def tearDown(self):
         pass
 
 if __name__ == '__main__':

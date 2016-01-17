@@ -17,26 +17,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# todo: Use for all input classes
+# todo: docstrings
 
-class MalformedIdError(Exception):
-    pass
-
-
-class MalformedSlugError(Exception):
-    pass
+from abc import ABCMeta, abstractmethod
 
 
-class OutputNotFoundError(Exception):
-    pass
+class FromDict(metaclass=ABCMeta):
+    @classmethod
+    @abstractmethod
+    def from_dict(cls, dict_):
+        raise NotImplementedError
 
-
-class MalformedProjectJsonError(Exception):
-    pass
-
-
-class NoChaptersFoundError(Exception):
-    pass
-
-
-class NoBookFoundError(Exception):
-    pass
+    @classmethod
+    def get_attribute_from_dict(cls, attribute_name, dict_, default=None):
+        if attribute_name not in dict_:
+            return default
+        return dict_['attribute']

@@ -17,9 +17,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import json
+import logging
+import os
 
 from apub.errors import MalformedProjectJsonError
+from apub.errors import NoBookFoundError
 from apub.book import Book
+
+log = logging.getLogger(__name__)
+log.addHandler(logging.NullHandler)
 
 
 class Project:
@@ -46,7 +53,7 @@ class Project:
         """
         project = Project()
 
-        project.metadata = Project._get_book_from_dict(dict_)
+        project.book = Project._get_book_from_dict(dict_)
         project.outputs = Project._get_outputs_from_dict(dict_)
         project.substitutions = Project._get_substitutions_from_dict(dict_)
 
@@ -62,10 +69,11 @@ class Project:
         Returns:
             dict: A dictionary containing the project metadata.
         """
-        if 'metadata' in project_dict:
-            return project_dict['metadata']
-
-        return {}
+        # todo fix docstring metadata <-> book
+        if 'book' in project_dict:
+            return Book.from_dict(project_dict['book'])
+        else:
+            raise NoBookFoundError
 
     @classmethod
     def _get_outputs_from_dict(cls, project_dict):
@@ -108,3 +116,55 @@ class Project:
             return substitutions
 
         return []
+
+
+def read_project(path=None):
+    """Welp
+
+    Args:
+        path (str): Optional
+
+    Returns:
+        Something.
+    """
+    log.debug('start read_project')
+    log.debug('path = {0}'.format(path))
+    project_file_path = None
+    default_project_file_name = '.apub.json'
+
+    if not path:
+        log.debug('path is None, look for {0} in cwd {1}'.format(
+                default_project_file_name,
+                os.getcwd()))
+        project_file_path = os.path.join(
+                os.getcwd(),
+                default_project_file_name)
+    elif os.path.isdir(os.path.join(os.getcwd(), path)):
+        log.debug('path is {0}, look for {1}'.format(
+                os.path.join(os.getcwd(), path),
+                default_project_file_name))
+        project_file_path = os.path.join(
+                path,
+                default_project_file_name)
+    elif os.path.isfile(os.path.join(os.getcwd(), path)):
+        project_file_path = path
+        log.debug('path is {0}, use it')
+
+    log.debug('reading {0}'.format(project_file_path))
+    with open(project_file_path) as project_file:
+        data = project_file.read()
+        log.debug('{0} read containing {1}'.format(project_file_path,
+                                                   data))
+    try:
+        dict_ = json.loads(data)
+    except ValueError as value_error:
+        raise MalformedProjectJsonError(
+                "The provided project json contained malformed data. "
+                "Expected a valid json object, got{0}'{1}'{0}"
+                "Inspect the enclosed ValueError for more information."
+                    .format(os.linesep, data)) from value_error
+
+    # todo: validate the data before calling the factory chain
+
+    log.debug('end read_project')
+    return Project.from_dict(dict_)

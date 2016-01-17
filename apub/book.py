@@ -20,15 +20,18 @@
 
 # todo the following states are recognized and localized by areader,
 #      others are possible but will be displayed by areader as-is
+from apub.fromdict import FromDict
+
 states = ['ongoing', 'finished', 'on hiatus']
 
 
-class Book:
+class Book(FromDict):
     """The book.
 
     Attributes:
         chapters (list[Chapter]): The list of chapters.
     """
+
     def __init__(self):
         # todo document attributes class docstring
         # todo reference http://manual.calibre-ebook.com/cli/ebook-convert.html#metadata as source for metadata attribute documentation
@@ -40,7 +43,7 @@ class Book:
         self.cover = ""  # todo handling ebook-convert vs json - bundle cover as
         #                      base64 encoded image into the json via
         #                      embed_cover option?
-        self.isbn = ""  # todo ignore in json and html outputs
+        self.isbn = ""  # todo ignore in json and html outputs - nah, keep it for when someone wants to look a book up
         self.language = ""
         self.pubdate = ""  # todo set to current date if not specified?
         #                    todo find out what ebook-convert defaults this to and implement it accordingly for areader
@@ -57,17 +60,6 @@ class Book:
         self.genres = ""  # todo use in JsonOutput
         self.state = ""  # todo use in JsonOutput
 
-        # todo get rid of metadata
-        self.metadata = {}
-        self.chapters = []
-        # self.outputs = []
-        # self.substitutions = []
-        # todo remove dependency on outputs and substitutions
-        # todo input.py will return the project, the outputs and the
-        #      substitutions as seperate entities / as a tuple
-        # todo refactor this into input.py as factory methods
-        # todo decision: metadata dict vs attributes
-
     @classmethod
     def from_dict(cls, dict_):
         """Creates a new Book object from the provided python dictionary.
@@ -83,35 +75,29 @@ class Book:
         """
         book = Book()
 
-        # todo implement all attributes
-        # todo basic validation of mandatory attributes
-        book.title = dict_['title']
-        book.series = dict_['series']
-        book.series_index = dict_['series_index']
-        book.authors = dict_['authors']
-        book.author_sort = dict_['author_sort']
-        book.publisher = dict_['publisher']
-        book.language = dict_['language']
-        book.tags = dict_['tags']
+        # todo validate mandatory attributes in output classes according to
+        #      the needs of the concrete output
+        book.author_sort = cls.get_attribute_from_dict('author_sort', dict_)
+        book.authors = cls.get_attribute_from_dict('authors', dict_)
+        book.book_producer = cls.get_attribute_from_dict('book_producer', dict_)
+        book.comments = cls.get_attribute_from_dict('comments', dict_)
+        book.cover = cls.get_attribute_from_dict('cover', dict_)
+        book.isbn = cls.get_attribute_from_dict('isbn', dict_)
+        book.language = cls.get_attribute_from_dict('language', dict_)
+        book.pubdate = cls.get_attribute_from_dict('pubdate', dict_)
+        book.publisher = cls.get_attribute_from_dict('publisher', dict_)
+        book.rating = cls.get_attribute_from_dict('rating', dict_)
+        book.series = cls.get_attribute_from_dict('series', dict_)
+        book.series_index = cls.get_attribute_from_dict('series_index', dict_)
+        book.tags = cls.get_attribute_from_dict('tags', dict_)
+        book.title = cls.get_attribute_from_dict('title', dict_)
+
+        book.genres = cls.get_attribute_from_dict('genres', dict_)
+        book.state = cls.get_attribute_from_dict('state', dict_)
 
         book.chapters = Book._get_chapters_from_dict(dict_)
 
         return book
-
-    @classmethod
-    def _get_metadata_from_dict(cls, project_dict):
-        """Returns the metadata dictionary contained in the project dictionary.
-
-        Args:
-            project_dict (dict): The project dictionary.
-
-        Returns:
-            dict: A dictionary containing the project metadata.
-        """
-        if 'metadata' in project_dict:
-            return project_dict['metadata']
-
-        return {}
 
     @classmethod
     def _get_chapters_from_dict(cls, project_dict):
@@ -133,7 +119,7 @@ class Book:
         return []
 
 
-class Chapter:
+class Chapter(FromDict):
     """Description for class.
 
     Args:
@@ -178,13 +164,15 @@ class Chapter:
         Args:
             dict_ (dict): The dictionary to translate into a Chapter object.
         """
-        chapter = Chapter(title=dict_['title'],
-                          source=dict_['source'])
+        title = cls.get_attribute_from_dict('title', dict_)
+        source = cls.get_attribute_from_dict('source', dict_)
 
-        if 'url_friendly_title' in dict_:
-            chapter.url_friendly_title = dict_['url_friendly_title']
+        chapter = Chapter(title=title,
+                          source=source)
 
-        if 'publish' in dict_ and dict_['publish'] is not None:
-            chapter.publish = dict_['publish']
+        chapter.publish = cls.get_attribute_from_dict(
+                'publish', dict_, default=True)
+        chapter.url_friendly_title = cls.get_attribute_from_dict(
+                'url_friendly_title', dict_)
 
         return chapter
