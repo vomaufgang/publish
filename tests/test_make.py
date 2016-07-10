@@ -17,30 +17,30 @@ from apub.make import make
 
 class TestMake(unittest.TestCase):
     def test_make(self):
-        book = Book()
-        book.title = "Book"
-        book.authors = "Author"
-
-        chapter = Chapter()
-        chapter.title = "Chapter 1"
-        chapter.source = 'D:\\Test\\test.chapter'
-        book.chapters.append(chapter)
-
-        chapter = Chapter()
-        chapter.title = "Chapter 2"
-        chapter.source = 'D:\\Test\\test.chapter'
-        book.chapters.append(chapter)
-
-        project = Project()
-        project.book = book
-
-        html = HtmlOutput()
-        html.path = 'D:\\Test\\test.html'
-        html.single_file = True  # todo shouldn't his be false by default?
-
-        project.outputs.append(html)
-
-        make(project)
+        # book = Book()
+        # book.title = "Book"
+        # book.authors = "Author"
+        #
+        # chapter = Chapter()
+        # chapter.title = "Chapter 1"
+        # chapter.source = 'D:\\Test\\test.chapter'
+        # book.chapters.append(chapter)
+        #
+        # chapter = Chapter()
+        # chapter.title = "Chapter 2"
+        # chapter.source = 'D:\\Test\\test.chapter'
+        # book.chapters.append(chapter)
+        #
+        # project = Project()
+        # project.book = book
+        #
+        # html = HtmlOutput()
+        # html.path = 'D:\\Test\\test.html'
+        # html.single_file = True  # todo shouldn't his be false by default?
+        #
+        # project.outputs.append(html)
+        #
+        # make(project)
 
         pass
 
