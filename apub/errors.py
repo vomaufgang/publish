@@ -40,3 +40,7 @@ class NoChaptersFoundError(Exception):
 
 class NoBookFoundError(Exception):
     pass
+
+
+class InvalidRatingError(Exception):
+    pass

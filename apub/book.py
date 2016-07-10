@@ -20,6 +20,9 @@
 
 # todo the following states are recognized and localized by areader,
 #      others are possible but will be displayed by areader as-is
+from typing import List, Dict
+
+from apub.errors import InvalidRatingError
 from apub.fromdict import FromDict
 
 states = ['ongoing', 'finished', 'on hiatus']
@@ -29,7 +32,7 @@ class Book(FromDict):
     """The book.
 
     Attributes:
-        chapters (list[Chapter]): The list of chapters.
+        chapters (List[Chapter]): The list of chapters.
     """
 
     def __init__(self):
@@ -38,39 +41,59 @@ class Book(FromDict):
         # http://manual.calibre-ebook.com/cli/ebook-convert.html#metadata
         # as source for metadata attribute documentation
         # attributes supported as metadata by ebook-convert:
-        self.author_sort = ""
-        self.authors = ""
-        self.book_producer = ""
-        self.comments = ""
-        self.cover = ""
+        self.author_sort = ""  # type: str
+        self.authors = ""  # type: str
+        self.book_producer = ""  # type: str
+        self.comments = ""  # type: str
+        self.cover = ""  # type: str
         # todo handling ebook-convert vs json - bundle cover as
         #      base64 encoded image into the json via
         #      embed_cover option?
-        self.isbn = ""
+        self.isbn = ""  # type: str
         # todo ignore in json and html outputs - nah, keep it for
         #      when someone wants to look a book up
-        self.language = ""
-        self.pubdate = ""
+        self.language = ""  # type: str
+        self.pubdate = ""  # type: str
         # todo set to current date if not specified?
         # todo find out what ebook-convert defaults this to and
         #      implement it accordingly for areader
         # todo expects ISO 8601 YYYY-MM-DD
-        self.publisher = ""
-        self.rating = ""  # todo numeric between 1 and 5
-        self.series = ""
-        self.series_index = ""
-        self.tags = ""
-        self.title = ""
+        self.publisher = ""  # type: str
+        # todo numeric between 1 and 5
+        self.__rating = None  # type: int
+        self.series = ""  # type: str
+        self.series_index = ""  # type: str
+        self.tags = ""  # type: str
+        self.title = ""  # type: str
 
         # additional attributes supported by areader:
         # todo document attributes and allowed values in class docstring
-        self.genres = ""  # todo use in JsonOutput
-        self.state = ""  # todo use in JsonOutput
+        # todo use genres and state in JsonOutput
+        self.genres = ""  # type: str
+        self.state = ""  # type: str
 
-        self.chapters = []
+        self.chapters = []  # type: List[Chapter]
+
+    @property
+    def rating(self) -> int:
+        return self.__rating
+
+    @rating.setter
+    def rating(self, value: int):
+        if value is None:
+            self.__rating = value
+
+        try:
+            value = int(value)
+        except ValueError:
+            raise InvalidRatingError(
+                'The rating of a chapter must be an int or castable to int '
+                'with a value >= 1 or <= 5 or None: \'{}\''.format(value))
+
+        self.__rating = value
 
     @classmethod
-    def from_dict(cls, dict_):
+    def from_dict(cls, dict_: Dict):
         """Creates a new Book object from the provided python dictionary.
 
         The structure and contents of the dictionary must be equivalent to
@@ -170,6 +193,9 @@ class Chapter(FromDict):
 
         Args:
             dict_ (dict): The dictionary to translate into a Chapter object.
+
+        Returns:
+            Chapter:
         """
         chapter = Chapter()
 
