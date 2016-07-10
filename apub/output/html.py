@@ -22,29 +22,43 @@ import markdown
 
 from apub.output import Output
 from apub.errors import NoChaptersFoundError
+from apub.project import Project
+from apub.book import Book
+from apub.substitution import Substitution
 
 import logging
 import logging.config
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
+# todo css, title + optional subtitle, lang
+# todo configurable codepage
+template = '''<!DOCTYPE html>
+<head>
+<meta charset="utf-8"/>
+<title>{{TITLE}}</title>
+</head>
+<body>
+{{CONTENT}}
+</body>
+</html>
+'''
+
 
 class HtmlOutput(Output):
 
     def __init__(self):
         super().__init__()
+        # todo shouldn't this default to True?
         self.single_file = False
         pass
 
-    def make(
-            self,
-            book,
-            substitutions):
+    def make(self, book, substitutions):
         """
 
         Args:
-            substitutions (list[apub.substitution.Substitution]): todo
-            book (apub.book.Book): todo
+            substitutions (List[Substitution]): todo
+            book (Book): todo
         """
         # todo implement HtmlOutput.make
         # todo docstring
@@ -57,15 +71,26 @@ class HtmlOutput(Output):
         chapters_html = HtmlOutput.get_chapters_html(book, substitutions)
 
         if self.single_file:
-            self.write_single_file(chapters_html)
+            self.write_single_file(chapters_html, book)
         else:
             self.write_file_per_chapter(chapters_html)
 
-    def write_single_file(self, chapters_html):
+    def write_single_file(self, chapters_html, book):
+        """
+
+        Args:
+            chapters_html:
+            book:
+
+        Returns:
+
+        """
+        content = '\n'.join(chapters_html.values())
+        html = template.replace('{{CONTENT}}', content)\
+                       .replace('{{TITLE}}', book.title)
+
         with open(self.path, 'w') as file:
-            for chapter in chapters_html:
-                if chapter.publish or self.force_publish:
-                    file.writelines(chapters_html[chapter])
+            file.writelines(html)
 
     def write_file_per_chapter(self, html_):
         # todo remember to implement force_publish vs false
@@ -76,7 +101,7 @@ class HtmlOutput(Output):
         """
 
         Args:
-            book (apub.book.Book):
+            book (Book):
             substitutions:
 
         Returns:
@@ -98,7 +123,7 @@ class HtmlOutput(Output):
         """
 
         Args:
-            book (apub.book.Book):
+            book (Book):
 
         """
         chapters_markdown = {}
@@ -121,6 +146,17 @@ class HtmlOutput(Output):
 
     @classmethod
     def _apply_substitutions(cls, markdown_, substitutions):
+        """Applies the list of substitutions to the markdown content.
+
+        Args:
+            markdown_ (dict[str]): The dict of markdown strings by chapter.
+            substitutions (list[Substitution]):
+                The list of substitutions to be applied.
+
+        Returns:
+            dict[str]: The dict of markdown strings by chapter with
+                 the substitutions applied.
+        """
         for chapter in markdown_:
             for substitution in substitutions:
                 markdown_[chapter] = substitution.apply_to(
@@ -145,7 +181,7 @@ class Html:
     """Provides methods that return the finished html content for a single
     chapter, including the application of substitutions."""
     @classmethod
-    def from_chapter(cls, chapter, substitutions=None):
+    def from_chapter(cls, chapter):
         """Returns the resulting html content of a chapter, applying all
         substitutions and transforming the contents from markdown to html.
 
@@ -159,16 +195,14 @@ class Html:
 
         Args:
             chapter (apub.book.Chapter): The chapter.
-            substitutions (apub.substitution.Substitution): The list of
-                substitutions to be applied. Defaults to None. [optional]
 
         Returns:
             str: the resulting html
         """
-        return Html.from_file(chapter.source, substitutions)
+        return Html.from_file(chapter.source)
 
     @classmethod
-    def from_file(cls, path, substitutions=None):
+    def from_file(cls, path):
         """Returns the resulting html content of a file, applying all
         substitutions and transforming the contents from markdown to html.
 
@@ -191,7 +225,7 @@ class Html:
         try:
             with open(path, encoding='utf-8') as file:
                 contents = file.read()
-                return Html.from_markdown(contents, substitutions)
+                return Html.from_markdown(contents)
         except IOError:
             raise
 

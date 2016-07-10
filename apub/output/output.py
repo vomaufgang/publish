@@ -21,11 +21,13 @@
 from abc import ABCMeta, abstractmethod
 import logging
 
+from apub.fromdict import FromDict
+
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler)
 
 
-class Output(metaclass=ABCMeta):
+class Output(FromDict, metaclass=ABCMeta):
     def __init__(self):
         self.name = None
         self.path = None

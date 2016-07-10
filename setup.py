@@ -19,6 +19,9 @@ requirements = [
     'validators>=0.7'
 ]
 
+if sys.version_info < (3, 5):
+    requirements.append('typing')
+
 test_requirements = [
     'nose'
 ]

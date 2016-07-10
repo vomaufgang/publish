@@ -20,8 +20,10 @@
 
 from abc import ABCMeta, abstractmethod
 
+from apub.fromdict import FromDict
 
-class Substitution(metaclass=ABCMeta):
+
+class Substitution(FromDict, metaclass=ABCMeta):
 
     @abstractmethod
     def apply_to(self, text):

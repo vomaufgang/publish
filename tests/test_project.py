@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 """
-test_project
+test_chapter
 ----------------------------------
 
-Tests for `apub.model.project` module.
+Tests for `apub.model.chapter` module.
 """
 
 import unittest

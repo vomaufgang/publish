@@ -24,16 +24,17 @@ import os
 from apub.errors import MalformedProjectJsonError
 from apub.errors import NoBookFoundError
 from apub.book import Book
+from apub.fromdict import FromDict
 
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler)
 
 
-class Project:
+class Project(FromDict):
     def __init__(self):
         self.book = None
-        self.outputs = None
-        self.Substitutions = None
+        self.outputs = []
+        self.substitutions = []
 
     # todo implement factory method from_json, splits the dict accordingly and
     #      calls book, output and substition factory methods
@@ -70,6 +71,7 @@ class Project:
             dict: A dictionary containing the project metadata.
         """
         # todo fix docstring metadata <-> book
+        a = "Hello"
         if 'book' in project_dict:
             return Book.from_dict(project_dict['book'])
         else:

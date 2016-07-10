@@ -34,6 +34,7 @@ def make(project, output=None):
     """
     if output is None:
         make_every_output(project)
+        return
 
     if isinstance(output, Output):
         output.make(
@@ -55,8 +56,7 @@ def make(project, output=None):
 def make_every_output(project):
     for output in project.outputs:
         output.make(
-            project.metadata,
-            project.chapters,
+            project.book,
             project.substitutions)
 
 

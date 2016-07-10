@@ -48,6 +48,32 @@ class JsonOutput(Output):
     def _get_json(self, book, substitutions):
         metadata = book.metadata
 
+        # todo cli command that recommends unique slugs for chapters based on
+        #      sanitized and uniqueified chapter titles
+
+        # todo output_path  of JsonOutput will be interpreted as a
+        #      directory name because JsonOutput writes more than one file
+
+        # v outputs to [url_friendly_title].json with instructions to add
+        #   this to stories.json of areader
+        example_json_metadata = {
+            'aus [url_friendly_title]': {
+                'title': 'AUS',
+                'subtitle': 'vom Auf- und Untergang der Sterne',
+                'lastUpdated'
+                'etc': None
+            }
+        }
+
+        # v outputs to [url_friendly_title]_chapters.json
+        example_json_chapters = {
+            'hunger [url_friendly_title]': {
+                'content': 'content [maybe encrypted, maybe not]',
+                'compressed': True  # or maybe not
+            }
+        }
+
+
         # todo metadata -> attributes
         # todo calculate word count?
         json_ = metadata.copy()

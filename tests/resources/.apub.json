@@ -33,7 +33,6 @@
     },
     {
       "name": "json",
-      "remember": "shouldn't this output type be called areader?",
       "type": "json",
       "url_friendly_title": "otwat",
       "path": "output/json/test.json",
