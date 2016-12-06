@@ -19,8 +19,8 @@ Created to make publishing stories a lot easier for myself.
 Build status
 ------------
 
-* develop: |develop|
-* master: |master|
+* develop: |DEVELOP|
+* master: |MASTER|
 
 .. |DEVELOP| image:: https://travis-ci.org/vomaufgang/apub.svg?branch=develop
                :target: https://travis-ci.org/vomaufgang/apub/branches
@@ -44,8 +44,6 @@ Features
   will automatically identify the folder as a apub project.
 
   A simple project might look like this:
-
-.. todo:: Update example json to new json format
 
 .. code-block:: javascript
 

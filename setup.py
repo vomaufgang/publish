@@ -12,7 +12,7 @@ except ImportError:
 
 
 readme = open('README.rst').read()
-history = open('HISTORY.rst').read().replace('.. :changelog:', '')
+history = open('docs/history.rst').read().replace('.. :changelog:', '')
 
 requirements = [
     'markdown>=2.5.2',
