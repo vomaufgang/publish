@@ -19,6 +19,7 @@
 
 import markdown
 import os.path
+from pkg_resources import resource_string
 
 from apub.output import Output
 from apub.errors import NoChaptersFoundError
@@ -30,59 +31,33 @@ log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
 # todo css, title + optional subtitle, lang
-# todo configurable codepage
-_default_template = '''<!DOCTYPE html>
-<head>
-<meta charset="utf-8"/>
-<title>{{TITLE}}</title>
-<style type="text/css">{{CSS}}</style>
-</head>
-<body>
-{{CONTENT}}
-</body>
-</html>
-'''
 
 
 class HtmlOutput(Output):
 
     def __init__(self):
         super().__init__()
-        self.template = _default_template
         self.css_path = ''
         pass
 
-    def make(self, book, substitutions):
-        """
-
-        Args:
-            book (Book): todo
-            substitutions (list[Substitution]): todo
-        """
+    def make(self, book, substitutions=None):
         if not book:
             raise AttributeError("book must not be None")
 
         if substitutions is None:
             substitutions = []
 
-        chapters_html = HtmlOutput.get_chapters_html(book, substitutions)
+        chapters_html = self.get_chapters_html(book, substitutions)
 
         self.write_file(chapters_html, book)
 
     def write_file(self, chapters_html, book):
-        """
-
-        Args:
-            chapters_html:
-            book:
-
-        Returns:
-
-        """
         content = '\n'.join(chapters_html.values())
-        html = self.template.replace('{{CONTENT}}', content)\
-                            .replace('{{TITLE}}', book.title)\
-                            .replace('{{CSS}}', self._get_css())
+        template = resource_string(__name__, 'template.html')
+
+        html = template.format(content=content,
+                               title=book.title,
+                               css=self._get_css())
 
         with open(self.path, 'w') as file:
             file.write(html)
@@ -95,36 +70,19 @@ class HtmlOutput(Output):
 
         return css if css else ''
 
-    @classmethod
-    def get_chapters_html(cls, book, substitutions):
-        """
+    def get_chapters_html(self, book, substitutions):
+        chapters_markdown = self._read_chapters_markdown(book)
 
-        Args:
-            book (Book):
-            substitutions:
-
-        Returns:
-            dict[apub.book.Chapter,str]:
-        """
-        chapters_markdown = HtmlOutput._read_chapters_markdown(book)
-
-        chapters_markdown = HtmlOutput._apply_substitutions(
+        chapters_markdown = self._apply_substitutions(
                 chapters_markdown,
                 substitutions)
 
-        chapters_html = HtmlOutput._transform_markdown_to_html(
+        chapters_html = self._transform_markdown_to_html(
                 chapters_markdown)
 
         return chapters_html
 
-    @classmethod
-    def _read_chapters_markdown(cls, book):
-        """
-
-        Args:
-            book (Book):
-
-        """
+    def _read_chapters_markdown(self, book):
         chapters_markdown = {}
         if not book.chapters or len(book.chapters) <= 0:
             raise NoChaptersFoundError()
@@ -135,16 +93,14 @@ class HtmlOutput(Output):
 
         return chapters_markdown
 
-    @classmethod
-    def _transform_markdown_to_html(cls, markdown_):
+    def _transform_markdown_to_html(self, markdown_):
         html_ = {}
         for chapter in markdown_:
             html_[chapter] = Html.from_markdown(
                     markdown_[chapter])
         return html_
 
-    @classmethod
-    def _apply_substitutions(cls, markdown_, substitutions):
+    def _apply_substitutions(self, markdown_, substitutions):
         """Applies the list of substitutions to the markdown content.
 
         Args:
@@ -166,14 +122,11 @@ class HtmlOutput(Output):
     @classmethod
     def from_dict(cls, dict_):
         html_output = HtmlOutput()
+        get_value = cls.get_value_from_dict
 
-        # todo move away from this generic solution and set + validate
-        #      required fields instead
-
-        html_output.template = cls.get_value_from_dict(
-            'template', dict_, default=_default_template)
-        html_output.css_path = cls.get_value_from_dict(
-            'css_path', dict_, default='')
+        html_output.css_path = get_value('css_path',
+                                         dict_,
+                                         default=None)
 
         return html_output
 
