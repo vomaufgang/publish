@@ -17,25 +17,38 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-import logging
 import os
 import subprocess
 from tempfile import mkstemp
 
-from .output import Output
-from .html import HtmlOutput
+from apub.output.output import Output
+from apub.output.html import HtmlOutput
+from apub.book import Book
 
-# todo append remaining metadata supported by ebookconvert
-supported_metadata = ['title',
-                      'series',
-                      'authors',
-                      'publisher',
-                      'language']
+import logging.config
+log = logging.getLogger(__name__)
+log.addHandler(logging.NullHandler())
 
 
-log = logging.Logger(__name__)
-log.debug('Logger for module {0} initialized', __name__)
+_supported_metadata_attrs = [
+    'author_sort',
+    'authors',
+    'book_producer'
+    'comments',
+    'cover',
+    'isbn',
+    'language',
+    'pubdate',
+    'publisher',
+    'rating',
+    'series',
+    'series_index',
+    'tags',
+    'title'
+]
+
+# todo apart from error handling, logging and validation, this should be
+#      usable already - test it
 
 
 class EbookConvertOutput(Output):
@@ -55,14 +68,11 @@ class EbookConvertOutput(Output):
                 self.path
             ]
 
-            # todo validate mandatory book attributes
+            # todo validate mandatory book attributes - are there even any
+            #      mandatory ones?
 
-            # todo transform book object into param array
-            # metadata_params = _dict_to_param_array(project.metadata)
-            custom_params = _dict_to_param_array(self.ebookconvert_params)
-
-            # call_params.extend(metadata_params)
-            call_params.extend(custom_params)
+            call_params.extend(_attrs_as_ebookconvert_params(book))
+            call_params.extend(self.ebookconvert_params)
 
             subprocess.call(call_params)
         finally:
@@ -75,27 +85,58 @@ class EbookConvertOutput(Output):
         html_output.css = self.css
         html_output.force_publish = self.force_publish
 
-        html_output.single_file = True
-
         html_output.make(book, substitutions)
 
     @classmethod
     def from_dict(cls, dict_):
         ebook_convert_output = EbookConvertOutput()
 
-        # todo move away from this generic solution and set + validate
-        #      required fields instead
-
-        for k, v in dict_.items():
-            setattr(ebook_convert_output, k, v)
+        ebook_convert_output.ebookconvert_params = cls.get_value_from_dict(
+            'ebookconvert_params', dict_, [])
 
         return ebook_convert_output
 
 
-def _dict_to_param_array(dict_):
-    param_array = []
+def _append_param(object_, attr_name, params):
+    """
 
-    for k, v in dict_:
-        param_array.append("--{0}=\"{1}\"".format(k, v))
+    Args:
+        object_:
+        attr_name:
+        params:
 
-    return param_array
+    Returns:
+
+    """
+    # todo document _append_param
+    # todo error handling
+    if hasattr(object_, attr_name):
+        attr = str(getattr(object_, attr_name))
+        if attr and not attr.isspace():
+            params.append(
+                _format_param(attr_name, attr))
+
+
+def _attrs_as_ebookconvert_params(object_):
+    """Takes an object and returns all attributes that can be processed
+    by the ebookconvert command line as a param array.
+
+    Args:
+        object_ (object): An object
+
+    Returns:
+        A param array containing all attributes of the book supported by
+        ebookconvert.
+    """
+    # This way the book can contain attrs not supported by ebookconvert
+    # (or any other specific output that follows this explicit pattern)
+    params = []
+
+    for attr_name in _supported_metadata_attrs:
+        _append_param(object_, attr_name, params)
+
+    return params
+
+
+def _format_param(param_name, param_value):
+    return "--{0}=\"{1}\"".format(param_name, param_value)

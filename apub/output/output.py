@@ -40,7 +40,7 @@ class Output(FromDict, metaclass=ABCMeta):
 
     @classmethod
     def from_dict(cls, dict_):
-        output_type = dict_['type']
+        output_type = cls.get_value_from_dict('type', dict_)
 
         if output_type == 'html':
             from .html import HtmlOutput
@@ -55,11 +55,13 @@ class Output(FromDict, metaclass=ABCMeta):
             raise NotImplementedError(
                 'Unrecognized output type: {0}'.format(output_type))
 
-        output.name = dict_['name']
-        output.path = dict_['path']
-        output.css = dict_['css']
-        if 'force_publish' in dict_:
-            output.force_publish = dict_['force_publish']
+        # todo validate mandatory parameters name & path
+
+        output.name = cls.get_value_from_dict('name', dict_)
+        output.path = cls.get_value_from_dict('path', dict_)
+        output.css = cls.get_value_from_dict('css', dict_)
+        output.force_publish = cls.get_value_from_dict(
+            'force_publish', dict_, default=False)
 
         return output
 
