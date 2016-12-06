@@ -1,6 +1,5 @@
 markdown>=2.5.2
 validators>=0.7
-typing; python_version < '3.5'
 nose
 tox
 Sphinx
