@@ -48,9 +48,10 @@ class SimpleSubstitution(Substitution):
             line at the same time while retaining the order of application
             defined in the json project.
         """
-        lines = text.splitlines
+        lines = text.splitlines()
 
-        altered_lines = [line.replace(self.find, self.replace_with) for line in lines]
+        altered_lines = [line.replace(self.find, self.replace_with)
+                         for line in lines]
 
         return os.linesep.join(altered_lines)
 
