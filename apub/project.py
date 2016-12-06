@@ -18,16 +18,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import json
-import logging
 import os
 
-from apub.errors import MalformedProjectJsonError
-from apub.errors import NoBookFoundError
+from apub.errors import MalformedProjectJsonError, NoBookFoundError
 from apub.book import Book
 from apub.fromdict import FromDict
 
+import logging.config
 log = logging.getLogger(__name__)
-log.addHandler(logging.NullHandler)
+log.addHandler(logging.NullHandler())
 
 
 class Project(FromDict):
@@ -71,7 +70,6 @@ class Project(FromDict):
             dict: A dictionary containing the project metadata.
         """
         # todo fix docstring metadata <-> book
-        a = "Hello"
         if 'book' in project_dict:
             return Book.from_dict(project_dict['book'])
         else:
@@ -83,7 +81,7 @@ class Project(FromDict):
         of Output objects.
 
         Args:
-            project_dict (dict): The project dictionary.
+            project_dict (Dict): The project dictionary.
 
         Returns:
             list[Output]: A list of Output objects or an empty list.
@@ -104,7 +102,7 @@ class Project(FromDict):
         a list of Output objects.
 
         Args:
-            project_dict (dict): The project dictionary.
+            project_dict (Dict): The project dictionary.
 
         Returns:
             list[Substitution]: A list of Substitution objects or an empty
@@ -134,22 +132,23 @@ def read_project(path=None):
     log.debug('path = {0}'.format(path))
     project_file_path = None
     default_project_file_name = '.apub.json'
+    cwd = os.getcwd()
 
     if not path:
         log.debug('path is None, look for {0} in cwd {1}'.format(
                 default_project_file_name,
-                os.getcwd()))
+                cwd))
         project_file_path = os.path.join(
-                os.getcwd(),
+                cwd,
                 default_project_file_name)
-    elif os.path.isdir(os.path.join(os.getcwd(), path)):
+    elif os.path.isdir(os.path.join(cwd, path)):
         log.debug('path is {0}, look for {1}'.format(
-                os.path.join(os.getcwd(), path),
+                os.path.join(cwd, path),
                 default_project_file_name))
         project_file_path = os.path.join(
                 path,
                 default_project_file_name)
-    elif os.path.isfile(os.path.join(os.getcwd(), path)):
+    elif os.path.isfile(os.path.join(cwd, path)):
         project_file_path = path
         log.debug('path is {0}, use it')
 
