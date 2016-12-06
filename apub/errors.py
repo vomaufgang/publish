@@ -44,3 +44,7 @@ class NoBookFoundError(Exception):
 
 class InvalidRatingError(Exception):
     pass
+
+
+class InvalidSeriesIndexError(Exception):
+    pass
