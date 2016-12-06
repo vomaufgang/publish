@@ -25,11 +25,10 @@ import sys
 import argparse
 import json
 
-import logging
 import logging.config
-
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
+
 
 apub_description = 'Command line interface to turn markdown files into ebooks'
 apub_usage = '''apub <command> [<args>]
@@ -53,6 +52,8 @@ Examples:
     apub make                      Make all configured outputs.
     apub make --output=my_output   Make the specified output.
 '''
+
+# todo move to click http://click.pocoo.org/5/
 
 
 class _CommandLineInterface:
