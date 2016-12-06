@@ -17,13 +17,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 from abc import ABCMeta, abstractmethod
 
 from apub.fromdict import FromDict
 
+import logging.config
+log = logging.getLogger(__name__)
+log.addHandler(logging.NullHandler())
+
 
 class Substitution(FromDict, metaclass=ABCMeta):
+    # todo write unit tests
 
     @abstractmethod
     def apply_to(self, text):

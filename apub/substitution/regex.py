@@ -17,23 +17,52 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
+import re
 
-from .substitution import Substitution
+from apub.substitution.substitution import Substitution
+
+import logging.config
+log = logging.getLogger(__name__)
+log.addHandler(logging.NullHandler())
 
 
 class RegexSubstitution(Substitution):
+    # todo write unit tests
+    def __init__(self):
+        self.expression = ''
+        self.replace_with = ''
+
     def apply_to(self, text):
-        # todo implement RegexSubstitution.apply_to
-        raise NotImplementedError
+        """
+        Args:
+            text (str): The text to apply this simple substitution to.
+
+        Notes:
+            The current implementation schema of apply_to might prove
+            inefficient, because every single substitution leads to an
+            additional iteration over the splitted lines of text.
+
+            If this proves true, the implementation should be changed to an
+            approach that is based on a single split and a single iteration
+            over all lines, diring which all substitutions get applied to a
+            line at the same time while retaining the order of application
+            defined in the json project.
+        """
+        lines = text.splitlines
+
+        altered_lines = [re.sub(self.expression, self.replace_with, line)
+                         for line in lines]
+
+        return os.linesep.join(altered_lines)
 
     @classmethod
     def from_dict(cls, dict_):
-        regex_substitution = RegexSubstitution()
+        simple_substitution = RegexSubstitution()
 
-        # todo move away from this generic solution and set + validate
-        #      required fields instead
+        simple_substitution.expression = cls.get_value_from_dict(
+            'expression', dict_, default='')
+        simple_substitution.replace_with = cls.get_value_from_dict(
+            'replace_with', dict_, default='')
 
-        for k, v in dict_.items():
-            setattr(regex_substitution, k, v)
-
-        return regex_substitution
+        return simple_substitution

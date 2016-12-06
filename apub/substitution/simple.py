@@ -17,16 +17,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 import os
 
-from .substitution import Substitution
+from apub.substitution.substitution import Substitution
+
+import logging.config
+log = logging.getLogger(__name__)
+log.addHandler(logging.NullHandler())
 
 
 class SimpleSubstitution(Substitution):
+    # todo write unit tests
     def __init__(self):
-        self.old = ""
-        self.new = ""
+        self.find = ''
+        self.replace_with = ''
 
     def apply_to(self, text):
         """
@@ -36,7 +40,7 @@ class SimpleSubstitution(Substitution):
         Notes:
             The current implementation schema of apply_to might prove
             inefficient, because every single substitution leads to an
-            additional iteration the splitted lines of text.
+            additional iteration over the splitted lines of text.
 
             If this proves true, the implementation should be changed to an
             approach that is based on a single split and a single iteration
@@ -46,7 +50,7 @@ class SimpleSubstitution(Substitution):
         """
         lines = text.splitlines
 
-        altered_lines = [line.replace(self.old, self.new) for line in lines]
+        altered_lines = [line.replace(self.find, self.replace_with) for line in lines]
 
         return os.linesep.join(altered_lines)
 
@@ -54,10 +58,9 @@ class SimpleSubstitution(Substitution):
     def from_dict(cls, dict_):
         simple_substitution = SimpleSubstitution()
 
-        # todo move away from this generic solution and set+validate required
-        #      fields instead
-
-        for k, v in dict_.items():
-            setattr(simple_substitution, k, v)
+        simple_substitution.find = cls.get_value_from_dict(
+            'find', dict_, default='')
+        simple_substitution.replace_with = cls.get_value_from_dict(
+            'replace_with', dict_, default='')
 
         return simple_substitution
