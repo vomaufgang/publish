@@ -16,84 +16,134 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+from abc import ABCMeta
+from datetime import date
+from enum import Enum
+
+from typing import Optional, List, Union
+
+from apub.errors import InvalidRatingError, InvalidSeriesIndexError
+from apub.fromdict import FromDict
+
+import logging.config
+log = logging.getLogger(__name__)
+log.addHandler(logging.NullHandler())
 
 
 # todo the following states are recognized and localized by areader,
 #      others are possible but will be displayed by areader as-is
-from typing import List, Dict
+class States(Enum):
+    ongoing = 1
+    finished = 2
+    on_hiatus = 3
 
-from apub.errors import InvalidRatingError
-from apub.fromdict import FromDict
-
-states = ['ongoing', 'finished', 'on hiatus']
+    def __str__(self):
+        return str(self.name)
 
 
 class Book(FromDict):
     """The book.
 
+    More information on the attributes can be found here:
+    http://manual.calibre-ebook.com/cli/ebook-convert.html#metadata
+
     Attributes:
         chapters (List[Chapter]): The list of chapters.
+        title (Optional[str]): The title.
     """
 
     def __init__(self):
+        # todo use None as default for non-mandatory fields
         # todo document attributes class docstring
-        # todo reference
-        # http://manual.calibre-ebook.com/cli/ebook-convert.html#metadata
-        # as source for metadata attribute documentation
         # attributes supported as metadata by ebook-convert:
-        self.author_sort = ""  # type: str
-        self.authors = ""  # type: str
-        self.book_producer = ""  # type: str
-        self.comments = ""  # type: str
-        self.cover = ""  # type: str
+        self.author_sort = None
+        self.authors = None
+        self.book_producer = None
+        self.comments = None
+        self.cover = None
         # todo handling ebook-convert vs json - bundle cover as
         #      base64 encoded image into the json via
         #      embed_cover option?
-        self.isbn = ""  # type: str
+        self.isbn = None
         # todo ignore in json and html outputs - nah, keep it for
         #      when someone wants to look a book up
-        self.language = ""  # type: str
-        self.pubdate = ""  # type: str
-        # todo set to current date if not specified?
-        # todo find out what ebook-convert defaults this to and
-        #      implement it accordingly for areader
-        # todo expects ISO 8601 YYYY-MM-DD
-        self.publisher = ""  # type: str
-        # todo numeric between 1 and 5
-        self.__rating = None  # type: int
-        self.series = ""  # type: str
-        self.series_index = ""  # type: str
-        self.tags = ""  # type: str
-        self.title = ""  # type: str
+        self.language = None
+        self.pubdate = date.today().isoformat()
+        self.publisher = None
+        self.series = None
+        self.tags = None
+        self.title = None
+
+        self.__rating = None
+        self.__series_index = None
 
         # additional attributes supported by areader:
-        # todo document attributes and allowed values in class docstring
         # todo use genres and state in JsonOutput
-        self.genres = ""  # type: str
-        self.state = ""  # type: str
+        self.genres = None
+        self.__state = None
+        self.url_friendly_title = None
 
-        self.chapters = []  # type: List[Chapter]
+        self.chapters = []
 
     @property
-    def rating(self) -> int:
+    def rating(self):
         return self.__rating
 
     @rating.setter
-    def rating(self, value: int):
+    def rating(self, value):
         if value is None:
-            self.__rating = value
+            self.__rating = None
 
         try:
             value = int(value)
+            if value < 1 or value > 5:
+                raise ValueError
         except ValueError:
             raise InvalidRatingError(
-                'The rating of a chapter must be an int or castable to int '
+                'The rating of a book must be an int or castable to int '
                 'with a value >= 1 or <= 5 or None: \'{}\''.format(value))
 
         self.__rating = value
 
+    @property
+    def series_index(self):
+        # todo document Book.series_index
+        return self.__series_index
+
+    @series_index.setter
+    def series_index(self, value):
+        if value is None:
+            self.__series_index = None
+
+        try:
+            value = int(value)
+        except ValueError:
+            raise InvalidSeriesIndexError(
+                'The rating of a book must be an int or castable to int.')
+
+        self.__series_index = value
+
+    @property
+    def state(self):
+        # todo document Book.state
+        return self.__state
+
+    @state.setter
+    def state(self, value):
+        if value is None:
+            self.__state = None
+
+        if value not in States.__members__:
+            log.warning("The state '{value}' is not officially supported "
+                        "by areader. You may have to add your own "
+                        "translation to translations.js. See apub.book.States "
+                        "for officially supported states."
+                        .format(value=value))
+
+        self.__state = value
+
     @classmethod
-    def from_dict(cls, dict_: Dict):
+    def from_dict(cls, dict_):
         """Creates a new Book object from the provided python dictionary.
 
         The structure and contents of the dictionary must be equivalent to
@@ -103,30 +153,31 @@ class Book(FromDict):
             dict_ (dict): The dictionary to translate into a Project object.
 
         Returns:
-            Book: A new Project created from the dictionary.
+            Book: A new Book created from the dictionary.
         """
         book = Book()
 
-        # todo validate mandatory attributes in output classes according to
-        #      the needs of the concrete output
-        book.author_sort = cls.get_attribute_from_dict('author_sort', dict_)
-        book.authors = cls.get_attribute_from_dict('authors', dict_)
-        book.book_producer = cls.get_attribute_from_dict(
-                'book_producer', dict_)
-        book.comments = cls.get_attribute_from_dict('comments', dict_)
-        book.cover = cls.get_attribute_from_dict('cover', dict_)
-        book.isbn = cls.get_attribute_from_dict('isbn', dict_)
-        book.language = cls.get_attribute_from_dict('language', dict_)
-        book.pubdate = cls.get_attribute_from_dict('pubdate', dict_)
-        book.publisher = cls.get_attribute_from_dict('publisher', dict_)
-        book.rating = cls.get_attribute_from_dict('rating', dict_)
-        book.series = cls.get_attribute_from_dict('series', dict_)
-        book.series_index = cls.get_attribute_from_dict('series_index', dict_)
-        book.tags = cls.get_attribute_from_dict('tags', dict_)
-        book.title = cls.get_attribute_from_dict('title', dict_)
+        get_value = cls.get_value_from_dict
 
-        book.genres = cls.get_attribute_from_dict('genres', dict_)
-        book.state = cls.get_attribute_from_dict('state', dict_)
+        book.author_sort = get_value('author_sort', dict_)
+        book.authors = get_value('authors', dict_)
+        book.book_producer = get_value('book_producer', dict_)
+        book.comments = get_value('comments', dict_)
+        book.cover = get_value('cover', dict_)
+        book.isbn = get_value('isbn', dict_)
+        book.language = get_value('language', dict_)
+        book.pubdate = get_value(
+            'pubdate', dict_, default=date.today().isoformat())
+        book.publisher = get_value('publisher', dict_)
+        book.rating = get_value('rating', dict_)
+        book.series = get_value('series', dict_)
+        book.series_index = get_value('series_index', dict_)
+        book.tags = get_value('tags', dict_)
+        book.title = get_value('title', dict_)
+
+        book.genres = get_value('genres', dict_)
+        book.state = get_value('state', dict_)
+        book.url_friendly_title = get_value('url_friendly_title', dict_)
 
         book.chapters = Book._get_chapters_from_dict(dict_)
 
@@ -195,15 +246,15 @@ class Chapter(FromDict):
             dict_ (dict): The dictionary to translate into a Chapter object.
 
         Returns:
-            Chapter:
+            Chapter: A new Chapter created from the dictionary.
         """
         chapter = Chapter()
 
-        chapter.title = cls.get_attribute_from_dict('title', dict_)
-        chapter.source = cls.get_attribute_from_dict('source', dict_)
-        chapter.publish = cls.get_attribute_from_dict(
-                'publish', dict_, default=True)
-        chapter.url_friendly_title = cls.get_attribute_from_dict(
-                'url_friendly_title', dict_)
+        get_value = cls.get_value_from_dict
+
+        chapter.title = get_value('title', dict_)
+        chapter.source = get_value('source', dict_)
+        chapter.publish = get_value('publish', dict_, default=True)
+        chapter.url_friendly_title = get_value('url_friendly_title', dict_)
 
         return chapter
