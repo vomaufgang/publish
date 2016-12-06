@@ -38,6 +38,9 @@ class Book(FromDict):
     Attributes:
         chapters (List[Chapter]): The list of chapters.
         title (Optional[str]): The title.
+        language (Optional[str]): The language as an ISO 639-2 code,
+            defaults to 'und'.
+            See: https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
     """
 
     def __init__(self):
@@ -55,17 +58,45 @@ class Book(FromDict):
         self.isbn = None
         # todo ignore in json and html outputs - nah, keep it for
         #      when someone wants to look a book up
-        self.language = None
         self.pubdate = date.today().isoformat()
         self.publisher = None
         self.series = None
         self.tags = None
         self.title = None
 
+        self.__language = 'und'
         self.__rating = None
         self.__series_index = None
 
         self.chapters = []
+
+    @property
+    def language(self):
+        return self.language
+
+    @language.setter
+    def language(self, value):
+        if not value:
+            self.__language = 'und'
+
+        faulty_language_warning = \
+            ("Book.language must be a string representing a "
+             "ISO 639-2 language code, falling back to 'und': "
+             "'{}'").format(value)
+
+        try:
+            value = str(value)
+        except ValueError:
+            log.warning(faulty_language_warning)
+            self.__language = 'und'
+            return
+
+        if len(value) not in [2, 3]:
+            log.warning(faulty_language_warning)
+            self.__language = 'und'
+            return
+
+        self.__language = value
 
     @property
     def rating(self):
@@ -82,8 +113,8 @@ class Book(FromDict):
                 raise ValueError
         except ValueError:
             raise InvalidRatingError(
-                'The rating of a book must be an int or castable to int '
-                'with a value >= 1 or <= 5 or None: \'{}\''.format(value))
+                "The rating of a book must be an int or castable to int "
+                "with a value >= 1 or <= 5 or None: '{}'".format(value))
 
         self.__rating = value
 
@@ -128,7 +159,7 @@ class Book(FromDict):
         book.comments = get_value('comments', dict_)
         book.cover = get_value('cover', dict_)
         book.isbn = get_value('isbn', dict_)
-        book.language = get_value('language', dict_)
+        book.language = get_value('language', dict_, 'und')
         book.pubdate = get_value(
             'pubdate', dict_, default=date.today().isoformat())
         book.publisher = get_value('publisher', dict_)

@@ -55,7 +55,8 @@ class HtmlOutput(Output):
 
         html_ = template.format(content=html_,
                                 title=book.title,
-                                css=self._get_css())
+                                css=self._get_css(),
+                                language=book.language)
 
         with open(self.path, 'w') as file:
             file.write(html_)
