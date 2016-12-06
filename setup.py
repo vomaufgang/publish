@@ -22,6 +22,9 @@ requirements = [
 if sys.version_info < (3, 5):
     requirements.append('typing')
 
+if sys.version_info < (3, 4):
+    requirements.append('enum34')
+
 test_requirements = [
     'nose'
 ]
