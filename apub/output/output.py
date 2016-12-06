@@ -46,8 +46,8 @@ class Output(FromDict, metaclass=ABCMeta):
             from .html import HtmlOutput
             output = HtmlOutput.from_dict(dict_)
         elif output_type == 'json':
-            from .json import JsonOutput
-            output = JsonOutput.from_dict(dict_)
+            raise NotImplementedError('Output type \'json\' is planned '
+                                      'for Version 3.0')
         elif output_type == 'ebook-convert':
             from .ebookconvert import EbookConvertOutput
             output = EbookConvertOutput.from_dict(dict_)

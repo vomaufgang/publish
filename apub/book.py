@@ -16,11 +16,10 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from abc import ABCMeta
-from datetime import date
-from enum import Enum
 
-from typing import Optional, List, Union
+from datetime import date
+
+from typing import Optional, List
 
 from apub.errors import InvalidRatingError, InvalidSeriesIndexError
 from apub.fromdict import FromDict
@@ -28,17 +27,6 @@ from apub.fromdict import FromDict
 import logging.config
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
-
-
-# todo the following states are recognized and localized by areader,
-#      others are possible but will be displayed by areader as-is
-class States(Enum):
-    ongoing = 1
-    finished = 2
-    on_hiatus = 3
-
-    def __str__(self):
-        return str(self.name)
 
 
 class Book(FromDict):
@@ -76,12 +64,6 @@ class Book(FromDict):
 
         self.__rating = None
         self.__series_index = None
-
-        # additional attributes supported by areader:
-        # todo use genres and state in JsonOutput
-        self.genres = None
-        self.__state = None
-        self.url_friendly_title = None
 
         self.chapters = []
 
@@ -122,25 +104,6 @@ class Book(FromDict):
                 'The rating of a book must be an int or castable to int.')
 
         self.__series_index = value
-
-    @property
-    def state(self):
-        # todo document Book.state
-        return self.__state
-
-    @state.setter
-    def state(self, value):
-        if value is None:
-            self.__state = None
-
-        if value not in States.__members__:
-            log.warning("The state '{value}' is not officially supported "
-                        "by areader. You may have to add your own "
-                        "translation to translations.js. See apub.book.States "
-                        "for officially supported states."
-                        .format(value=value))
-
-        self.__state = value
 
     @classmethod
     def from_dict(cls, dict_):

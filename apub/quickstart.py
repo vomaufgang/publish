@@ -24,4 +24,4 @@ log.addHandler(logging.NullHandler)
 
 def quickstart():
     # todo implement quickstart()
-    raise NotImplementedError
+    raise NotImplementedError('Planned for Version 2.0')

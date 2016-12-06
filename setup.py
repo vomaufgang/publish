@@ -40,11 +40,6 @@ setup(
         'apub.output',
         'apub.substitution',
     ],
-    entry_points={
-        'console_scripts': [
-            'apub = apub.cli:main',
-        ],
-    },
     include_package_data=True,
     install_requires=requirements,
     license="GPLv3",
@@ -58,6 +53,7 @@ setup(
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
     test_suite='nose.collector',
     tests_require=test_requirements
