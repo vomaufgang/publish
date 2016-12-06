@@ -17,38 +17,42 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import logging
+from apub.output import Output
+from apub.errors import OutputNotFoundError
 
-from .output import Output
-from .errors import OutputNotFoundError
-
+import logging.config
 log = logging.getLogger(__name__)
-log.addHandler(logging.NullHandler)
+log.addHandler(logging.NullHandler())
 
 
 def make(project, output=None):
     """
 
-    :param output:
-    :type project: :class:`apub.metadata.Book`
+    Args:
+        project (apub.project.Project): todo
+        output (apub.output.Output): todo
     """
+
     if output is None:
         make_every_output(project)
         return
 
+    outputs = project.outputs
+    book = project.book
+    substitutions = project.substitutions
+
     if isinstance(output, Output):
         output.make(
-            project.metadata,
-            project.chapters,
-            project.substitutions)
+            book,
+            substitutions)
         return
 
     try:
-        output = find_output(project, output)
+        output_name = output
+        output = find_output(outputs, output_name)
         output.make(
-            project.metadata,
-            project.chapters,
-            project.substitutions)
+            book,
+            substitutions)
     except OutputNotFoundError:
         raise
 
@@ -60,9 +64,10 @@ def make_every_output(project):
             project.substitutions)
 
 
-def find_output(project, output_name):
-    for output in project.outputs:
+def find_output(outputs, output_name):
+    for output in outputs:
         if output.output_name == output_name:
             return output
+
     raise OutputNotFoundError("No output using the following name could "
                               "be found: '{0}'".format(output_name))
