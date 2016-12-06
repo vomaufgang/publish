@@ -17,26 +17,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 import markdown
+import os.path
 
 from apub.output import Output
 from apub.errors import NoChaptersFoundError
-from apub.project import Project
 from apub.book import Book
 from apub.substitution import Substitution
 
-import logging
 import logging.config
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
 # todo css, title + optional subtitle, lang
 # todo configurable codepage
-template = '''<!DOCTYPE html>
+_default_template = '''<!DOCTYPE html>
 <head>
 <meta charset="utf-8"/>
 <title>{{TITLE}}</title>
+<style type="text/css">{{CSS}}</style>
 </head>
 <body>
 {{CONTENT}}
@@ -49,33 +48,28 @@ class HtmlOutput(Output):
 
     def __init__(self):
         super().__init__()
-        # todo shouldn't this default to True?
-        self.single_file = False
+        self.template = _default_template
+        self.css_path = ''
         pass
 
     def make(self, book, substitutions):
         """
 
         Args:
-            substitutions (List[Substitution]): todo
             book (Book): todo
+            substitutions (list[Substitution]): todo
         """
-        # todo implement HtmlOutput.make
-        # todo docstring
-
         if not book:
             raise AttributeError("book must not be None")
-        if not substitutions or hasattr(substitutions, "__iter__"):
-            log.warn("")
+
+        if substitutions is None:
+            substitutions = []
 
         chapters_html = HtmlOutput.get_chapters_html(book, substitutions)
 
-        if self.single_file:
-            self.write_single_file(chapters_html, book)
-        else:
-            self.write_file_per_chapter(chapters_html)
+        self.write_file(chapters_html, book)
 
-    def write_single_file(self, chapters_html, book):
+    def write_file(self, chapters_html, book):
         """
 
         Args:
@@ -86,15 +80,20 @@ class HtmlOutput(Output):
 
         """
         content = '\n'.join(chapters_html.values())
-        html = template.replace('{{CONTENT}}', content)\
-                       .replace('{{TITLE}}', book.title)
+        html = self.template.replace('{{CONTENT}}', content)\
+                            .replace('{{TITLE}}', book.title)\
+                            .replace('{{CSS}}', self._get_css())
 
         with open(self.path, 'w') as file:
-            file.writelines(html)
+            file.write(html)
 
-    def write_file_per_chapter(self, html_):
-        # todo remember to implement force_publish vs false
-        raise NotImplementedError
+    def _get_css(self):
+        css_path = os.path.join(os.getcwd(), self.css_path)
+
+        with open(css_path, 'r') as file:
+            css = file.read()
+
+        return css if css else ''
 
     @classmethod
     def get_chapters_html(cls, book, substitutions):
@@ -171,8 +170,10 @@ class HtmlOutput(Output):
         # todo move away from this generic solution and set + validate
         #      required fields instead
 
-        for k, v in dict_.items():
-            setattr(html_output, k, v)
+        html_output.template = cls.get_value_from_dict(
+            'template', dict_, default=_default_template)
+        html_output.css_path = cls.get_value_from_dict(
+            'css_path', dict_, default='')
 
         return html_output
 
@@ -203,6 +204,7 @@ class Html:
 
     @classmethod
     def from_file(cls, path):
+        # todo new docstring format
         """Returns the resulting html content of a file, applying all
         substitutions and transforming the contents from markdown to html.
 
@@ -216,9 +218,6 @@ class Html:
         Args:
             :param path: the path to the file
             :type path: string
-            :param substitutions: the list of substitutions to be applied
-                [optional]
-            :type substitutions: subclass of :class:`Substitution` or None
 
         :rtype: string containing html
         """
@@ -231,6 +230,7 @@ class Html:
 
     @classmethod
     def from_markdown(cls, markdown_content):
+        # todo new docstring format
         """Returns the resulting html content of a string containing markdown,
         applying all substitutions and transforming the contents from markdown
         to html.
