@@ -18,7 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import markdown
-import os.path
+import os
 from pkg_resources import resource_string
 
 from apub.output import Output
@@ -37,8 +37,7 @@ class HtmlOutput(Output):
 
     def __init__(self):
         super().__init__()
-        self.css_path = ''
-        pass
+        self.css_path = None
 
     def make(self, book, substitutions=None):
         if not book:
@@ -47,22 +46,24 @@ class HtmlOutput(Output):
         if substitutions is None:
             substitutions = []
 
-        chapters_html = self.get_chapters_html(book, substitutions)
+        html_ = self.get_html(book, substitutions)
 
-        self.write_file(chapters_html, book)
+        self.write_file(html_, book)
 
-    def write_file(self, chapters_html, book):
-        content = '\n'.join(chapters_html.values())
+    def write_file(self, html_, book):
         template = resource_string(__name__, 'template.html')
 
-        html = template.format(content=content,
-                               title=book.title,
-                               css=self._get_css())
+        html_ = template.format(content=html_,
+                                title=book.title,
+                                css=self._get_css())
 
         with open(self.path, 'w') as file:
-            file.write(html)
+            file.write(html_)
 
     def _get_css(self):
+        if not self.css_path:
+            return ''
+
         css_path = os.path.join(os.getcwd(), self.css_path)
 
         with open(css_path, 'r') as file:
@@ -70,52 +71,47 @@ class HtmlOutput(Output):
 
         return css if css else ''
 
-    def get_chapters_html(self, book, substitutions):
-        chapters_markdown = self._read_chapters_markdown(book)
+    def get_html(self, book, substitutions):
+        markdown_ = self._read_markdown(book)
 
-        chapters_markdown = self._apply_substitutions(
-                chapters_markdown,
+        markdown_ = self._apply_substitutions(
+                markdown_,
                 substitutions)
 
-        chapters_html = self._transform_markdown_to_html(
-                chapters_markdown)
+        html_ = self._transform_markdown_to_html(markdown_)
 
-        return chapters_html
+        return html_
 
-    def _read_chapters_markdown(self, book):
-        chapters_markdown = {}
+    def _read_markdown(self, book):
+        markdown_ = []
         if not book.chapters or len(book.chapters) <= 0:
             raise NoChaptersFoundError()
 
         for chapter in book.chapters:
             with open(chapter.source, 'r') as file:
-                chapters_markdown[chapter] = file.read()
+                markdown_.append(file.read())
 
-        return chapters_markdown
+        md_paragraph_sep = os.linesep + os.linesep
+
+        return md_paragraph_sep.join(markdown_)
 
     def _transform_markdown_to_html(self, markdown_):
-        html_ = {}
-        for chapter in markdown_:
-            html_[chapter] = Html.from_markdown(
-                    markdown_[chapter])
-        return html_
+        return Html.from_markdown(markdown_)
 
     def _apply_substitutions(self, markdown_, substitutions):
         """Applies the list of substitutions to the markdown content.
 
         Args:
-            markdown_ (dict[str]): The dict of markdown strings by chapter.
+            markdown_ (str): The dict of markdown strings by chapter.
             substitutions (list[Substitution]):
                 The list of substitutions to be applied.
 
         Returns:
-            dict[str]: The dict of markdown strings by chapter with
+            str: The dict of markdown strings by chapter with
                  the substitutions applied.
         """
-        for chapter in markdown_:
-            for substitution in substitutions:
-                markdown_[chapter] = substitution.apply_to(
-                        markdown_[chapter])
+        for substitution in substitutions:
+            markdown_ = substitution.apply_to(markdown_)
 
         return markdown_
 
@@ -182,7 +178,7 @@ class Html:
             raise
 
     @classmethod
-    def from_markdown(cls, markdown_content):
+    def from_markdown(cls, markdown_):
         # todo new docstring format
         """Returns the resulting html content of a string containing markdown,
         applying all substitutions and transforming the contents from markdown
@@ -194,9 +190,9 @@ class Html:
         take a look at the :py:mod:`substitution` package.
 
         Args:
-            :param markdown_content: the markdown content
-            :type markdown_content: string
+            :param markdown_: the markdown content
+            :type markdown_: string
 
         :rtype: string containing html
         """
-        return markdown.markdown(markdown_content)
+        return markdown.markdown(markdown_)
