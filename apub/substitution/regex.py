@@ -49,7 +49,7 @@ class RegexSubstitution(Substitution):
             line at the same time while retaining the order of application
             defined in the json project.
         """
-        lines = text.splitlines
+        lines = text.splitlines()
 
         altered_lines = [re.sub(self.expression, self.replace_with, line)
                          for line in lines]
