@@ -30,7 +30,7 @@ import logging.config
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
-# todo css, title + optional subtitle, lang
+# todo optional subtitle
 
 
 class HtmlOutput(Output):
