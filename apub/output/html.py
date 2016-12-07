@@ -85,7 +85,7 @@ class HtmlOutput(Output):
 
     def _read_markdown(self, book):
         markdown_ = []
-        md_paragraph_sep = os.linesep + os.linesep
+        md_paragraph_sep = '\n\n'
 
         if not book.chapters or len(book.chapters) <= 0:
             raise NoChaptersFoundError()

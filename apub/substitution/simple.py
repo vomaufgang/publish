@@ -17,8 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-
 from apub.substitution.substitution import Substitution
 
 import logging.config
@@ -53,7 +51,7 @@ class SimpleSubstitution(Substitution):
         altered_lines = [line.replace(self.find, self.replace_with)
                          for line in lines]
 
-        return os.linesep.join(altered_lines)
+        return '\n'.join(altered_lines)
 
     @classmethod
     def from_dict(cls, dict_):

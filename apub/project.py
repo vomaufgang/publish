@@ -164,7 +164,7 @@ def read_project(path=None):
                 "The provided project json contained malformed data. "
                 "Expected a valid json object, got{0}'{1}'{0}"
                 "Inspect the enclosed ValueError for more information."
-                .format(os.linesep, data)) from value_error
+                .format('\n', data)) from value_error
 
     # todo: validate the data before calling the factory chain
 

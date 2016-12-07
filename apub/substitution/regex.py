@@ -17,7 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
 import re
 
 from apub.substitution.substitution import Substitution
@@ -54,7 +53,7 @@ class RegexSubstitution(Substitution):
         altered_lines = [re.sub(self.expression, self.replace_with, line)
                          for line in lines]
 
-        return os.linesep.join(altered_lines)
+        return '\n'.join(altered_lines)
 
     @classmethod
     def from_dict(cls, dict_):
