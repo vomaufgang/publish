@@ -78,11 +78,12 @@ class SimpleSubstitution(Substitution):
 
     @classmethod
     def from_dict(cls, dict_):
-        simple_substitution = SimpleSubstitution()
+        get_value = cls.get_value_from_dict
 
-        simple_substitution.find = cls.get_value_from_dict(
-            'find', dict_, default='')
-        simple_substitution.replace_with = cls.get_value_from_dict(
-            'replace_with', dict_, default='')
+        find = get_value('find', dict_, default='')
+        replace_with = get_value('replace_with', dict_, default='')
 
-        return simple_substitution
+        substitution = SimpleSubstitution(find=find,
+                                          replace_with=replace_with)
+
+        return substitution
