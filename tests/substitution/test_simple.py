@@ -51,7 +51,7 @@ class TestSimpleSubstitution(unittest.TestCase):
 
         self.assertEqual(actual, excpected)
 
-    def test_apply_to_find_empty_unknown_behavior(self):
+    def test_constructor_find_empty_raises_value_error(self):
         with self.assertRaises(ValueError) as context_manager:
             SimpleSubstitution(find='')
 
@@ -63,6 +63,43 @@ class TestSimpleSubstitution(unittest.TestCase):
 
         self.assertEqual(actual, excpected)
 
+    def test_constructor_find_none_raises_value_error(self):
+        with self.assertRaises(ValueError) as context_manager:
+            SimpleSubstitution(find=None)
+
+        exception = context_manager.exception
+
+        excpected = ('SimpleSubstitution.find must not be None or '
+                     'empty')
+        actual = str(exception)
+
+        self.assertEqual(actual, excpected)
+
+    def test_find_setter_empty_raises_value_error(self):
+        substitution = SimpleSubstitution(find='foo')
+        with self.assertRaises(ValueError) as context_manager:
+            substitution.find = ''
+
+        exception = context_manager.exception
+
+        excpected = ('SimpleSubstitution.find must not be None or '
+                     'empty')
+        actual = str(exception)
+
+        self.assertEqual(actual, excpected)
+
+    def test_find_setter_none_raises_value_error(self):
+        substitution = SimpleSubstitution(find='foo')
+        with self.assertRaises(ValueError) as context_manager:
+            substitution.find = None
+
+        exception = context_manager.exception
+
+        excpected = ('SimpleSubstitution.find must not be None or '
+                     'empty')
+        actual = str(exception)
+
+        self.assertEqual(actual, excpected)
 
 if __name__ == '__main__':
     unittest.main()
