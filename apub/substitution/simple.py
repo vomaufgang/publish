@@ -26,9 +26,32 @@ log.addHandler(logging.NullHandler())
 
 class SimpleSubstitution(Substitution):
     # todo write unit tests
-    def __init__(self):
-        self.find = ''
-        self.replace_with = ''
+    def __init__(self, find, replace_with=None):
+        self.__find = None
+        self.__replace_with = None
+
+        self.find = find
+        self.replace_with = replace_with
+
+    @property
+    def find(self):
+        return self.__find
+
+    @find.setter
+    def find(self, value):
+        if not value:
+            raise ValueError('SimpleSubstitution.find must not be None or '
+                             'empty')
+
+        self.__find = value
+
+    @property
+    def replace_with(self):
+        return self.__replace_with
+
+    @replace_with.setter
+    def replace_with(self, value):
+        self.__replace_with = value if value else ''
 
     def apply_to(self, text):
         """

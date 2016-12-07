@@ -16,29 +16,50 @@ from apub.substitution import SimpleSubstitution
 class TestSimpleSubstitution(unittest.TestCase):
 
     def test_apply_to(self):
-        simple = SimpleSubstitution()
-        simple.find = 'foo'
-        simple.replace_with = 'bar'
+        substitution = SimpleSubstitution(find='foo',
+                                          replace_with='bar')
 
-        lines = '\n'.join([
-            "foo",
-            "foo",
-            "something else",
-            "something foo",
-            "",
-            "foo else",
+        text = '\n'.join([
+            'foo',
+            'foo',
+            'something else',
+            'something foo',
+            '',
+            'foo else',
         ])
-
         excpected = '\n'.join([
-            "bar",
-            "bar",
-            "something else",
-            "something bar",
-            "",
-            "bar else",
+            'bar',
+            'bar',
+            'something else',
+            'something bar',
+            '',
+            'bar else',
         ])
 
-        actual = simple.apply_to(lines)
+        actual = substitution.apply_to(text)
+
+        self.assertEqual(actual, excpected)
+
+    def test_apply_to_empty_input(self):
+        substitution = SimpleSubstitution(find='foo',
+                                          replace_with='bar')
+
+        text = ''
+        excpected = ''
+
+        actual = substitution.apply_to(text)
+
+        self.assertEqual(actual, excpected)
+
+    def test_apply_to_find_empty_unknown_behavior(self):
+        with self.assertRaises(ValueError) as context_manager:
+            SimpleSubstitution(find='')
+
+        exception = context_manager.exception
+
+        excpected = ('SimpleSubstitution.find must not be None or '
+                     'empty')
+        actual = str(exception)
 
         self.assertEqual(actual, excpected)
 
