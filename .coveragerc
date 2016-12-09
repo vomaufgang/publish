@@ -5,3 +5,4 @@ omit =
   *s/decorator*
   */xml/etree*
   *s/six*
+  */site-packages/*
