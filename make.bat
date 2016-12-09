@@ -1,0 +1,34 @@
+@ECHO OFF
+
+REM Command file for build automation
+
+REM todo clean, lint, docs, dist (see Make.ps1)
+
+if "%1" == "" goto help
+
+if "%1" == "help" (
+	:help
+	echo.Please use `make ^<target^>` where ^<target^> is one of
+	echo.  html       to make standalone HTML files
+	goto end
+)
+
+if "%1" == "test" (
+	nosetests
+	goto end
+)
+
+if "%1" == "test-all" (
+	tox
+	goto end
+)
+
+if "%1" == "cover" (
+	nosetests && coverage html
+	cd htmlcov
+	index.html
+	cd ..
+	goto end
+)
+
+:end
