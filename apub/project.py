@@ -23,8 +23,11 @@ import os
 from apub.errors import MalformedProjectJsonError, NoBookFoundError
 from apub.book import Book
 from apub.fromdict import FromDict
+from apub.substitution import Substitution
+from apub.output import Output
 
 import logging.config
+
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
@@ -86,8 +89,6 @@ class Project(FromDict):
         Returns:
             list[Output]: A list of Output objects or an empty list.
         """
-        from apub.output import Output
-
         if 'outputs' in project_dict:
             outputs = []
             for output_dict in project_dict['outputs']:
@@ -108,8 +109,6 @@ class Project(FromDict):
             list[Substitution]: A list of Substitution objects or an empty
                 list.
         """
-        from apub.substitution import Substitution
-
         if 'substitutions' in project_dict:
             substitutions = []
             for substitution_dict in project_dict['substitutions']:
@@ -130,43 +129,47 @@ def read_project(path=None):
     """
     log.debug('start read_project')
     log.debug('path = {0}'.format(path))
-    project_file_path = None
-    default_project_file_name = '.apub.json'
-    cwd = os.getcwd()
 
-    if not path:
-        log.debug('path is None, look for {0} in cwd {1}'.format(
-                default_project_file_name,
-                cwd))
-        project_file_path = os.path.join(
-                cwd,
-                default_project_file_name)
-    elif os.path.isdir(os.path.join(cwd, path)):
-        log.debug('path is {0}, look for {1}'.format(
-                os.path.join(cwd, path),
-                default_project_file_name))
-        project_file_path = os.path.join(
-                path,
-                default_project_file_name)
-    elif os.path.isfile(os.path.join(cwd, path)):
-        project_file_path = path
-        log.debug('path is {0}, use it')
+    project_file_path = _get_project_file_path(path)
 
     log.debug('reading {0}'.format(project_file_path))
     with open(project_file_path) as project_file:
         data = project_file.read()
-        log.debug('{0} read containing {1}'.format(project_file_path,
+        log.debug("{0} read containing {1}".format(project_file_path,
                                                    data))
     try:
         dict_ = json.loads(data)
     except ValueError as value_error:
         raise MalformedProjectJsonError(
-                "The provided project json contained malformed data. "
-                "Expected a valid json object, got{0}'{1}'{0}"
-                "Inspect the enclosed ValueError for more information."
-                .format('\n', data)) from value_error
+            "The provided project json contained malformed data. "
+            "Expected a valid json object, got\n'{data}'\n"
+            "Inspect the enclosed ValueError for more "
+            "information.".format(data=data)) from value_error
 
     # todo: validate the data before calling the factory chain
 
     log.debug('end read_project')
     return Project.from_dict(dict_)
+
+
+def _get_project_file_path(path: str):
+    default_project_file_name = '.apub.json'
+    cwd = os.getcwd()
+
+    if not path:
+        log.debug('path is None, look for {0} in cwd {1}'.format(
+            default_project_file_name,
+            cwd))
+        return os.path.join(
+            cwd,
+            default_project_file_name)
+    elif os.path.isdir(os.path.join(cwd, path)):
+        log.debug('path is {0}, look for {1}'.format(
+            os.path.join(cwd, path),
+            default_project_file_name))
+        return os.path.join(
+            path,
+            default_project_file_name)
+    elif os.path.isfile(os.path.join(cwd, path)):
+        log.debug('path is {0}, use it')
+        return path
