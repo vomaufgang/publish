@@ -20,29 +20,28 @@
 import json
 import os
 
-from apub.errors import MalformedProjectJsonError, NoBookFoundError
 from apub.book import Book
+from apub.errors import MalformedProjectJsonError, NoBookFoundError
 from apub.fromdict import FromDict
-from apub.substitution import Substitution
 from apub.output import Output
+from apub.substitution import Substitution
+from typing import List, Dict
 
 import logging.config
-
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
 
 class Project(FromDict):
+    # todo document Project
+
     def __init__(self):
         self.book = None
         self.outputs = []
         self.substitutions = []
 
-    # todo implement factory method from_json, splits the dict accordingly and
-    #      calls book, output and substition factory methods
-
     @classmethod
-    def from_dict(cls, dict_):
+    def from_dict(cls, dict_: Dict) -> 'Project':
         """Creates a new Project object from the provided python dictionary.
 
         The structure and contents of the dictionary must be equivalent to
@@ -52,81 +51,78 @@ class Project(FromDict):
             dict_ (dict): The dictionary to translate into a Project object.
 
         Returns:
-            Book: A new Project created from the dictionary.
+            Project: A new Project created from the dictionary.
         """
+        # todo unit test Project.from_dict
         project = Project()
 
-        project.book = Project._get_book_from_dict(dict_)
-        project.outputs = Project._get_outputs_from_dict(dict_)
-        project.substitutions = Project._get_substitutions_from_dict(dict_)
+        project.book = cls._get_book_from_dict(dict_)
+        project.outputs = cls._get_outputs_from_dict(dict_)
+        project.substitutions = cls._get_substitutions_from_dict(dict_)
 
         return project
 
     @classmethod
-    def _get_book_from_dict(cls, project_dict):
-        """Returns the metadata dictionary contained in the project dictionary.
+    def _get_book_from_dict(cls, dict_: Dict) -> Book:
+        """Returns the book contained in the project dictionary.
 
         Args:
-            project_dict (dict): The project dictionary.
+            dict_ (dict): The project dictionary.
 
         Returns:
-            dict: A dictionary containing the project metadata.
+            Dict: A dictionary containing the project metadata.
         """
-        # todo fix docstring metadata <-> book
-        if 'book' in project_dict:
-            return Book.from_dict(project_dict['book'])
+        # todo unit test Project._get_book_from_dict
+        if 'book' in dict_:
+            return Book.from_dict(dict_['book'])
         else:
             raise NoBookFoundError
 
     @classmethod
-    def _get_outputs_from_dict(cls, project_dict):
-        """Returns the outputs contained in the project dictionary as a list
-        of Output objects.
+    def _get_outputs_from_dict(cls, dict_: Dict) -> List[Output]:
+        """Returns the outputs contained in the project dictionary.
 
         Args:
-            project_dict (Dict): The project dictionary.
+            dict_ (Dict): The project dictionary.
 
         Returns:
-            list[Output]: A list of Output objects or an empty list.
+            List[Output]: A list of Output objects or an empty list.
         """
-        if 'outputs' in project_dict:
+        # todo unit test Project._get_outputs_from_dict
+        if 'outputs' in dict_:
             outputs = []
-            for output_dict in project_dict['outputs']:
+            for output_dict in dict_['outputs']:
                 outputs.append(Output.from_dict(output_dict))
             return outputs
 
         return []
 
     @classmethod
-    def _get_substitutions_from_dict(cls, project_dict):
+    def _get_substitutions_from_dict(cls,
+                                     dict_: Dict) -> List[Substitution]:
         """Returns the substitutions contained in the project dictionary as
         a list of Output objects.
 
         Args:
-            project_dict (Dict): The project dictionary.
+            dict_ (Dict): The project dictionary.
 
         Returns:
-            list[Substitution]: A list of Substitution objects or an empty
+            List[Substitution]: A list of Substitution objects or an empty
                 list.
         """
-        if 'substitutions' in project_dict:
+        # todo unit test Project._get_substitutions_from_dict
+        if 'substitutions' in dict_:
             substitutions = []
-            for substitution_dict in project_dict['substitutions']:
+            for substitution_dict in dict_['substitutions']:
                 substitutions.append(Substitution.from_dict(substitution_dict))
             return substitutions
 
         return []
 
 
-def read_project(path=None):
-    """Welp
-
-    Args:
-        path (str): Optional
-
-    Returns:
-        Something.
-    """
+def read_project(path: str = None) -> Project:
+    # todo document project.read_project
+    # todo unit test read_project
     log.debug('start read_project')
     log.debug('path = {0}'.format(path))
 
@@ -152,7 +148,9 @@ def read_project(path=None):
     return Project.from_dict(dict_)
 
 
-def _get_project_file_path(path: str):
+def _get_project_file_path(path: str) -> str:
+    # todo document project._get_project_file_path
+    # todo unit test _get_project_file_path
     default_project_file_name = '.apub.json'
     cwd = os.getcwd()
 

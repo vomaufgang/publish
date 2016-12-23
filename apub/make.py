@@ -17,21 +17,19 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from apub.output import Output
 from apub.errors import OutputNotFoundError
+from apub.output import Output
+from apub.project import Project
+from typing import Union, List
 
 import logging.config
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
 
-def make(project, output=None):
-    """
-
-    Args:
-        project (apub.project.Project): todo
-        output (apub.output.Output): todo
-    """
+def make(project: Project,
+         output: Union[Output, str] = None):
+    # todo document make.make
 
     if output is None:
         make_every_output(project)
@@ -57,16 +55,19 @@ def make(project, output=None):
         raise
 
 
-def make_every_output(project):
+def make_every_output(project: Project):
+    # todo document make.make_every_output
     for output in project.outputs:
         output.make(
             project.book,
             project.substitutions)
 
 
-def find_output(outputs, output_name):
+def find_output(outputs: List[Output],
+                output_name: str) -> Output:
+    # todo document make.find_output
     for output in outputs:
-        if output.output_name == output_name:
+        if output.name == output_name:
             return output
 
     raise OutputNotFoundError("No output using the following name could "
