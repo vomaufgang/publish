@@ -38,6 +38,9 @@ class HtmlOutput(Output):
     def __init__(self):
         super().__init__()
         self.css_path = None
+        self.generate_toc = False  # todo implement HtmlOutput.generate_toc
+        #    ^ is dependant upon book & chapter url_friendly_title
+        #      for jump links
 
     def make(self, book, substitutions=None):
         if not book:
