@@ -57,8 +57,8 @@ class Substitution(FromDict, metaclass=ABCMeta):
             return SimpleSubstitution.from_dict(dict_)
 
         elif substitution_type == 'regex':
-            from apub.substitution.regex import RegexSubstitution
-            return RegexSubstitution.from_dict(dict_)
+            raise NotImplementedError('Substitution type \'regex\' is planned '
+                                      'for Version 3.0')
 
         raise NotImplementedError(
-            'Unrecognized substitution type: {0}'.format(substitution_type))
+            "Unrecognized substitution type: {0}".format(substitution_type))
