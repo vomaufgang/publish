@@ -19,10 +19,9 @@
 
 from datetime import date
 
-from typing import Optional, List
-
 from apub.errors import InvalidRatingError, InvalidSeriesIndexError
 from apub.fromdict import FromDict
+from typing import Optional, List, Dict
 
 import logging.config
 log = logging.getLogger(__name__)
@@ -30,17 +29,67 @@ log.addHandler(logging.NullHandler())
 
 
 class Book(FromDict):
-    """The book.
+    """The Book class isused to define the attributes and metadata
+    required for creating a book via ebook-convert.
+
+    It is one of the four integral parts of the project structure, the others
+    being Project, Chapter, outputs and substitutions.
+
+    See the users guide for more extensive documentation on how they fit
+    together or the respective docs on info for the individual parts.
 
     More information on the attributes can be found here:
     http://manual.calibre-ebook.com/cli/ebook-convert.html#metadata
 
+    Contains the chapters on top of the attributes required by ebook-convert.
+
+    Examples:
+        Create a new book object and use its attributes::
+
+            book = Book()
+            book.title = 'My book'
+            book.language = 'en'
+            book.rating = 3
+            # ...
+
+        Add chapters to a book::
+
+            chapter = Chapter()
+            chapter.title = 'My chapter'
+            chapter.source = 'my_script.md'
+            # ...
+            book.chapters.append(chapter)
+
+        Assign the book to a project::
+
+            project = Project()
+            project.book = book
+            # ... add outputs and/or substitutions to the project
+            make(project)
+
+        See the users guide for more comprehensive examples and information
+        on how to use the Book and where it fits in apub as a whole.
+
     Attributes:
         chapters (List[Chapter]): The list of chapters.
-        title (Optional[str]): The title.
-        language (Optional[str]): The language as an ISO 639-2 code,
-            defaults to 'und'.
-            See: https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
+        author_sort
+        authors
+        book_producer
+        comments
+        cover
+        isbn
+        language (str): The language.
+            Must be an ISO 639-2 code, defaults to 'und'.
+        pubdate
+        publisher
+        rating (int): The rating.
+            Must be an integer between 1 and 5.
+        series
+        series_index (int): The index of the book in the series.
+        tags
+        title
+
+
     """
 
     def __init__(self):
@@ -71,11 +120,17 @@ class Book(FromDict):
         self.chapters = []
 
     @property
-    def language(self):
+    def language(self) -> str:
+        """Gets or sets the language.
+
+        Must be a ISO 639-2 code, defaults to 'und'.
+
+        See: https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
+        """
         return self.language
 
     @language.setter
-    def language(self, value):
+    def language(self, value: str):
         if not value:
             self.__language = 'und'
 
@@ -137,7 +192,7 @@ class Book(FromDict):
         self.__series_index = value
 
     @classmethod
-    def from_dict(cls, dict_):
+    def from_dict(cls, dict_: Dict) -> 'Book':
         """Creates a new Book object from the provided python dictionary.
 
         The structure and contents of the dictionary must be equivalent to
