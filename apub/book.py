@@ -229,7 +229,7 @@ class Book(FromDict):
         return book
 
     @classmethod
-    def _get_chapters_from_dict(cls, project_dict: Dict) -> List[Chapter]:
+    def _get_chapters_from_dict(cls, project_dict: Dict) -> List['Chapter']:
         """Returns the chapters contained in the project dictionary as a list
         of Chapter objects.
 
