@@ -25,6 +25,7 @@ from apub.output import Output
 from apub.errors import NoChaptersFoundError
 from apub.book import Book
 from apub.substitution import Substitution
+from typing import List
 
 import logging.config
 log = logging.getLogger(__name__)
@@ -42,29 +43,41 @@ class HtmlOutput(Output):
         #    ^ is dependant upon book & chapter url_friendly_title
         #      for jump links
 
-    def make(self, book, substitutions=None):
+    def make(self,
+             book: Book,
+             substitutions: List[Substitution]=None) -> None:
         if not book:
             raise AttributeError("book must not be None")
 
-        if substitutions is None:
+        if not substitutions:
             substitutions = []
 
         html_ = self.get_html(book, substitutions)
 
-        self.write_file(html_, book)
+        html_ = self._apply_template(content=html_,
+                                     title=book.title,
+                                     css=self._get_css(),
+                                     language=book.language)
 
-    def write_file(self, html_, book):
-        template = resource_string(__name__, 'template.html')
+        self.write_file(html_)
 
-        html_ = template.format(content=html_,
-                                title=book.title,
-                                css=self._get_css(),
-                                language=book.language)
-
+    def write_file(self, html_):
         with open(self.path, 'w') as file:
             file.write(html_)
 
-    def _get_css(self):
+    def _apply_template(self,
+                        content: str,
+                        title: str,
+                        css: str,
+                        language: str) -> str:
+        template = resource_string(__name__, 'template.html')
+
+        return template.format(content=content,
+                               title=title,
+                               css=css,
+                               language=language)
+
+    def _get_css(self) -> str:
         if not self.css_path:
             return ''
 
@@ -75,7 +88,9 @@ class HtmlOutput(Output):
 
         return css if css else ''
 
-    def get_html(self, book, substitutions):
+    def get_html(self,
+                 book: Book,
+                 substitutions: List[Substitution]) -> str:
         markdown_ = self._read_markdown(book)
 
         markdown_ = self._apply_substitutions(
@@ -86,7 +101,7 @@ class HtmlOutput(Output):
 
         return html_
 
-    def _read_markdown(self, book):
+    def _read_markdown(self, book: Book) -> str:
         markdown_ = []
         md_paragraph_sep = '\n\n'
 
@@ -99,10 +114,12 @@ class HtmlOutput(Output):
 
         return md_paragraph_sep.join(markdown_)
 
-    def _transform_markdown_to_html(self, markdown_):
+    def _transform_markdown_to_html(self, markdown_: str) -> str:
         return Html.from_markdown(markdown_)
 
-    def _apply_substitutions(self, markdown_, substitutions):
+    def _apply_substitutions(self,
+                             markdown_: str,
+                             substitutions: List[Substitution]) -> str:
         """Applies the list of substitutions to the markdown content.
 
         Args:
