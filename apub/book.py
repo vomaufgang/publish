@@ -21,7 +21,7 @@ from datetime import date
 
 from apub.errors import InvalidRatingError, InvalidSeriesIndexError
 from apub.fromdict import FromDict
-from typing import Optional, List, Dict
+from typing import List, Dict
 
 import logging.config
 log = logging.getLogger(__name__)
@@ -154,11 +154,11 @@ class Book(FromDict):
         self.__language = value
 
     @property
-    def rating(self):
+    def rating(self) -> int:
         return self.__rating
 
     @rating.setter
-    def rating(self, value):
+    def rating(self, value: int):
         if value is None:
             self.__rating = None
 
@@ -174,12 +174,12 @@ class Book(FromDict):
         self.__rating = value
 
     @property
-    def series_index(self):
+    def series_index(self) -> int:
         # todo document Book.series_index
         return self.__series_index
 
     @series_index.setter
-    def series_index(self, value):
+    def series_index(self, value: int):
         if value is None:
             self.__series_index = None
 
@@ -224,16 +224,12 @@ class Book(FromDict):
         book.tags = get_value('tags', dict_)
         book.title = get_value('title', dict_)
 
-        book.genres = get_value('genres', dict_)
-        book.state = get_value('state', dict_)
-        book.url_friendly_title = get_value('url_friendly_title', dict_)
-
         book.chapters = Book._get_chapters_from_dict(dict_)
 
         return book
 
     @classmethod
-    def _get_chapters_from_dict(cls, project_dict):
+    def _get_chapters_from_dict(cls, project_dict: Dict) -> List[Chapter]:
         """Returns the chapters contained in the project dictionary as a list
         of Chapter objects.
 
@@ -256,9 +252,8 @@ class Chapter(FromDict):
     """Description for class.
 
     Attributes:
-        title (str): The title
         source (str): File name of the source file
-        url_friendly_title(str): Url friendly representation of the title
+        slug(str): Url friendly representation of the title
 
             Mandatory if you use JsonOutput or HtmlOutput, optional for all
             other outputs.
@@ -269,11 +264,8 @@ class Chapter(FromDict):
     """
 
     def __init__(self):
-        self.title = None
-        # todo docs: This is what gets displayed in areader - it isn't used
-        #      anywhere else
         self.source = None
-        self.url_friendly_title = None
+        self.slug = None
         # todo docs This is used in areader (for the url) and html file
         #      names in html multi file mode
         # todo HtmlOutput: additional attribute that determines wether the
@@ -285,7 +277,7 @@ class Chapter(FromDict):
         self.publish = True
 
     @classmethod
-    def from_dict(cls, dict_):
+    def from_dict(cls, dict_: Dict) -> 'Chapter':
         """Creates a new Chapter object from the provided python dictionary.
 
         The structure and contents of the dictionary must be equivalent to
@@ -301,9 +293,8 @@ class Chapter(FromDict):
 
         get_value = cls.get_value_from_dict
 
-        chapter.title = get_value('title', dict_)
         chapter.source = get_value('source', dict_)
         chapter.publish = get_value('publish', dict_, default=True)
-        chapter.url_friendly_title = get_value('url_friendly_title', dict_)
+        chapter.slug = get_value('slug', dict_)
 
         return chapter
