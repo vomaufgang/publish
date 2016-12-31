@@ -20,12 +20,12 @@
 import markdown
 import os
 from pkg_resources import resource_string
+from typing import List
 
 from apub.output import Output
 from apub.errors import NoChaptersFoundError
-from apub.book import Book
+from apub.book import Book, Chapter
 from apub.substitution import Substitution
-from typing import List
 
 import logging.config
 log = logging.getLogger(__name__)
@@ -61,7 +61,7 @@ class HtmlOutput(Output):
 
         self.write_file(html_)
 
-    def write_file(self, html_):
+    def write_file(self, html_: str):
         with open(self.path, 'w') as file:
             file.write(html_)
 
@@ -102,13 +102,26 @@ class HtmlOutput(Output):
         return html_
 
     def _read_markdown(self, book: Book) -> str:
+        # todo document HtmlOutput._read_markdown
+        # todo unit test HtmlOutput._read_markdown
         markdown_ = []
         md_paragraph_sep = '\n\n'
 
         if not book.chapters or len(book.chapters) <= 0:
-            raise NoChaptersFoundError()
+            raise NoChaptersFoundError('Your book contains no chapters that'
+                                       'could be published.')
 
-        for chapter in book.chapters:
+        if self.force_publish:
+            chapters = book.chapters
+        else:
+            chapters = filter(lambda x: x.publish is True,
+                              book.chapters)
+
+        if len(chapters) <= 0:
+            raise NoChaptersFoundError('None of your chapters are set to be'
+                                       'published.')
+
+        for chapter in chapters:
             with open(chapter.source, 'r') as file:
                 markdown_.append(file.read())
 
@@ -137,7 +150,7 @@ class HtmlOutput(Output):
         return markdown_
 
     @classmethod
-    def from_dict(cls, dict_):
+    def from_dict(cls, dict_: dict) -> 'HtmlOutput':
         html_output = HtmlOutput()
         get_value = cls.get_value_from_dict
 
@@ -152,7 +165,7 @@ class Html:
     """Provides methods that return the finished html content for a single
     chapter, including the application of substitutions."""
     @classmethod
-    def from_chapter(cls, chapter):
+    def from_chapter(cls, chapter: Chapter) -> str:
         """Returns the resulting html content of a chapter, applying all
         substitutions and transforming the contents from markdown to html.
 
@@ -173,7 +186,7 @@ class Html:
         return Html.from_file(chapter.source)
 
     @classmethod
-    def from_file(cls, path):
+    def from_file(cls, path: str) -> str:
         # todo new docstring format
         """Returns the resulting html content of a file, applying all
         substitutions and transforming the contents from markdown to html.
@@ -199,7 +212,7 @@ class Html:
             raise
 
     @classmethod
-    def from_markdown(cls, markdown_):
+    def from_markdown(cls, markdown_: str) -> str:
         # todo new docstring format
         """Returns the resulting html content of a string containing markdown,
         applying all substitutions and transforming the contents from markdown

@@ -20,10 +20,12 @@
 import os
 import subprocess
 from tempfile import mkstemp
+from typing import List
 
+from apub.book import Book
 from apub.output.output import Output
 from apub.output.html import HtmlOutput
-from apub.book import Book
+from apub.substitution import Substitution
 
 import logging.config
 log = logging.getLogger(__name__)
@@ -57,7 +59,7 @@ class EbookConvertOutput(Output):
         super().__init__()
         self.ebookconvert_params = []
 
-    def make(self, book, substitutions):
+    def make(self, book: Book, substitutions: List[Substitution]):
         (temp_handle, temp_path) = mkstemp(suffix=".html")
         try:
             self._make_html(temp_path, book, substitutions)
@@ -71,14 +73,17 @@ class EbookConvertOutput(Output):
             # todo validate mandatory book attributes - are there even any
             #      mandatory ones?
 
-            call_params.extend(_attrs_as_ebookconvert_params(book))
+            call_params.extend(_yield_attrs_as_ebookconvert_params(book))
             call_params.extend(self.ebookconvert_params)
 
             subprocess.call(call_params)
         finally:
             os.remove(temp_path)
 
-    def _make_html(self, temp_path, book, substitutions):
+    def _make_html(self,
+                   temp_path: str,
+                   book: Book,
+                   substitutions: List[Substitution]):
         html_output = HtmlOutput()
 
         html_output.path = temp_path
@@ -88,7 +93,7 @@ class EbookConvertOutput(Output):
         html_output.make(book, substitutions)
 
     @classmethod
-    def from_dict(cls, dict_):
+    def from_dict(cls, dict_: dict):
         ebook_convert_output = EbookConvertOutput()
 
         ebook_convert_output.ebookconvert_params = cls.get_value_from_dict(
@@ -97,46 +102,25 @@ class EbookConvertOutput(Output):
         return ebook_convert_output
 
 
-def _append_param(object_, attr_name, params):
-    """
-
-    Args:
-        object_:
-        attr_name:
-        params:
-
-    Returns:
-
-    """
-    # todo document _append_param
-    # todo error handling
-    if hasattr(object_, attr_name):
-        attr = str(getattr(object_, attr_name))
-        if attr and not attr.isspace():
-            params.append(
-                _format_param(attr_name, attr))
-
-
-def _attrs_as_ebookconvert_params(object_):
-    """Takes an object and returns all attributes that can be processed
-    by the ebookconvert command line as a param array.
+def _yield_attrs_as_ebookconvert_params(object_):
+    """Takes an object and returns a generator yielding all attributes
+    that can be processed by the ebookconvert command line as a param array.
 
     Args:
         object_ (object): An object
 
     Returns:
-        A param array containing all attributes of the book supported by
+        A generator yielding all attributes of the object supported by
         ebookconvert.
     """
     # This way the book can contain attrs not supported by ebookconvert
     # (or any other specific output that follows this explicit pattern)
-    params = []
-
     for attr_name in _supported_metadata_attrs:
-        _append_param(object_, attr_name, params)
+        if hasattr(object_, attr_name):
+            attr = str(getattr(object_, attr_name))
+            if attr and not attr.isspace():
+                yield "--{0}=\"{1}\"".format(attr_name, attr)
 
-    return params
 
 
-def _format_param(param_name, param_value):
-    return "--{0}=\"{1}\"".format(param_name, param_value)
+

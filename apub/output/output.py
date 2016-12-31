@@ -19,10 +19,10 @@
 
 
 from abc import ABCMeta, abstractmethod
-import logging
 
 from apub.fromdict import FromDict
 
+import logging
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler)
 
