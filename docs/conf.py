@@ -49,7 +49,7 @@ extensions = [
 ]
 
 # Napoleon settings
-napoleon_google_docstring = True
+napoleon_google_docstring = False
 napoleon_numpy_docstring = False
 napoleon_include_private_with_doc = False
 napoleon_include_special_with_doc = True
