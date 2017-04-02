@@ -18,16 +18,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import json
+import logging.config
 import os
+from typing import List, Dict
 
 from apub.book import Book
 from apub.errors import MalformedProjectJsonError, NoBookFoundError
 from apub.fromdict import FromDict
 from apub.output import Output
-from apub.substitution import Substitution
-from typing import List, Dict
+from apub.substitute import Substitute
 
-import logging.config
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
@@ -41,7 +41,7 @@ class Project(FromDict):
         self.substitutions = []
 
     @classmethod
-    def from_dict(cls, dict_: Dict) -> 'Project':
+    def from_dict(cls, dict_: Dict):
         """Creates a new Project object from the provided python dictionary.
 
         The structure and contents of the dictionary must be equivalent to
@@ -99,7 +99,7 @@ class Project(FromDict):
 
     @classmethod
     def _get_substitutions_from_dict(cls,
-                                     dict_: Dict) -> List[Substitution]:
+                                     dict_: Dict) -> List[Substitute]:
         """Returns the substitutions contained in the project dictionary as
         a list of Output objects.
 
@@ -114,7 +114,7 @@ class Project(FromDict):
         if 'substitutions' in dict_:
             substitutions = []
             for substitution_dict in dict_['substitutions']:
-                substitutions.append(Substitution.from_dict(substitution_dict))
+                substitutions.append(Substitute.from_dict(substitution_dict))
             return substitutions
 
         return []
@@ -161,6 +161,7 @@ def _get_project_file_path(path: str) -> str:
         return os.path.join(
             cwd,
             default_project_file_name)
+
     elif os.path.isdir(os.path.join(cwd, path)):
         log.debug('path is {0}, look for {1}'.format(
             os.path.join(cwd, path),
@@ -168,6 +169,7 @@ def _get_project_file_path(path: str) -> str:
         return os.path.join(
             path,
             default_project_file_name)
+
     elif os.path.isfile(os.path.join(cwd, path)):
         log.debug('path is {0}, use it')
         return path

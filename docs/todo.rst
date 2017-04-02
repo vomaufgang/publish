@@ -29,8 +29,10 @@ TODO
 
 .. todo:: !!!Move todos to issue tracker!!!
 
+.. todo:: https://github.com/sphinx-doc/sphinx/issues/3545 autodoc generates duplicate entries when subpackage 'redeclares' package contents via __all__.
+
 IDEAS
-=====
+-----
 
 .. todo:: Connect apub to apub-server instances via
           apub-push [*|1-5|1,3,5]
@@ -47,7 +49,7 @@ IDEAS
 
 
 Long Term Goals
-===============
+---------------
 
 .. todo:: Create a standalone implementation of ebook-convert OR take
           ebook-convert, remove all gui references and dependencies on calibre

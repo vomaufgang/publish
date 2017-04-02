@@ -26,6 +26,7 @@ import re
 
 
 # noinspection PyPep8Naming,PyUnusedLocal,PyMethodMayBeStatic
+# noinspection PyUnboundLocalVariable,PyAugmentAssignment
 class LZString:
 
     def __init__(self):

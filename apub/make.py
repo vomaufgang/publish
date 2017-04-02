@@ -17,25 +17,34 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging.config
+from typing import List
+
 from apub.errors import OutputNotFoundError
 from apub.output import Output
 from apub.project import Project
-from typing import Union, List
 
-import logging.config
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
 
-def make(project: Project,
-         output: Union[Output, str] = None):
-    # todo document make.make
+def make(project, output=None):
+    """
 
+    Args:
+        project (Project):
+        output (apub.output.Output or str):
+
+    Raises:
+        TypeError:
+        OutputNotFoundError:
+
+    """
+    # todo document make.make
     if output is None:
         make_every_output(project)
         return
 
-    outputs = project.outputs
     book = project.book
     substitutions = project.substitutions
 
@@ -46,8 +55,28 @@ def make(project: Project,
         return
 
     try:
-        output_name = output
-        output = find_output(outputs, output_name)
+        make_output_by_name(project, str(output))
+    except OutputNotFoundError:
+        raise
+
+
+def make_output_by_name(project, output_name):
+    """
+
+    Args:
+        project (Project):
+        output_name (str):
+
+    Raises:
+        OutputNotFoundError
+    """
+    # todo document make.make_output_by_name
+    outputs = project.outputs
+    book = project.book
+    substitutions = project.substitutions
+
+    try:
+        output = find_output_by_name(outputs, output_name)
         output.make(
             book,
             substitutions)
@@ -55,16 +84,33 @@ def make(project: Project,
         raise
 
 
-def make_every_output(project: Project):
+def make_every_output(project):
     # todo document make.make_every_output
+    """
+
+    Args:
+        project (Project):
+    """
     for output in project.outputs:
         output.make(
             project.book,
             project.substitutions)
 
 
-def find_output(outputs: List[Output],
-                output_name: str) -> Output:
+def find_output_by_name(outputs, output_name):
+    """
+
+    Args:
+        outputs (list of apub.output.Output):
+        output_name (str):
+
+    Returns:
+        apub.output.Output: 
+    Raises:
+        NameError:
+        OutputNotFoundError:
+
+    """
     # todo document make.find_output
     for output in outputs:
         if output.name == output_name:

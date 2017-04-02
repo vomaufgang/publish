@@ -10,14 +10,13 @@ Tests for `apub.model.chapter` module.
 
 import unittest
 
-from apub.substitution import SimpleSubstitution
+from apub.substitute import SimpleSubstitute
 
 
 class TestSimpleSubstitution(unittest.TestCase):
-
     def test_apply_to(self):
-        substitution = SimpleSubstitution(find='foo',
-                                          replace_with='bar')
+        substitution = SimpleSubstitute(find='foo',
+                                        replace_with='bar')
 
         text = '\n'.join([
             'foo',
@@ -41,8 +40,8 @@ class TestSimpleSubstitution(unittest.TestCase):
         self.assertEqual(actual, excpected)
 
     def test_apply_to_empty_input(self):
-        substitution = SimpleSubstitution(find='foo',
-                                          replace_with='bar')
+        substitution = SimpleSubstitute(find='foo',
+                                        replace_with='bar')
 
         text = ''
         excpected = ''
@@ -53,53 +52,86 @@ class TestSimpleSubstitution(unittest.TestCase):
 
     def test_constructor_find_empty_raises_value_error(self):
         with self.assertRaises(ValueError) as context_manager:
-            SimpleSubstitution(find='')
+            SimpleSubstitute(find='')
 
         exception = context_manager.exception
 
-        excpected = ('SimpleSubstitution.find must not be None or '
-                     'empty')
+        excpected = 'SimpleSubstitution.find must not be empty'
         actual = str(exception)
 
         self.assertEqual(actual, excpected)
 
     def test_constructor_find_none_raises_value_error(self):
-        with self.assertRaises(ValueError) as context_manager:
-            SimpleSubstitution(find=None)
+        with self.assertRaises(TypeError) as context_manager:
+            SimpleSubstitute(find=None)
 
         exception = context_manager.exception
 
-        excpected = ('SimpleSubstitution.find must not be None or '
-                     'empty')
+        excpected = 'SimpleSubstitution.find must not be None'
         actual = str(exception)
 
         self.assertEqual(actual, excpected)
 
     def test_find_setter_empty_raises_value_error(self):
-        substitution = SimpleSubstitution(find='foo')
+        substitution = SimpleSubstitute(find='foo')
         with self.assertRaises(ValueError) as context_manager:
             substitution.find = ''
 
         exception = context_manager.exception
 
-        excpected = ('SimpleSubstitution.find must not be None or '
-                     'empty')
+        excpected = 'SimpleSubstitution.find must not be empty'
         actual = str(exception)
 
         self.assertEqual(actual, excpected)
 
     def test_find_setter_none_raises_value_error(self):
-        substitution = SimpleSubstitution(find='foo')
-        with self.assertRaises(ValueError) as context_manager:
+        substitution = SimpleSubstitute(find='foo')
+        with self.assertRaises(TypeError) as context_manager:
             substitution.find = None
 
         exception = context_manager.exception
 
-        excpected = ('SimpleSubstitution.find must not be None or '
-                     'empty')
+        excpected = 'SimpleSubstitution.find must not be None'
         actual = str(exception)
 
         self.assertEqual(actual, excpected)
+
+    def test_find_setter_not_representable_as_str_raises_type_error(self):
+        substitution = SimpleSubstitute(find='foo')
+
+        class BrokenStr:
+            def __str__(self):
+                raise Exception('broken __str__')
+
+        with self.assertRaises(TypeError) as context_manager:
+            substitution.find = BrokenStr()
+
+        exception = context_manager.exception
+
+        excpected = ("SimpleSubstitution.find must be a string or "
+                     "have a working string representation via "
+                     "__str__")
+        actual = str(exception)
+
+        self.assertEqual(actual, excpected)
+
+    def test_constructor_find_not_representable_as_str_raises_type_error(self):
+        class BrokenStr:
+            def __str__(self):
+                raise Exception('broken __str__')
+
+        with self.assertRaises(TypeError) as context_manager:
+            SimpleSubstitute(find=BrokenStr())
+
+        exception = context_manager.exception
+
+        excpected = ("SimpleSubstitution.find must be a string or "
+                     "have a working string representation via "
+                     "__str__")
+        actual = str(exception)
+
+        self.assertEqual(actual, excpected)
+
 
 if __name__ == '__main__':
     unittest.main()

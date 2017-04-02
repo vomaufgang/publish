@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import os
 import sys
 
 
@@ -15,15 +14,9 @@ readme = open('README.rst').read()
 history = open('docs/history.rst').read().replace('.. :changelog:', '')
 
 requirements = [
-    'markdown>=2.5.2',
-    'validators>=0.7'
+    'markdown>=2.6',
+    'validators>=0.11'
 ]
-
-if sys.version_info < (3, 5):
-    requirements.append('typing')
-
-if sys.version_info < (3, 4):
-    requirements.append('enum34')
 
 test_requirements = [
     'nose'
@@ -40,8 +33,6 @@ setup(
     url='https://github.com/vomaufgang/apub/',
     packages=[
         'apub',
-        'apub.output',
-        'apub.substitution',
     ],
     include_package_data=True,
     install_requires=requirements,
@@ -53,9 +44,6 @@ setup(
         'Intended Audience :: End Users/Desktop',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Natural Language :: English',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
     ],
     test_suite='nose.collector',

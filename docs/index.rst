@@ -17,10 +17,10 @@ Contents:
    apub_in_depth
    contributing
    todo
-   todo_list
    authors
    history
    thirdparty
+   misc
 
 Indices and tables
 ==================

@@ -17,14 +17,53 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from apub.substitution.substitution import Substitution
+from abc import ABCMeta, abstractmethod
+
+from apub.fromdict import FromDict
 
 import logging.config
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
 
-class SimpleSubstitution(Substitution):
+class Substitute(FromDict, metaclass=ABCMeta):
+    # todo write unit tests
+
+    @abstractmethod
+    def apply_to(self, text):
+        """
+        Args:
+            text (str): The text to apply this simple substitution to.
+
+        Notes:
+            The current implementation schema of apply_to might prove
+            inefficient, because every single substitution leads to an
+            additional iteration the splitted lines of text.
+
+            If this proves true, the implementation should be changed to an
+            approach that is based on a single split and a single iteration
+            over all lines, diring which all substitutions get applied to a
+            line at the same time while retaining the order of application
+            defined in the json project.
+        """
+        raise NotImplementedError
+
+    @classmethod
+    def from_dict(cls, dict_):
+        substitution_type = dict_['type']
+
+        if substitution_type == 'simple':
+            return SimpleSubstitute.from_dict(dict_)
+
+        elif substitution_type == 'regex':
+            raise NotImplementedError('Substitution type \'regex\' is planned '
+                                      'for Version 3.0')
+
+        raise NotImplementedError(
+            "Unrecognized substitution type: {0}".format(substitution_type))
+
+
+class SimpleSubstitute(Substitute):
     # todo write unit tests
     def __init__(self, find, replace_with=None):
         self.__find = None
@@ -39,11 +78,21 @@ class SimpleSubstitution(Substitution):
 
     @find.setter
     def find(self, value):
-        if not value:
-            raise ValueError('SimpleSubstitution.find must not be None or '
-                             'empty')
+        if value is None:
+            raise TypeError('SimpleSubstitution.find must not be None')
 
-        self.__find = value
+        try:
+            find = str(value)
+        except Exception as error:
+            raise TypeError("SimpleSubstitution.find must be a string or "
+                            "have a working string representation via "
+                            "__str__") \
+                from error
+
+        if len(find) <= 0:
+            raise ValueError('SimpleSubstitution.find must not be empty')
+
+        self.__find = str(value)
 
     @property
     def replace_with(self):
@@ -83,7 +132,20 @@ class SimpleSubstitution(Substitution):
         find = get_value('find', dict_, default='')
         replace_with = get_value('replace_with', dict_, default='')
 
-        substitution = SimpleSubstitution(find=find,
-                                          replace_with=replace_with)
+        substitution = SimpleSubstitute(find=find,
+                                        replace_with=replace_with)
 
         return substitution
+
+
+class RegexSubstitute(Substitute):
+    def __init__(self):
+        super().__init__()
+        raise NotImplementedError('Planned for Version 3.0')
+
+    def apply_to(self, text):
+        raise NotImplementedError('Planned for Version 3.0')
+
+    @classmethod
+    def from_dict(cls, dict_):
+        raise NotImplementedError('Planned for Version 3.0')

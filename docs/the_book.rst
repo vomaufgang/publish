@@ -10,3 +10,4 @@ The Book class
 
 .... autoclass:: apub.book.Book
     :members:
+    :noindex:

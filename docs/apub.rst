@@ -1,14 +1,6 @@
 apub package
 ============
 
-Subpackages
------------
-
-.. toctree::
-
-    apub.output
-    apub.substitution
-
 Submodules
 ----------
 
@@ -32,14 +24,6 @@ apub.errors module
 ------------------
 
 .. automodule:: apub.errors
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-apub.input module
------------------
-
-.. automodule:: apub.input
     :members:
     :undoc-members:
     :show-inheritance:
@@ -76,6 +60,21 @@ apub.quickstart module
     :undoc-members:
     :show-inheritance:
 
+apub.substitution module
+------------------------
+
+.. automodule:: apub.substitution
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+apub.output module
+------------------
+
+.. automodule:: apub.output
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 Module contents
 ---------------

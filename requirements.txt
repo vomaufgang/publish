@@ -1,5 +1,5 @@
-markdown>=2.5.2
-validators>=0.7
+markdown>=2.6
+validators>=0.11
 nose
 tox
 Sphinx

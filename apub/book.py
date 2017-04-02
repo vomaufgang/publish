@@ -17,13 +17,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging.config
 from datetime import date
+from typing import List, Dict, Optional
 
 from apub.errors import InvalidRatingError, InvalidSeriesIndexError
 from apub.fromdict import FromDict
-from typing import List, Dict
 
-import logging.config
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
@@ -72,27 +72,51 @@ class Book(FromDict):
 
     Attributes:
         chapters (List[Chapter]): The list of chapters.
-        author_sort
-        authors
-        book_producer
-        comments
-        cover
-        isbn
-        language (str): The language.
-            Must be an ISO 639-2 code, defaults to 'und'.
-        pubdate
-        publisher
-        rating (int): The rating.
-            Must be an integer between 1 and 5.
-        series
-        series_index (int): The index of the book in the series.
-        tags
-        title
+
+        author_sort (Optional[str]): String to be used when sorting by author.
+
+        authors (Optional[str]): The authors. Multiple authors should be
+            separated by ampersands.
+
+        book_producer (Optional[str]): The book producer.
+
+        comments (Optional[str]): The ebook description.
+
+        cover (Optional[str]): Path or url to the cover image.
+
+        isbn (Optional[str]): The ISBN of the book.
+
+        language (Optional[str]): The language formatted as an
+            ISO 639-2 code. Defaults to 'und'.
+
+        pubdate (Optional[str]): The publication date formatted
+            as 'YYYY-MM-DD' (see ISO 8601).
+
+        publisher (Optional[str]): The ebook publisher.
+
+        rating (Optional[int]): The rating.
+            Should be an integer between 1 and 5.
+
+        series (Optional[str]): The series this ebook belongs to.
+
+        series_index (Optional[int])): The index of the book in the series.
+
+        tags (Optional[str]): The tags for the book. Should be a comma
+            separated list.
+
+        title (Optional[str]): The title
+
+        title_sort (Optional[str]): The version of the title to be used for
+            sorting.
 
 
     """
 
     def __init__(self):
+        self.__language = None
+        self.__rating = None
+        self.__series_index = None
+
         # todo use None as default for non-mandatory fields
         # todo document attributes class docstring
         # attributes supported as metadata by ebook-convert:
@@ -107,15 +131,15 @@ class Book(FromDict):
         self.isbn = None
         # todo ignore in json and html outputs - nah, keep it for
         #      when someone wants to look a book up
+        self.language = 'und'
         self.pubdate = date.today().isoformat()
         self.publisher = None
+        self.rating = None
         self.series = None
+        self.series_index = None
         self.tags = None
         self.title = None
-
-        self.__language = 'und'
-        self.__rating = None
-        self.__series_index = None
+        self.title_sort = None
 
         self.chapters = []
 
@@ -192,14 +216,14 @@ class Book(FromDict):
         self.__series_index = value
 
     @classmethod
-    def from_dict(cls, dict_: Dict) -> 'Book':
+    def from_dict(cls, dict_) -> 'Book':
         """Creates a new Book object from the provided python dictionary.
 
         The structure and contents of the dictionary must be equivalent to
         the apub JSON format.
 
         Args:
-            dict_ (dict): The dictionary to translate into a Project object.
+            dict_ (Dict): The dictionary to translate into a Project object.
 
         Returns:
             Book: A new Book created from the dictionary.
@@ -223,13 +247,14 @@ class Book(FromDict):
         book.series_index = get_value('series_index', dict_)
         book.tags = get_value('tags', dict_)
         book.title = get_value('title', dict_)
+        book.title_sort = get_value('title_sort', dict_)
 
         book.chapters = Book._get_chapters_from_dict(dict_)
 
         return book
 
     @classmethod
-    def _get_chapters_from_dict(cls, project_dict: Dict) -> List['Chapter']:
+    def _get_chapters_from_dict(cls, project_dict):
         """Returns the chapters contained in the project dictionary as a list
         of Chapter objects.
 
@@ -237,7 +262,7 @@ class Book(FromDict):
             project_dict (dict): The project dictionary.
 
         Returns:
-            list[Chapter]: A list of Chapter objects or an empty list.
+            A list of Chapter objects or an empty list.
         """
         if 'chapters' in project_dict:
             chapters = []
@@ -277,17 +302,17 @@ class Chapter(FromDict):
         self.publish = True
 
     @classmethod
-    def from_dict(cls, dict_: Dict) -> 'Chapter':
+    def from_dict(cls, dict_):
         """Creates a new Chapter object from the provided python dictionary.
 
         The structure and contents of the dictionary must be equivalent to
         the apub JSON chapter format.
 
         Args:
-            dict_ (dict): The dictionary to translate into a Chapter object.
+            dict_: The dictionary to translate into a Chapter object.
 
         Returns:
-            Chapter: A new Chapter created from the dictionary.
+            A new Chapter created from the dictionary.
         """
         chapter = Chapter()
 

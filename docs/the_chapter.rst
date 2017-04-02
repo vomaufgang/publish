@@ -9,3 +9,4 @@ The Chapter class
 
 .. autoclass:: apub.book.Chapter
     :members:
+    :noindex:

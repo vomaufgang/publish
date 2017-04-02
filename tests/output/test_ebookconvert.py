@@ -10,8 +10,6 @@ Tests for `apub.model.project` module.
 
 import unittest
 
-from apub.output.ebookconvert import _yield_attrs_as_ebookconvert_params
-
 
 class TestEbookConvertOutput(unittest.TestCase):
 
