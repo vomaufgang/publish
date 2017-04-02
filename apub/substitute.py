@@ -56,8 +56,8 @@ class Substitute(FromDict, metaclass=ABCMeta):
             return SimpleSubstitute.from_dict(dict_)
 
         elif substitution_type == 'regex':
-            raise NotImplementedError('Substitution type \'regex\' is planned '
-                                      'for Version 3.0')
+            raise NotImplementedError(
+                "Substitution type 'regex' is planned for Version 3.0")
 
         raise NotImplementedError(
             f"Unrecognized substitution type: {substitution_type}")
@@ -79,7 +79,7 @@ class SimpleSubstitute(Substitute):
     @find.setter
     def find(self, value):
         if value is None:
-            raise TypeError('SimpleSubstitution.find must not be None')
+            raise TypeError("SimpleSubstitution.find must not be None")
 
         try:
             find = str(value)
@@ -90,7 +90,7 @@ class SimpleSubstitute(Substitute):
                 from error
 
         if len(find) <= 0:
-            raise ValueError('SimpleSubstitution.find must not be empty')
+            raise ValueError("SimpleSubstitution.find must not be empty")
 
         self.__find = str(value)
 
@@ -141,11 +141,11 @@ class SimpleSubstitute(Substitute):
 class RegexSubstitute(Substitute):
     def __init__(self):
         super().__init__()
-        raise NotImplementedError('Planned for Version 3.0')
+        raise NotImplementedError("Planned for Version 3.0")
 
     def apply_to(self, text):
-        raise NotImplementedError('Planned for Version 3.0')
+        raise NotImplementedError("Planned for Version 3.0")
 
     @classmethod
     def from_dict(cls, dict_):
-        raise NotImplementedError('Planned for Version 3.0')
+        raise NotImplementedError("Planned for Version 3.0")

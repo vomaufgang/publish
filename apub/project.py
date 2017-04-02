@@ -18,7 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import json
-import logging.config
+import logging
 import os
 
 from apub.book import Book

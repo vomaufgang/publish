@@ -17,9 +17,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from abc import ABCMeta, abstractmethod
+import logging
 
-import logging.config
+from abc import ABCMeta, abstractmethod
+from typing import Dict
+
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
@@ -35,7 +37,7 @@ class FromDict(metaclass=ABCMeta):
 
     @classmethod
     @abstractmethod
-    def from_dict(cls, dict_):
+    def from_dict(cls, dict_: Dict):
         """Abstract method that must be implemented by inheriting classes.
 
         Instantiates a new object from the providied dictionary 'dict_', using
