@@ -4,6 +4,7 @@ nose
 tox
 Sphinx
 sphinx-rtd-theme
+sphinx-autodoc-typehints
 flake8
 coverage
 wheel

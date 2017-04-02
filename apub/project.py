@@ -20,13 +20,13 @@
 import json
 import logging.config
 import os
-from typing import List, Dict
 
 from apub.book import Book
 from apub.errors import MalformedProjectJsonError, NoBookFoundError
 from apub.fromdict import FromDict
 from apub.output import Output
 from apub.substitute import Substitute
+from typing import List, Dict
 
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
@@ -41,17 +41,15 @@ class Project(FromDict):
         self.substitutions = []
 
     @classmethod
-    def from_dict(cls, dict_: Dict):
-        """Creates a new Project object from the provided python dictionary.
+    def from_dict(cls, dict_: Dict) -> 'Project':
+        """Creates a new Project object from a dictionary.
 
-        The structure and contents of the dictionary must be equivalent to
-        the apub JSON project format.
+        The structure and contents of the dictionary must follow the apub 
+        JSON project format.
 
-        Args:
-            dict_ (dict): The dictionary to translate into a Project object.
+        :param dict_: The dictionary to translate into a Project object.
 
-        Returns:
-            Project: A new Project created from the dictionary.
+        :returns: A new Project created from the dictionary.
         """
         # todo unit test Project.from_dict
         project = Project()
@@ -63,14 +61,12 @@ class Project(FromDict):
         return project
 
     @classmethod
-    def _get_book_from_dict(cls, dict_: Dict) -> Book:
+    def _get_book_from_dict(cls, dict_: Dict) -> 'Book':
         """Returns the book contained in the project dictionary.
 
-        Args:
-            dict_ (dict): The project dictionary.
+        :param dict_: The project dictionary.
 
-        Returns:
-            Dict: A dictionary containing the project metadata.
+        :returns: The book contained in the project dictionary.
         """
         # todo unit test Project._get_book_from_dict
         if 'book' in dict_:
@@ -79,14 +75,14 @@ class Project(FromDict):
             raise NoBookFoundError
 
     @classmethod
-    def _get_outputs_from_dict(cls, dict_: Dict) -> List[Output]:
+    def _get_outputs_from_dict(cls, dict_: Dict):
         """Returns the outputs contained in the project dictionary.
 
         Args:
             dict_ (Dict): The project dictionary.
 
         Returns:
-            List[Output]: A list of Output objects or an empty list.
+            A list of Output objects or an empty list.
         """
         # todo unit test Project._get_outputs_from_dict
         if 'outputs' in dict_:
