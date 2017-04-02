@@ -60,7 +60,7 @@ class Substitute(FromDict, metaclass=ABCMeta):
                                       'for Version 3.0')
 
         raise NotImplementedError(
-            "Unrecognized substitution type: {0}".format(substitution_type))
+            f"Unrecognized substitution type: {substitution_type}")
 
 
 class SimpleSubstitute(Substitute):

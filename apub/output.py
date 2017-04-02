@@ -60,7 +60,7 @@ class Output(FromDict, metaclass=ABCMeta):
             output = EbookConvertOutput.from_dict(dict_)
         else:
             raise NotImplementedError(
-                'Unrecognized output type: {0}'.format(output_type))
+                f'Unrecognized output type: {output_type}')
 
         # todo validate mandatory parameters name & path
 
@@ -190,7 +190,7 @@ def _yield_attrs_as_ebookconvert_params(object_):
         if hasattr(object_, attr_name):
             attr = str(getattr(object_, attr_name))
             if attr and not attr.isspace():
-                yield "--{0}=\"{1}\"".format(attr_name, attr)
+                yield f"--{attr_name}=\"{attr}\""
 
 
 # todo optional subtitle
