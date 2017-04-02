@@ -26,7 +26,7 @@ log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
 
-class Substitute(FromDict, metaclass=ABCMeta):
+class Substitution(FromDict, metaclass=ABCMeta):
     # todo write unit tests
 
     @abstractmethod
@@ -53,7 +53,7 @@ class Substitute(FromDict, metaclass=ABCMeta):
         substitution_type = dict_['type']
 
         if substitution_type == 'simple':
-            return SimpleSubstitute.from_dict(dict_)
+            return SimpleSubstitution.from_dict(dict_)
 
         elif substitution_type == 'regex':
             raise NotImplementedError(
@@ -63,7 +63,7 @@ class Substitute(FromDict, metaclass=ABCMeta):
             f"Unrecognized substitution type: {substitution_type}")
 
 
-class SimpleSubstitute(Substitute):
+class SimpleSubstitution(Substitution):
     # todo write unit tests
     def __init__(self, find, replace_with=None):
         self.__find = None
@@ -132,13 +132,13 @@ class SimpleSubstitute(Substitute):
         find = get_value('find', dict_, default='')
         replace_with = get_value('replace_with', dict_, default='')
 
-        substitution = SimpleSubstitute(find=find,
-                                        replace_with=replace_with)
+        substitution = SimpleSubstitution(find=find,
+                                          replace_with=replace_with)
 
         return substitution
 
 
-class RegexSubstitute(Substitute):
+class RegexSubstitution(Substitution):
     def __init__(self):
         super().__init__()
         raise NotImplementedError("Planned for Version 3.0")

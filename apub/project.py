@@ -25,7 +25,7 @@ from apub.book import Book
 from apub.errors import MalformedProjectJsonError, NoBookFoundError
 from apub.fromdict import FromDict
 from apub.output import Output
-from apub.substitute import Substitute
+from apub.substitution import Substitution
 from typing import List, Dict
 
 log = logging.getLogger(__name__)
@@ -95,7 +95,7 @@ class Project(FromDict):
 
     @classmethod
     def _get_substitutions_from_dict(cls,
-                                     dict_: Dict) -> List[Substitute]:
+                                     dict_: Dict) -> List[Substitution]:
         """Returns the substitutions contained in the project dictionary as
         a list of Output objects.
 
@@ -110,7 +110,7 @@ class Project(FromDict):
         if 'substitutions' in dict_:
             substitutions = []
             for substitution_dict in dict_['substitutions']:
-                substitutions.append(Substitute.from_dict(substitution_dict))
+                substitutions.append(Substitution.from_dict(substitution_dict))
             return substitutions
 
         return []

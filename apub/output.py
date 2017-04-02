@@ -30,7 +30,7 @@ from typing import List
 from apub.book import Book
 from apub.errors import NoChaptersFoundError
 from apub.fromdict import FromDict
-from apub.substitute import Substitute
+from apub.substitution import Substitution
 
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler)
@@ -130,7 +130,7 @@ class EbookConvertOutput(Output):
         super().__init__()
         self.ebookconvert_params = []
 
-    def make(self, book: Book, substitutions: List[Substitute]):
+    def make(self, book: Book, substitutions: List[Substitution]):
         (temp_handle, temp_path) = mkstemp(suffix=".html")
         try:
             self._make_html(temp_path, book, substitutions)
@@ -154,7 +154,7 @@ class EbookConvertOutput(Output):
     def _make_html(self,
                    temp_path: str,
                    book: Book,
-                   substitutions: List[Substitute]):
+                   substitutions: List[Substitution]):
         html_output = HtmlOutput()
 
         html_output.path = temp_path
@@ -206,7 +206,7 @@ class HtmlOutput(Output):
 
     def make(self,
              book: Book,
-             substitutions: List[Substitute] = None) -> None:
+             substitutions: List[Substitution] = None) -> None:
         if not book:
             raise AttributeError("book must not be None")
 
@@ -251,7 +251,7 @@ class HtmlOutput(Output):
 
     def get_html(self,
                  book: Book,
-                 substitutions: List[Substitute]) -> str:
+                 substitutions: List[Substitution]) -> str:
         markdown_ = self._read_markdown(book)
 
         markdown_ = self._apply_substitutions(
@@ -294,7 +294,7 @@ class HtmlOutput(Output):
         Args:
             markdown_ (str): 
                 The dict of markdown strings by chapter.
-            substitutions (list of apub.substitute.Substitute):
+            substitutions (list of apub.substitution.Substitution):
                 The list of substitutions to be applied.
 
         Returns:
