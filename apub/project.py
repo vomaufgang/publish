@@ -120,23 +120,23 @@ def read_project(path: str = None) -> Project:
     # todo document project.read_project
     # todo unit test read_project
     log.debug('start read_project')
-    log.debug(f'path = {path}')
+    log.debug('path = {}'.format(path))
 
     project_file_path = _get_project_file_path(path)
     data = ''
 
-    log.debug(f'reading {project_file_path}')
+    log.debug('reading {}'.format(project_file_path))
     with open(project_file_path) as project_file:
         data = project_file.read()
-        log.debug(f"{project_file_path} read containing {data}")
+        log.debug("{0} read containing {1}".format(project_file_path, data))
     try:
         dict_ = json.loads(data)
     except ValueError as value_error:
         raise MalformedProjectJsonError(
             "The provided project json contained malformed data. "
-            f"Expected a valid json object, got\n'{data}'\n"
+            "Expected a valid json object, got\n'{}'\n"
             "Inspect the enclosed ValueError for more "
-            "information.") from value_error
+            "information.".format(data)) from value_error
 
     # todo: validate the data before calling the factory chain
 
@@ -152,20 +152,21 @@ def _get_project_file_path(path: str) -> str:
 
     if not path:
         log.debug(
-            f'path is None, look for {default_project_file_name} in '
-            f'cwd {cwd}')
+            'path is None, look for {0} in cwd {1}'.format(
+                default_project_file_name, cwd))
         return os.path.join(
             cwd,
             default_project_file_name)
 
     elif os.path.isdir(os.path.join(cwd, path)):
         log.debug(
-            f'path is {os.path.join(cwd, path)}, look for '
-            f'{default_project_file_name}')
+            'path is {0}, look for {1}'.format(
+                os.path.join(cwd, path),
+                default_project_file_name))
         return os.path.join(
             path,
             default_project_file_name)
 
     elif os.path.isfile(os.path.join(cwd, path)):
-        log.debug(f'file at {os.path.join(cwd, path)} exists, use it')
+        log.debug('file at {} exists, use it'.format(os.path.join(cwd, path)))
         return path

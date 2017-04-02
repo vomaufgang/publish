@@ -117,4 +117,4 @@ def find_output_by_name(outputs, output_name):
             return output
 
     raise OutputNotFoundError("No output using the following name could "
-                              f"be found: '{output_name}'")
+                              "be found: '{}'".format(output_name))

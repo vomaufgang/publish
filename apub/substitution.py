@@ -60,7 +60,7 @@ class Substitution(FromDict, metaclass=ABCMeta):
                 "Substitution type 'regex' is planned for Version 3.0")
 
         raise NotImplementedError(
-            f"Unrecognized substitution type: {substitution_type}")
+            "Unrecognized substitution type: {}".format(substitution_type))
 
 
 class SimpleSubstitution(Substitution):

@@ -161,7 +161,7 @@ class Book(FromDict):
         faulty_language_warning = \
             ("Book.language must be a string representing a "
              "ISO 639-2 language code, falling back to 'und': "
-             f"'{value}'")
+             "'{}'".format(value))
 
         try:
             value = str(value)
@@ -193,7 +193,7 @@ class Book(FromDict):
         except ValueError:
             raise InvalidRatingError(
                 "The rating of a book must be an int or castable to int "
-                f"with a value >= 1 or <= 5 or None: '{value}'")
+                "with a value >= 1 or <= 5 or None: '{}'".format(value))
 
         self.__rating = value
 
