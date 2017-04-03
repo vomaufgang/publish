@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+"""Planned for Version 2.0"""
+
 
 def main():
     raise NotImplementedError('Planned for Version 2.0')

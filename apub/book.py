@@ -19,7 +19,7 @@
 
 import logging
 from datetime import date
-from typing import List, Dict, Optional
+from typing import List, Dict
 
 from apub.errors import InvalidRatingError, InvalidSeriesIndexError
 from apub.fromdict import FromDict
@@ -29,7 +29,7 @@ log.addHandler(logging.NullHandler())
 
 
 class Book(FromDict):
-    """The Book class isused to define the attributes and metadata
+    """The Book class is used to define the attributes and metadata
     required for creating a book via ebook-convert.
 
     It is one of the four integral parts of the project structure, the others
@@ -106,6 +106,7 @@ class Book(FromDict):
 
     @language.setter
     def language(self, value: str):
+        # todo unit test language
         if not value:
             self.__language = 'und'
 
@@ -139,6 +140,7 @@ class Book(FromDict):
 
     @rating.setter
     def rating(self, value: int):
+        # todo unit test rating
         if value is None:
             self.__rating = None
 
@@ -155,8 +157,7 @@ class Book(FromDict):
 
     @property
     def series_index(self) -> int:
-        """
-        Gets or sets the series index.
+        """Gets or sets the series index.
         
         :raises InvalidSeriesIndexError: 
             The rating of a book must be an int or castable to int.
@@ -165,6 +166,7 @@ class Book(FromDict):
 
     @series_index.setter
     def series_index(self, value: int):
+        # todo unit test series_index
         if value is None:
             self.__series_index = None
 
@@ -215,15 +217,13 @@ class Book(FromDict):
         return book
 
     @classmethod
-    def _get_chapters_from_dict(cls, project_dict):
+    def _get_chapters_from_dict(cls, project_dict: Dict) -> List['Chapter']:
         """Returns the chapters contained in the project dictionary as a list
         of Chapter objects.
 
-        Args:
-            project_dict (dict): The project dictionary.
+        :param project_dict: The project dictionary.
 
-        Returns:
-            A list of Chapter objects or an empty list.
+        :returns: A list of Chapter objects or an empty list.
         """
         if 'chapters' in project_dict:
             chapters = []
@@ -235,45 +235,40 @@ class Book(FromDict):
 
 
 class Chapter(FromDict):
-    """Description for class.
+    """The chapter class is used to define all metadata required for a chapter
+    of a book.
+    
+    :ivar publish: Determines wether the chapter will be included
+                   in the resulting output or not.
 
-    Attributes:
-        source (str): File name of the source file
-        slug(str): Url friendly representation of the title
+                   Defaults to True
+    :vartype publish: :obj:`bool`
+    
+    :ivar slug: Url friendly representation of the title
 
-            Mandatory if you use JsonOutput or HtmlOutput, optional for all
-            other outputs.
-        publish (bool): Determines wether the chapter will be included
-            in the resulting output or not.
-
-            Defaults to True
+                Mandatory if you use JsonOutput or HtmlOutput, optional for 
+                all other outputs.
+    :vartype slug: :obj:`str`
+    
+    :ivar source: File name of the source file
+    :vartype source: :obj:`str`
     """
 
     def __init__(self):
         self.source = None
         self.slug = None
-        # todo docs This is used in areader (for the url) and html file
-        #      names in html multi file mode
-        # todo HtmlOutput: additional attribute that determines wether the
-        #      url_friendly_title is used as the file name
-        # todo HtmlOutput: decide on a file name scheme for multi file
-        #      output in abscence of url friendly title
-        # todo HtmlOutput: additional attribute to optionally generate
-        #      forward and back links in multi file mode
         self.publish = True
 
     @classmethod
-    def from_dict(cls, dict_):
+    def from_dict(cls, dict_: Dict) -> 'Chapter':
         """Creates a new Chapter object from the provided python dictionary.
 
         The structure and contents of the dictionary must be equivalent to
         the apub JSON chapter format.
 
-        Args:
-            dict_: The dictionary to translate into a Chapter object.
+        :param dict_: The dictionary to translate into a Chapter object.
 
-        Returns:
-            A new Chapter created from the dictionary.
+        :returns: A new Chapter created from the dictionary.
         """
         chapter = Chapter()
 
