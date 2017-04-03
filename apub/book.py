@@ -40,75 +40,26 @@ class Book(FromDict):
 
     More information on the attributes can be found here:
     http://manual.calibre-ebook.com/cli/ebook-convert.html#metadata
-
-    Contains the chapters on top of the attributes required by ebook-convert.
-
-    Examples:
-        Create a new book object and use its attributes::
-
-            book = Book()
-            book.title = 'My book'
-            book.language = 'en'
-            book.rating = 3
-            # ...
-
-        Add chapters to a book::
-
-            chapter = Chapter()
-            chapter.title = 'My chapter'
-            chapter.source = 'my_script.md'
-            # ...
-            book.chapters.append(chapter)
-
-        Assign the book to a project::
-
-            project = Project()
-            project.book = book
-            # ... add outputs and/or substitutions to the project
-            make(project)
-
-        See the users guide for more comprehensive examples and information
-        on how to use the Book and where it fits in apub as a whole.
-
-    Attributes:
-        chapters (List[Chapter]): The list of chapters.
-
-        author_sort (Optional[str]): String to be used when sorting by author.
-
-        authors (Optional[str]): The authors. Multiple authors should be
-            separated by ampersands.
-
-        book_producer (Optional[str]): The book producer.
-
-        comments (Optional[str]): The ebook description.
-
-        cover (Optional[str]): Path or url to the cover image.
-
-        isbn (Optional[str]): The ISBN of the book.
-
-        language (Optional[str]): The language formatted as an
-            ISO 639-2 code. Defaults to 'und'.
-
-        pubdate (Optional[str]): The publication date formatted
-            as 'YYYY-MM-DD' (see ISO 8601).
-
-        publisher (Optional[str]): The ebook publisher.
-
-        rating (Optional[int]): The rating.
-            Should be an integer between 1 and 5.
-
-        series (Optional[str]): The series this ebook belongs to.
-
-        series_index (Optional[int])): The index of the book in the series.
-
-        tags (Optional[str]): The tags for the book. Should be a comma
-            separated list.
-
-        title (Optional[str]): The title
-
-        title_sort (Optional[str]): The version of the title to be used for
-            sorting.
-
+    
+    :ivar chapters: The list of chapters.
+    
+    :ivar author_sort: String to be used when sorting by author.
+    :ivar authors: The authors. Multiple authors should be separated by 
+                   ampersands.
+    :ivar book_producer: The book producer.
+    :ivar comments: The ebook description.
+    :ivar cover: Path or url to the cover image.
+    :ivar isbn: The ISBN of the book.
+    :ivar language: see property language below
+    :ivar pubdate: The publication date formatted as 'YYYY-MM-DD' 
+                   (see ISO 8601).
+    :ivar publisher: The ebook publisher.
+    :ivar rating: see property rating below
+    :ivar series: The series this ebook belongs to.
+    :ivar series_index: see property series_index below
+    :ivar tags: The tags for the book. Should be a comma separated list.
+    :ivar title: The title of the book.
+    :ivar title_sort: The version of the title to be used for sorting.
 
     """
 
@@ -117,8 +68,8 @@ class Book(FromDict):
         self.__rating = None
         self.__series_index = None
 
-        # todo use None as default for non-mandatory fields
-        # todo document attributes class docstring
+        self.chapters = []
+
         # attributes supported as metadata by ebook-convert:
         self.author_sort = None
         self.authors = None
@@ -141,13 +92,13 @@ class Book(FromDict):
         self.title = None
         self.title_sort = None
 
-        self.chapters = []
-
     @property
     def language(self) -> str:
         """Gets or sets the language.
 
-        Must be a ISO 639-2 code, defaults to 'und'.
+        Must be a ISO 639-2 code, defaults to 'und' if no language was given
+        or the value is not a string or does not follow the ISO 639-2 format
+        (string with 2 or 3 characters).
 
         See: https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
         """
@@ -179,6 +130,11 @@ class Book(FromDict):
 
     @property
     def rating(self) -> int:
+        """Gets or sets the rating.
+        
+        :raises InvalidRatingError: The rating of a book must be an int or 
+            None or castable to int with a value >= 1 or <= 5 .
+        """
         return self.__rating
 
     @rating.setter
@@ -199,7 +155,12 @@ class Book(FromDict):
 
     @property
     def series_index(self) -> int:
-        # todo document Book.series_index
+        """
+        Gets or sets the series index.
+        
+        :raises InvalidSeriesIndexError: 
+            The rating of a book must be an int or castable to int.
+        """
         return self.__series_index
 
     @series_index.setter
@@ -216,17 +177,17 @@ class Book(FromDict):
         self.__series_index = value
 
     @classmethod
-    def from_dict(cls, dict_) -> 'Book':
+    def from_dict(cls, dict_: Dict) -> 'Book':
         """Creates a new Book object from the provided python dictionary.
 
         The structure and contents of the dictionary must be equivalent to
         the apub JSON format.
 
-        Args:
-            dict_ (Dict): The dictionary to translate into a Project object.
+        :param dict_: 
+            The dictionary to translate into a Project object.
+        :type dict_: :obj:`Dict`
 
-        Returns:
-            Book: A new Book created from the dictionary.
+        :returns: A new Book created from the dictionary.
         """
         book = Book()
 
