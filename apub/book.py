@@ -21,7 +21,8 @@ import logging
 from datetime import date
 from typing import List, Dict
 
-from apub.errors import InvalidRatingError, InvalidSeriesIndexError
+from apub.errors import InvalidRatingError, InvalidSeriesIndexError, \
+    NoBookFoundError
 from apub.fromdict import FromDict
 
 log = logging.getLogger(__name__)
@@ -40,57 +41,94 @@ class Book(FromDict):
 
     More information on the attributes can be found here:
     http://manual.calibre-ebook.com/cli/ebook-convert.html#metadata
-    
-    :ivar chapters: The list of chapters.
-    
-    :ivar author_sort: String to be used when sorting by author.
-    :ivar authors: The authors. Multiple authors should be separated by 
-                   ampersands.
-    :ivar book_producer: The book producer.
-    :ivar comments: The ebook description.
-    :ivar cover: Path or url to the cover image.
-    :ivar isbn: The ISBN of the book.
-    :ivar language: see property language below
-    :ivar pubdate: The publication date formatted as 'YYYY-MM-DD' 
-                   (see ISO 8601).
-    :ivar publisher: The ebook publisher.
-    :ivar rating: see property rating below
-    :ivar series: The series this ebook belongs to.
-    :ivar series_index: see property series_index below
-    :ivar tags: The tags for the book. Should be a comma separated list.
-    :ivar title: The title of the book.
-    :ivar title_sort: The version of the title to be used for sorting.
-
     """
 
     def __init__(self):
-        self.__language = None
-        self.__rating = None
-        self.__series_index = None
-
-        self.chapters = []
+        self.__chapters = []
 
         # attributes supported as metadata by ebook-convert:
-        self.author_sort = None
-        self.authors = None
-        self.book_producer = None
-        self.comments = None
-        self.cover = None
-        # todo handling ebook-convert vs json - bundle cover as
-        #      base64 encoded image into the json via
-        #      embed_cover option?
-        self.isbn = None
-        # todo ignore in json and html outputs - nah, keep it for
-        #      when someone wants to look a book up
-        self.language = 'und'
-        self.pubdate = date.today().isoformat()
-        self.publisher = None
-        self.rating = None
-        self.series = None
-        self.series_index = None
-        self.tags = None
-        self.title = None
-        self.title_sort = None
+        self.__author_sort = None
+        self.__authors = None
+        self.__book_producer = None
+        self.__comments = None
+        self.__cover = None
+        self.__isbn = None
+        self.__language = 'und'
+        self.__pubdate = date.today()
+        self.__publisher = None
+        self.__rating = None
+        self.__series = None
+        self.__series_index = None
+        self.__tags = None
+        self.__title = None
+        self.__title_sort = None
+
+    @property
+    def chapters(self) -> List['Chapter']:
+        """Gets the list of chapters.
+        """
+        return self.__chapters
+
+    @property
+    def author_sort(self) -> str:
+        """Gets or sets the string to be used when sorting by author.
+        """
+        return self.__author_sort
+
+    @author_sort.setter
+    def author_sort(self, value: str):
+        self.__author_sort = value
+
+    @property
+    def authors(self) -> str:
+        """Gets or sets the authors. Multiple authors should be separated by 
+        ampersands.
+        """
+        return self.__authors
+
+    @authors.setter
+    def authors(self, value: str):
+        self.__authors = value
+
+    @property
+    def book_producer(self) -> str:
+        """Gets or sets the book producer.
+        """
+        return self.__book_producer
+
+    @book_producer.setter
+    def book_producer(self, value: str):
+        self.__book_producer = value
+
+    @property
+    def comments(self) -> str:
+        """Gets or sets the ebook description.
+        """
+        return self.__comments
+
+    @comments.setter
+    def comments(self, value: str):
+        self.__comments = value
+
+    @property
+    def cover(self) -> str:
+        """Gets or sets the path or url to the cover image.
+        """
+        return self.__cover
+
+    @cover.setter
+    def cover(self, value: str):
+        self.__cover = value
+
+    @property
+    def isbn(self) -> str:
+        """Gets or sets the ISBN of the book.
+        """
+        return self.__isbn
+
+    @isbn.setter
+    def isbn(self, value: str):
+        self.__isbn = value
 
     @property
     def language(self) -> str:
@@ -102,18 +140,18 @@ class Book(FromDict):
 
         See: https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
         """
-        return self.language
+        return self.__language
 
     @language.setter
     def language(self, value: str):
         # todo unit test language
         if not value:
             self.__language = 'und'
+            return
 
         faulty_language_warning = \
             ("Book.language must be a string representing a "
-             "ISO 639-2 language code, falling back to 'und': "
-             "'{}'".format(value))
+             "ISO 639-2 language code, falling back to 'und'.")
 
         try:
             value = str(value)
@@ -123,11 +161,32 @@ class Book(FromDict):
             return
 
         if len(value) not in [2, 3]:
-            log.warning(faulty_language_warning)
+            log.warning(faulty_language_warning +
+                        " value was: {}".format(value))
             self.__language = 'und'
             return
 
         self.__language = value
+
+    @property
+    def pubdate(self) -> date:
+        """Gets or sets the publication date.
+        """
+        return self.__pubdate
+
+    @pubdate.setter
+    def pubdate(self, value: date):
+        self.__pubdate = value
+
+    @property
+    def publisher(self) -> str:
+        """Gets or sets the ebook publisher.
+        """
+        return self.__publisher
+
+    @publisher.setter
+    def publisher(self, value: str):
+        self.__publisher = value
 
     @property
     def rating(self) -> int:
@@ -156,6 +215,16 @@ class Book(FromDict):
         self.__rating = value
 
     @property
+    def series(self) -> str:
+        """Gets or sets the series this ebook belongs to.
+        """
+        return self.__series
+
+    @series.setter
+    def series(self, value: str):
+        self.__series = value
+
+    @property
     def series_index(self) -> int:
         """Gets or sets the series index.
         
@@ -169,6 +238,7 @@ class Book(FromDict):
         # todo unit test series_index
         if value is None:
             self.__series_index = None
+            return
 
         try:
             value = int(value)
@@ -177,6 +247,37 @@ class Book(FromDict):
                 'The rating of a book must be an int or castable to int.')
 
         self.__series_index = value
+
+    @property
+    def tags(self) -> str:
+        """Gets or sets the tags for the book. Should be a comma 
+        separated list.
+        """
+        return self.__tags
+
+    @tags.setter
+    def tags(self, value: str):
+        self.__tags = value
+
+    @property
+    def title(self) -> str:
+        """Gets or sets the title of the book.
+        """
+        return self.__title
+
+    @title.setter
+    def title(self, value: str):
+        self.__title = value
+
+    @property
+    def title_sort(self) -> str:
+        """Gets or sets the version of the title to be used for sorting.
+        """
+        return self.__title_sort
+
+    @title_sort.setter
+    def title_sort(self, value: str):
+        self.__title_sort = value
 
     @classmethod
     def from_dict(cls, dict_: Dict) -> 'Book':
@@ -191,28 +292,33 @@ class Book(FromDict):
 
         :returns: A new Book created from the dictionary.
         """
+        if 'book' not in dict_:
+            raise NoBookFoundError
+
+        book_dict = dict_['book']
+
         book = Book()
 
         get_value = cls.get_value_from_dict
 
-        book.author_sort = get_value('author_sort', dict_)
-        book.authors = get_value('authors', dict_)
-        book.book_producer = get_value('book_producer', dict_)
-        book.comments = get_value('comments', dict_)
-        book.cover = get_value('cover', dict_)
-        book.isbn = get_value('isbn', dict_)
-        book.language = get_value('language', dict_, 'und')
+        book.author_sort = get_value('author_sort', book_dict)
+        book.authors = get_value('authors', book_dict)
+        book.book_producer = get_value('book_producer', book_dict)
+        book.comments = get_value('comments', book_dict)
+        book.cover = get_value('cover', book_dict)
+        book.isbn = get_value('isbn', book_dict)
+        book.language = get_value('language', book_dict, 'und')
         book.pubdate = get_value(
-            'pubdate', dict_, default=date.today().isoformat())
-        book.publisher = get_value('publisher', dict_)
-        book.rating = get_value('rating', dict_)
-        book.series = get_value('series', dict_)
-        book.series_index = get_value('series_index', dict_)
-        book.tags = get_value('tags', dict_)
-        book.title = get_value('title', dict_)
-        book.title_sort = get_value('title_sort', dict_)
+            'pubdate', book_dict, default=date.today().isoformat())
+        book.publisher = get_value('publisher', book_dict)
+        book.rating = get_value('rating', book_dict)
+        book.series = get_value('series', book_dict)
+        book.series_index = get_value('series_index', book_dict)
+        book.tags = get_value('tags', book_dict)
+        book.title = get_value('title', book_dict)
+        book.title_sort = get_value('title_sort', book_dict)
 
-        book.chapters = Book._get_chapters_from_dict(dict_)
+        book.chapters.extend(Book._get_chapters_from_dict(dict_))
 
         return book
 
@@ -237,27 +343,47 @@ class Book(FromDict):
 class Chapter(FromDict):
     """The chapter class is used to define all metadata required for a chapter
     of a book.
-    
-    :ivar publish: Determines wether the chapter will be included
-                   in the resulting output or not.
-
-                   Defaults to True
-    :vartype publish: :obj:`bool`
-    
-    :ivar slug: Url friendly representation of the title
-
-                Mandatory if you use JsonOutput or HtmlOutput, optional for 
-                all other outputs.
-    :vartype slug: :obj:`str`
-    
-    :ivar source: File name of the source file
-    :vartype source: :obj:`str`
     """
 
     def __init__(self):
-        self.source = None
-        self.slug = None
-        self.publish = True
+        self.__publish = True
+        self.__slug = None
+        self.__source = None
+
+    @property
+    def publish(self) -> bool:
+        """Determines wether the chapter will be included
+        in the resulting output or not.
+
+        Defaults to True
+        """
+        return self.__publish
+
+    @publish.setter
+    def publish(self, value: bool):
+        self.__publish = value
+
+    @property
+    def slug(self) -> str:
+        """Gets or sets the url friendly representation of the title
+
+        Mandatory if you use JsonOutput, optional for all other outputs.
+        """
+        return self.__slug
+
+    @slug.setter
+    def slug(self, value: str):
+        self.__slug = value
+
+    @property
+    def source(self) -> str:
+        """Gets or sets the file name of the source file
+        """
+        return self.__source
+
+    @source.setter
+    def source(self, value: str):
+        self.__source = value
 
     @classmethod
     def from_dict(cls, dict_: Dict) -> 'Chapter':

@@ -10,14 +10,12 @@
     "state": "ongoing",
     "chapters": [
       {
-        "title": "1",
-        "url_friendly_title": "1",
+        "slug": "1",
         "source": "./chapters/01-1.chapter",
         "publish": true
       },
       {
-        "title": "2",
-        "url_friendly_title": "2",
+        "slug": "2",
         "source": "./chapters/02-2.chapter",
         "publish": false
       }
@@ -34,7 +32,7 @@
     {
       "name": "json",
       "type": "json",
-      "url_friendly_title": "otwat",
+      "slug": "otwat",
       "path": "output/json/test.json",
       "compress_content": true,
       "css_path": "test.css"

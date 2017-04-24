@@ -18,6 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from abc import ABCMeta, abstractmethod
+from typing import Dict
 
 from apub.fromdict import FromDict
 
@@ -30,12 +31,12 @@ class Substitution(FromDict, metaclass=ABCMeta):
     # todo write unit tests
 
     @abstractmethod
-    def apply_to(self, text):
+    def apply_to(self, text: str) -> str:
         """
-        Args:
-            text (str): The text to apply this simple substitution to.
-
-        Notes:
+        
+        :param text: The text to apply this simple substitution to.
+        
+        .. note::
             The current implementation schema of apply_to might prove
             inefficient, because every single substitution leads to an
             additional iteration the splitted lines of text.
@@ -49,7 +50,7 @@ class Substitution(FromDict, metaclass=ABCMeta):
         raise NotImplementedError
 
     @classmethod
-    def from_dict(cls, dict_):
+    def from_dict(cls, dict_: Dict) -> 'Substitution':
         substitution_type = dict_['type']
 
         if substitution_type == 'simple':

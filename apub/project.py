@@ -20,13 +20,14 @@
 import json
 import logging
 import os
+from collections import OrderedDict
+from typing import List, Dict
 
 from apub.book import Book
 from apub.errors import MalformedProjectJsonError, NoBookFoundError
 from apub.fromdict import FromDict
 from apub.output import Output
 from apub.substitution import Substitution
-from typing import List, Dict
 
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
@@ -39,6 +40,10 @@ class Project(FromDict):
         self.book = None
         self.outputs = []
         self.substitutions = []
+
+    # todo Ich sehe ja ein, dass from_dict Teil der Project-Klasse ist.
+    #      Aber get_book_from_dict? Warum packe ich das nichts ins Buch-Modul
+    #      usw?
 
     @classmethod
     def from_dict(cls, dict_: Dict) -> 'Project':
@@ -54,25 +59,11 @@ class Project(FromDict):
         # todo unit test Project.from_dict
         project = Project()
 
-        project.book = cls._get_book_from_dict(dict_)
+        project.book = Book.from_dict(dict_)
         project.outputs = cls._get_outputs_from_dict(dict_)
         project.substitutions = cls._get_substitutions_from_dict(dict_)
 
         return project
-
-    @classmethod
-    def _get_book_from_dict(cls, dict_: Dict) -> 'Book':
-        """Returns the book contained in the project dictionary.
-
-        :param dict_: The project dictionary.
-
-        :returns: The book contained in the project dictionary.
-        """
-        # todo unit test Project._get_book_from_dict
-        if 'book' in dict_:
-            return Book.from_dict(dict_['book'])
-        else:
-            raise NoBookFoundError
 
     @classmethod
     def _get_outputs_from_dict(cls, dict_: Dict):
@@ -130,7 +121,7 @@ def read_project(path: str = None) -> Project:
         data = project_file.read()
         log.debug("{0} read containing {1}".format(project_file_path, data))
     try:
-        dict_ = json.loads(data)
+        dict_ = json.loads(data, object_pairs_hook=OrderedDict)
     except ValueError as value_error:
         raise MalformedProjectJsonError(
             "The provided project json contained malformed data. "
