@@ -68,43 +68,6 @@ class TestBook(unittest.TestCase):
 
         self.assertEqual('und', book.language)
 
-    def test_language_value_falsey_defaults_to_und(self):
-        book = Book()
-        book.language = False
-
-        self.assertEqual('und', book.language)
-
-    def test_language_value_None_defaults_to_und(self):
-        book = Book()
-        book.language = None
-
-        self.assertEqual('und', book.language)
-
-    def test_language_no_string_repr_defaults_to_und(self):
-        class NoStringRepr:
-            def __str__(self):
-                raise ValueError
-
-            def __repr__(self):
-                raise ValueError
-
-        book = Book()
-        book.language = NoStringRepr()
-
-        self.assertEqual('und', book.language)
-
-    def test_language_too_long_defaults_to_und(self):
-        book = Book()
-        book.language = 'abcd'
-
-        self.assertEqual('und', book.language)
-
-    def test_language_too_short_defaults_to_und(self):
-        book = Book()
-        book.language = 'a'
-
-        self.assertEqual('und', book.language)
-
     def test_author_sort(self):
         book = Book()
         book.author_sort = "abc"
@@ -241,17 +204,6 @@ class TestChapter(unittest.TestCase):
         chapter = Chapter()
 
         self.assertEqual(True, chapter.publish)
-
-    def test_slug(self):
-        chapter = Chapter()
-        chapter.slug = "abc"
-
-        self.assertEqual("abc", chapter.slug)
-
-    def test_slug_defaults_to_none(self):
-        chapter = Chapter()
-
-        self.assertEqual(None, chapter.slug)
 
     def test_source(self):
         chapter = Chapter()

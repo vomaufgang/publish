@@ -20,11 +20,10 @@
 import json
 import logging
 import os
-from collections import OrderedDict
 from typing import List, Dict
 
 from apub.book import Book
-from apub.errors import MalformedProjectJsonError, NoBookFoundError
+from apub.errors import MalformedProjectJsonError
 from apub.fromdict import FromDict
 from apub.output import Output
 from apub.substitution import Substitution
@@ -114,14 +113,13 @@ def read_project(path: str = None) -> Project:
     log.debug('path = {}'.format(path))
 
     project_file_path = _get_project_file_path(path)
-    data = ''
 
     log.debug('reading {}'.format(project_file_path))
     with open(project_file_path) as project_file:
         data = project_file.read()
         log.debug("{0} read containing {1}".format(project_file_path, data))
     try:
-        dict_ = json.loads(data, object_pairs_hook=OrderedDict)
+        dict_ = json.loads(data)
     except ValueError as value_error:
         raise MalformedProjectJsonError(
             "The provided project json contained malformed data. "

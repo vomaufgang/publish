@@ -10,12 +10,10 @@
     "state": "ongoing",
     "chapters": [
       {
-        "slug": "1",
         "source": "./chapters/01-1.chapter",
         "publish": true
       },
       {
-        "slug": "2",
         "source": "./chapters/02-2.chapter",
         "publish": false
       }
