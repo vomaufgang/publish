@@ -19,10 +19,8 @@
 
 import logging
 from datetime import date
-from typing import List, Dict
 
-from apub.errors import InvalidRatingError, InvalidSeriesIndexError, \
-    NoBookFoundError, NoChaptersFoundError
+from apub.errors import NoBookFoundError, NoChaptersFoundError
 from apub.fromdict import FromDict
 
 log = logging.getLogger(__name__)
@@ -30,7 +28,7 @@ log.addHandler(logging.NullHandler())
 
 
 class Book(FromDict):
-    """The Book class is used to define the attributes and metadata
+    """The Book is used to define the attributes and metadata
     required for creating a book via ebook-convert.
 
     It is one of the four integral parts of the project structure, the others
@@ -66,37 +64,37 @@ class Book(FromDict):
         self.__chapters = []
 
         # attributes supported as metadata by ebook-convert:
-        self.author_sort: str = None
-        self.authors: str = None
-        self.book_producer: str = None
-        self.comments: str = None
-        self.cover: str = None
-        self.isbn: str = None
-        self.language: str = 'und'
-        self.pubdate: str = date.today().isoformat()
-        self.publisher: str = None
-        self.rating: int = None
-        self.series: str = None
-        self.series_index: int = None
-        self.tags: str = None
-        self.title: str = None
-        self.title_sort: str = None
+        self.author_sort = None
+        self.authors = None
+        self.book_producer = None
+        self.comments = None
+        self.cover = None
+        self.isbn = None
+        self.language = 'und'
+        self.pubdate = date.today().isoformat()
+        self.publisher = None
+        self.rating = None
+        self.series = None
+        self.series_index = None
+        self.tags = None
+        self.title = None
+        self.title_sort = None
 
     @property
-    def chapters(self) -> List['Chapter']:
+    def chapters(self):
         """Gets the list of chapters.
         """
         return self.__chapters
 
     @classmethod
-    def from_dict(cls, dict_: Dict) -> 'Book':
+    def from_dict(cls, dict_):
         """Creates a new Book object from the provided python dictionary.
 
         The structure and contents of the dictionary must be equivalent to
         the apub JSON format.
 
         :param dict_: 
-            The dictionary to translate into a Project object.
+            The dictionary to translate into a Book object.
         :type dict_: :obj:`Dict`
 
         :returns: A new Book created from the dictionary.
@@ -117,6 +115,8 @@ class Book(FromDict):
         book.cover = get_value('cover', book_dict)
         book.isbn = get_value('isbn', book_dict)
         book.language = get_value('language', book_dict, 'und')
+        # todo unit test this, if awkward -> store date() instead, get string
+        #      here and convert to date
         book.pubdate = get_value(
             'pubdate', book_dict, default=date.today().isoformat())
         book.publisher = get_value('publisher', book_dict)
@@ -148,11 +148,11 @@ class Chapter(FromDict):
     """
 
     def __init__(self):
-        self.publish: bool = True
-        self.source: str = None
+        self.publish = True
+        self.source = None
 
     @classmethod
-    def from_dict(cls, dict_: Dict) -> 'Chapter':
+    def from_dict(cls, dict_):
         """Creates a new Chapter object from the provided python dictionary.
 
         The structure and contents of the dictionary must be equivalent to

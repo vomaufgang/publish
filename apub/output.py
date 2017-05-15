@@ -20,40 +20,36 @@
 import logging
 import markdown
 import os
+import shutil
 import subprocess
+import uuid
 from abc import ABCMeta, abstractmethod
 from pkg_resources import resource_string
-from tempfile import mkstemp
-from typing import List, Dict, Iterable
+from tempfile import mkdtemp
 
-from apub.book import Book, Chapter
 from apub.errors import NoChaptersFoundError
 from apub.fromdict import FromDict
-from apub.substitution import Substitution
 
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler)
 
 
-_supported_ebookconvert_attrs = {
-    'ebook-convert': [
-        'author_sort',
-        'authors',
-        'book_producer'
-        'comments',
-        'cover',
-        'isbn',
-        'language',
-        'pubdate',
-        'publisher',
-        'rating',
-        'series',
-        'series_index',
-        'tags',
-        'title'
-    ]
-}
-
+_supported_ebookconvert_attrs = [
+    'author_sort',
+    'authors',
+    'book_producer'
+    'comments',
+    'cover',
+    'isbn',
+    'language',
+    'pubdate',
+    'publisher',
+    'rating',
+    'series',
+    'series_index',
+    'tags',
+    'title'
+]
 
 # todo: Output has 'css', html_output has 'css_path' - choose one,
 #       remove the other
@@ -65,68 +61,45 @@ _supported_ebookconvert_attrs = {
 
 # todo what was generate_toc even for?
 
+
 class Output(FromDict, metaclass=ABCMeta):
-    def __init__(self):
-        self.__name = None
-        self.__path = None
-        self.__css = None
-        self.__force_publish = False
+    """Abstract base class for specific Output implementations.
 
-    @property
-    def name(self) -> str:
-        """Gets or sets the output name.
-        """
-        return self.__name
-
-    @name.setter
-    def name(self, value: str):
-        self.__name = value
-
-    @property
-    def path(self) -> str:
-        """Gets or sets the output path.
-        """
-        return self.__path
-
-    @path.setter
-    def path(self, value: str):
-        self.__path = value
-
-    @property
-    def css(self) -> str:
-        """Gets or sets the style sheet.
-        """
-        return self.__css
-
-    @css.setter
-    def css(self, value: str):
-        self.__css = value
-
-    @property
-    def force_publish(self) -> bool:
-        """Gets or sets wether to force publish all chapters.
+    :ivar css_path: The path to the style sheet.
+    :ivar force_publish: Determines wether to force publish all chapters.
         
         If set to true, all chapters of the book will be published
         no matter how the chapters are configured.
-        """
-        return self.__force_publish
+    :ivar name: The output name.
+    :ivar path: The output path.
+    """
 
-    @force_publish.setter
-    def force_publish(self, value: bool):
-        self.__force_publish = value
+    def __init__(self):
+
+        self.name = None
+        self.css_path = None
+        self.force_publish = False
+        self.path = None
 
     @abstractmethod
-    def make(self, book: Book, substitutions: List[Substitution]):
+    def make(self, book, substitutions):
         pass
 
-    def get_chapters_to_publish(self, book: Book) -> List[Chapter]:
+    def get_chapters_to_publish(self, book):
         if self.force_publish:
             return book.chapters
         else:
             return list(filter(lambda x: x.publish is True, book.chapters))
 
+    def validate(self):
+        """Validates the Book object. 
+        
+        Errors are raised as AttributeErrors."""
+        if not self.path:
+            raise AttributeError('Output path must be set.')
+
     @classmethod
-    def from_dict(cls, dict_: Dict) -> 'Output':
+    def from_dict(cls, dict_):
         output_type = cls.get_value_from_dict('type', dict_)
 
         if output_type == 'html':
@@ -140,13 +113,11 @@ class Output(FromDict, metaclass=ABCMeta):
             raise NotImplementedError(
                 'Unrecognized output type: {}'.format(output_type))
 
-        # todo validate mandatory parameters name & path
-
         get_value = cls.get_value_from_dict
 
         output.name = get_value('name', dict_)
         output.path = get_value('path', dict_)
-        output.css = get_value('css', dict_)
+        output.css_path = get_value('css_path', dict_)
         output.force_publish = get_value(
             'force_publish', dict_, default=False)
 
@@ -160,27 +131,34 @@ class EbookConvertOutput(Output):
         self.ebookconvert_params = []
 
     def make(self,
-             book: Book,
-             substitutions: List[Substitution] = None):
+             book,
+             substitutions=None):
         if not book:
             raise AttributeError("book must not be None")
 
         if not substitutions:
             substitutions = []
 
-        (_, temp_path) = mkstemp(suffix=".html")
+        self.validate()
+
+        temp_directory = mkdtemp()
+        # mkstmp and NamedTemporaryFile won't work, because the html file
+        # will be kept open by EbookConvertOutput with exclusive access,
+        # which means ebook-convert can't read the html to create the epub.
+        # -> ebook-convert crashes with Permission denied.
 
         try:
             html_output = HtmlOutput()
-            html_output.path = temp_path
-            html_output.css = self.css
+            html_output.path = os.path.join(
+                temp_directory, str(uuid.uuid4()) + '.html')
+            html_output.css_path = self.css_path
             html_output.force_publish = self.force_publish
 
             html_output.make(book, substitutions)
 
             call_params = [
                 'ebook-convert',
-                temp_path,
+                html_output.path,
                 self.path
             ]
 
@@ -189,19 +167,19 @@ class EbookConvertOutput(Output):
 
             subprocess.call(call_params)
         finally:
-            os.remove(temp_path)
+            shutil.rmtree(temp_directory)
 
     @classmethod
-    def from_dict(cls, dict_: Dict) -> 'EbookConvertOutput':
+    def from_dict(cls, dict_):
         ebook_convert_output = EbookConvertOutput()
 
         ebook_convert_output.ebookconvert_params = cls.get_value_from_dict(
-            'ebookconvert_params', dict_, [])
+            'ebookconvert_params', dict_, default=[])
 
         return ebook_convert_output
 
 
-def _yield_attrs_as_ebookconvert_params(object_) -> Iterable[str]:
+def _yield_attrs_as_ebookconvert_params(object_):
     """Takes an object and returns a generator yielding all attributes
     that can be processed by the ebookconvert command line as a param array.
 
@@ -216,58 +194,36 @@ def _yield_attrs_as_ebookconvert_params(object_) -> Iterable[str]:
     # (or any other specific output that follows this explicit pattern)
     for attr_name in _supported_ebookconvert_attrs:
         if hasattr(object_, attr_name):
-            attr = str(getattr(object_, attr_name))
+            attr = getattr(object_, attr_name)
+            if not attr:
+                continue
+            attr = str(attr)
             if attr and not attr.isspace():
                 yield "--{0}=\"{1}\"".format(attr_name, attr)
 
 
 class HtmlOutput(Output):
+
     def __init__(self):
         super().__init__()
-        self.__css_path = None
-        self.__generate_toc = False  # todo implement HtmlOutput.generate_toc
-        #    ^ is dependant upon book & chapter url_friendly_title
-        #      for jump links
 
-    @property
-    def css_path(self) -> str:
-        """Gets or sets the css_path.
+    def make(self, book, substitutions=None):
+        """Makes the HtmlOutput for the provided book and substitutions.
         """
-        return self.__css_path
-
-    @css_path.setter
-    def css_path(self, value: str):
-        pass
-
-    @property
-    def generate_toc(self) -> bool:
-        """Gets or sets the generate_toc.
-        """
-        return self.__generate_toc
-
-    @generate_toc.setter
-    def generate_toc(self, value: bool):
-        self.__generate_toc = value
-
-    def make(self,
-             book: Book,
-             substitutions: List[Substitution] = None):
         if not book:
             raise AttributeError("book must not be None")
 
         if not substitutions:
             substitutions = []
 
-        html_document = self.get_html_document(book, substitutions)
+        html_document = self._get_html_document(book, substitutions)
 
         with open(self.path, 'w') as file:
             file.write(html_document)
 
-    def get_html_document(self,
-                          book: Book,
-                          substitutions: List[Substitution]) -> str:
+    def _get_html_document(self, book, substitutions):
 
-        html_content = self.get_html_content(book, substitutions)
+        html_content = self._get_html_content(book, substitutions)
         html_document = self._apply_template(html_content=html_content,
                                              title=book.title,
                                              css=self._get_css(),
@@ -275,9 +231,7 @@ class HtmlOutput(Output):
 
         return html_document
 
-    def get_html_content(self,
-                         book: Book,
-                         substitutions: List[Substitution]) -> str:
+    def _get_html_content(self, book, substitutions):
         markdown_ = self._get_markdown_content(book)
         markdown_ = self._apply_substitutions(
             markdown_,
@@ -290,14 +244,22 @@ class HtmlOutput(Output):
                         title: str,
                         css: str,
                         language: str) -> str:
-        template = resource_string(__name__, 'template.html')
+        template = resource_string(__name__, 'template.html')\
+            .decode('utf-8')\
+            .replace('\r\n', '\n')
+        # resource_string opens the file as bytes, which means that we
+        # have to decode to utf-8. The replace is necessary because
+        # resource_string, instead of open, does not automatically
+        # strip \r\n down to \n on windows systems. Leaving \r\n as is
+        # would produce double line breaks when writing the resulting string
+        # back to disc, thus we have to do the replacement ourselves, too.
 
         return template.format(content=html_content,
                                title=title,
                                css=css,
                                language=language)
 
-    def _get_css(self) -> str:
+    def _get_css(self):
         if not self.css_path:
             return ''
 
@@ -308,7 +270,7 @@ class HtmlOutput(Output):
 
         return css if css else ''
 
-    def _get_markdown_content(self, book: Book) -> str:
+    def _get_markdown_content(self, book):
         markdown_ = []
         md_paragraph_sep = '\n\n'
 
@@ -330,8 +292,8 @@ class HtmlOutput(Output):
 
     def _apply_substitutions(
             self,
-            markdown_: str,
-            substitutions: List[Substitution]) -> str:
+            markdown_,
+            substitutions):
         """Applies the list of substitutions to the markdown content.
 
         :param markdown_: The markdown content of the chapter.
@@ -346,7 +308,7 @@ class HtmlOutput(Output):
         return markdown_
 
     @classmethod
-    def from_dict(cls, dict_: dict) -> 'HtmlOutput':
+    def from_dict(cls, dict_):
         html_output = HtmlOutput()
         get_value = cls.get_value_from_dict
 
@@ -358,6 +320,8 @@ class HtmlOutput(Output):
 
 
 class JsonOutput(Output):
+    """Planned for Version 3.0"""
+
     def __init__(self):
         super().__init__()
         raise NotImplementedError('Planned for Version 3.0')

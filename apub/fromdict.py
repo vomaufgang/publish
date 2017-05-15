@@ -20,7 +20,6 @@
 import logging
 
 from abc import ABCMeta, abstractmethod
-from typing import Dict
 
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
@@ -37,7 +36,7 @@ class FromDict(metaclass=ABCMeta):
 
     @classmethod
     @abstractmethod
-    def from_dict(cls, dict_: Dict):
+    def from_dict(cls, dict_):
         """Abstract method that must be implemented by inheriting classes.
 
         Instantiates a new object from the providied dictionary 'dict_', using
