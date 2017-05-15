@@ -31,6 +31,15 @@ TODO
 
 .. todo:: https://github.com/sphinx-doc/sphinx/issues/3545 autodoc generates duplicate entries when subpackage 'redeclares' package contents via __all__.
 
+.. todo:: todo You don't even need the project. Get rid of it.
+          The cli can just pass the book, list of outputs and substitutions
+          to make, no need to encapsulate 3 parameters.
+          The json will stay the same, with the cli json.load-ing the
+          'project' file, but simply passing the three dicts to their
+          corresponding ctors by itself.
+          make.make is also only needed by the cli - via the api
+          it's plain simplet to just call my_output.make.
+
 IDEAS
 -----
 
