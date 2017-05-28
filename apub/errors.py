@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# coding: utf8
+# -*- coding: utf-8 -*-
 #
 # apub - Python package with cli to turn markdown files into ebooks
 # Copyright (C) 2015  Christopher Knörndel
