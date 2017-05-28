@@ -25,9 +25,11 @@ if "%1" == "test-all" (
 
 if "%1" == "cover" (
 	nosetests && coverage html
-	cd htmlcov
-	index.html
-	cd ..
+	if "%2" == "show" (
+        cd htmlcov
+        index.html
+        cd ..
+	)
 	goto end
 )
 

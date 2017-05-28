@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from pkg_resources import resource_string
+
 __author__ = 'Christopher Knörndel'
 __email__ = 'cknoerndel@anited.de'
-__version__ = '1.0.0a0'
+__version__ = resource_string(__name__, 'VERSION').decode('utf-8').strip()

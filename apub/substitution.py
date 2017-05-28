@@ -30,7 +30,7 @@ class Substitution(FromDict, metaclass=ABCMeta):
     # todo write unit tests
 
     @abstractmethod
-    def apply_to(self, text: str) -> str:
+    def apply_to(self, text):
         """
         
         :param text: The text to apply this simple substitution to.
@@ -121,4 +121,3 @@ class SimpleSubstitution(Substitution):
         simple_substitution.replace_with = get_value('replace_with', dict_)
 
         return simple_substitution
-

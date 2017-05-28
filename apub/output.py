@@ -70,13 +70,10 @@ class Output(FromDict, metaclass=ABCMeta):
         
         If set to true, all chapters of the book will be published
         no matter how the chapters are configured.
-    :ivar name: The output name.
     :ivar path: The output path.
     """
 
     def __init__(self):
-
-        self.name = None
         self.css_path = None
         self.force_publish = False
         self.path = None
@@ -92,7 +89,7 @@ class Output(FromDict, metaclass=ABCMeta):
             return list(filter(lambda x: x.publish is True, book.chapters))
 
     def validate(self):
-        """Validates the Book object. 
+        """Validates the Book object.
         
         Errors are raised as AttributeErrors."""
         if not self.path:
@@ -126,9 +123,17 @@ class Output(FromDict, metaclass=ABCMeta):
 
 class EbookConvertOutput(Output):
 
-    def __init__(self):
+    def __init__(self,
+                 path=None,
+                 css_path=None,
+                 force_publish=False,
+                 ebookconvert_params=None):
         super().__init__()
-        self.ebookconvert_params = []
+        self.path = path
+        self.css_path = css_path
+        self.force_publish = force_publish
+        self.ebookconvert_params = \
+            [] if not ebookconvert_params else ebookconvert_params
 
     def make(self,
              book,
@@ -145,7 +150,7 @@ class EbookConvertOutput(Output):
         # mkstmp and NamedTemporaryFile won't work, because the html file
         # will be kept open by EbookConvertOutput with exclusive access,
         # which means ebook-convert can't read the html to create the epub.
-        # -> ebook-convert crashes with Permission denied.
+        # -> ebook-convert fails with 'Permission denied'.
 
         try:
             html_output = HtmlOutput()
@@ -204,8 +209,11 @@ def _yield_attrs_as_ebookconvert_params(object_):
 
 class HtmlOutput(Output):
 
-    def __init__(self):
+    def __init__(self, path=None, css_path=None, force_publish=False):
         super().__init__()
+        self.path = path
+        self.css_path = css_path
+        self.force_publish = force_publish
 
     def make(self, book, substitutions=None):
         """Makes the HtmlOutput for the provided book and substitutions.

@@ -1,37 +1,30 @@
 from apub.book import Book, Chapter
-from apub.output import EbookConvertOutput,HtmlOutput
+from apub.output import EbookConvertOutput, HtmlOutput
 from apub.substitution import SimpleSubstitution
 
 
 def main():
-    book = Book()
-    book.title = 'Example'
-    book.language = 'en'
-    book.authors = 'Max Mustermann'
+    book = Book(
+        title='Example',
+        authors='Max Mustermann',
+        language='en')
 
-    chapter = Chapter()
-    chapter.source = 'first_chapter.md'
+    book.chapters.extend(
+        [Chapter(source='first_chapter.md'),
+         Chapter(source='second_chapter.md')])
 
-    book.chapters.append(chapter)
+    substitution = SimpleSubstitution(
+        find='Cows',
+        replace_with='Substitutions')
 
-    chapter = Chapter()
-    chapter.source = 'second_chapter.md'
-    book.chapters.append(chapter)
-
-    substitution = SimpleSubstitution()
-    substitution.find = 'Cows'
-    substitution.replace_with = 'Substitutions'
-
-    output = HtmlOutput()
-    output.path = 'example.html'
-    output.css_path = 'style.css'
-
+    output = HtmlOutput(
+        path='example.html',
+        css_path='style.css')
     output.make(book, [substitution])
 
-    output = EbookConvertOutput()
-    output.path = 'example.epub'
-    output.css_path = 'style.css'
-
+    output = EbookConvertOutput(
+        path='example.epub',
+        css_path='style.css')
     output.make(book, [substitution])
 
 

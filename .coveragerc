@@ -6,3 +6,4 @@ omit =
   */xml/etree*
   *s/six*
   */site-packages/*
+  */examples/*

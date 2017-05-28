@@ -14,6 +14,7 @@ except ImportError:
 
 readme = open('README.rst').read()
 history = open('docs/history.rst').read().replace('.. :changelog:', '')
+version = open('apub/VERSION').read().strip()
 
 requirements = [
     'markdown>=2.6',
@@ -26,7 +27,7 @@ test_requirements = [
 
 setup(
     name='apub',
-    version='1.0.0-alpha.0',
+    version=version,
     description='Python package with command line interface to turn markdown '
                 'files into ebooks.',
     long_description=readme + '\n\n' + history,
@@ -36,13 +37,15 @@ setup(
     packages=[
         'apub',
     ],
-    include_package_data=True,
+    package_data={
+        'apub': ['template.html', 'VERSION']
+    },
     install_requires=requirements,
     license="GPLv3",
     zip_safe=False,
     keywords='apub',
     classifiers=[
-        'Development Status :: 1 - Planning',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: End Users/Desktop',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Natural Language :: English',
