@@ -20,9 +20,5 @@
 """Planned for Version 2.0"""
 
 
-def main():
-    raise NotImplementedError('Planned for Version 2.0')
-
-
-if __name__ == '__main__':
-    main()
+# def apub(book=None, substitutions=None, outputs=None):
+#     raise NotImplementedError('Planned for Version 2.0')

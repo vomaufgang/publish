@@ -28,22 +28,6 @@ apub.errors module
     :undoc-members:
     :show-inheritance:
 
-apub.make module
-----------------
-
-.. automodule:: apub.make
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-apub.project module
--------------------
-
-.. automodule:: apub.project
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 apub.quickstart module
 ----------------------
 
@@ -52,18 +36,18 @@ apub.quickstart module
     :undoc-members:
     :show-inheritance:
 
-apub.substitution module
-------------------------
-
-.. automodule:: apub.substitution
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 apub.output module
 ------------------
 
 .. automodule:: apub.output
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+apub.substitution module
+------------------------
+
+.. automodule:: apub.substitution
     :members:
     :undoc-members:
     :show-inheritance:

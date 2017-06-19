@@ -26,30 +26,78 @@ log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
 
+# todo module docstring
+# todo consolidate all examples in module docstring
+
 class Substitution(FromDict, metaclass=ABCMeta):
+    """The Substitution class acts as an abstract interface for future
+    substitution implementations.
+
+    In order for a substitution to be executable by an output class,
+    it must offer the apply_to method described below.
+    """
     # todo write unit tests
 
     @abstractmethod
     def apply_to(self, text):
-        """
-        
-        :param text: The text to apply this simple substitution to.
-        
-        .. note::
-            The current implementation schema of apply_to might prove
-            inefficient, because every single substitution leads to an
-            additional iteration the splitted lines of text.
+        """Applies the substitution to the text, returning the changed text.
 
-            If this proves true, the implementation should be changed to an
-            approach that is based on a single split and a single iteration
-            over all lines, diring which all substitutions get applied to a
-            line at the same time while retaining the order of application
-            defined in the json project.
+        :param text: The text to apply this simple substitution to.
+        :type text: str
+
+        :returns: The changed text.
+        :rtype: str
         """
         raise NotImplementedError
 
     @classmethod
     def from_dict(cls, dict_):
+        """Creates a new Substitution object from the provided
+        python dictionary.
+
+        The type of the Substitution is inferred from the value assigned to
+        the 'type' field of the dictionary.
+
+        The following values are supported as of Version 1.0:
+
+        * `simple` -> `SimpleSubstitution`
+
+        The structure and contents of the dictionary must be equivalent to
+        the apub JSON format, specifically the format of the substitution
+        specified by the 'type' field of the dictionary.
+
+        :param dict_:
+            The dictionary to translate into a SimpleSubstitution object.
+        :type dict_: dict
+
+        :returns: A new Substitution created from the dictionary.
+
+        :raises NotImplementedError: The value of 'type' does not equal any
+            existing Substitution implementation. See valid types above.
+
+        :Example:
+
+            .. code-block:: python
+
+                dict_ = {
+                    'type': 'simple',
+                    'find': 'Cow',
+                    'replace_with': 'Substitution'
+                }
+
+                substitution = Substitution.from_dict(dict_)
+
+                print(substitution)
+                # <apub.substitution.SimpleSubstitution object at ...>
+
+        .. note::
+
+            The parameter name is `dict_` with a trailing underscore. See
+            docs/readme.rst or index.html of the html documentation for more
+            information.
+
+
+        """
         substitution_type = dict_['type']
 
         if substitution_type == 'simple':
@@ -64,6 +112,8 @@ class Substitution(FromDict, metaclass=ABCMeta):
 
 
 class RegexSubstitution(Substitution):
+    """Planned for Version 3.0
+    """
     def __init__(self):
         super().__init__()
         raise NotImplementedError("Planned for Version 3.0")
@@ -77,47 +127,87 @@ class RegexSubstitution(Substitution):
 
 
 class SimpleSubstitution(Substitution):
-    """ todo
+    """The SimpleSubstitution allows for simple text replacements.
 
-    :ivar find: todo
-    :ivar replace_with: todo
+    Substitutions are always applied to all chapters when calling
+    `*Output.make(book, substitutions)`.
+
+    :ivar find: The string to find.
+    :type find: str
+    :ivar replace_with: The string to replace the find string with.
+    :type replace_with: str
+
+    :Example:
+
+        .. code-block:: python
+
+            book = Book()
+            book.chapters.append(Chapter(source='example.md'))
+
+            substitution = SimpleSubstitution(find='Cow', replace_with='World')
+
+            HtmlOutput(path='example.html').make(book, [substitution])
+
+        Content of example.md:
+
+        .. code-block:: markdown
+
+            # Hello Cow!
+
+        This leads to the following output in example.html (shortened):
+
+        .. code-block:: html
+
+            <h1>Hello World!</h1>
+
     """
 
-    # todo document SimpleSubstitution
     def __init__(self, find=None, replace_with=None):
         super().__init__()
         self.find = find
         self.replace_with = replace_with
 
     def apply_to(self, text):
-        """ todo
+        """Applies the substitution to the text, returning the changed text.
 
         :param text: The text to apply this simple substitution to.
+        :type text: str
 
-        .. note:: The current implementation schema of apply_to might prove
-            inefficient, because every single substitution leads to an
-            additional iteration over the splitted lines of text.
-
-            If this proves true, the implementation should be changed to an
-            approach that is based on a single split and a single iteration
-            over all lines, diring which all substitutions get applied to a
-            line at the same time while retaining the order of application
-            defined in the json project.
+        :returns: The changed text.
+        :rtype: str
         """
-        lines = text.splitlines()
-
-        altered_lines = [line.replace(self.find, self.replace_with)
-                         for line in lines]
-
-        return '\n'.join(altered_lines)
+        return text.replace(self.find, self.replace_with)
 
     @classmethod
     def from_dict(cls, dict_):
-        simple_substitution = SimpleSubstitution()
+        """Creates a new SimpleSubstitution object from the provided
+        python dictionary.
+
+        The structure and contents of the dictionary must be equivalent to
+        the apub JSON format, specifically the format for a SimpleSubstitution.
+
+        Properties omitted in the dictionary default to en empty string.
+
+        :param dict_:
+            The dictionary to translate into a SimpleSubstitution object.
+        :type dict_: dict
+
+        :returns: A new SimpleSubstitution created from the dictionary.
+        :rtype: SimpleSubstitution
+
+        .. note::
+
+            The parameter name is `dict_` with a trailing underscore. See
+            docs/readme.rst or index.html of the html documentation for more
+            information.
+
+        """
+        substitution = SimpleSubstitution()
 
         get_value = cls.get_value_from_dict
 
-        simple_substitution.find = get_value('find', dict_)
-        simple_substitution.replace_with = get_value('replace_with', dict_)
+        substitution.find = get_value('find', dict_, default='')
+        substitution.replace_with = get_value(
+            'replace_with', dict_, default='')
 
-        return simple_substitution
+        return substitution

@@ -103,6 +103,9 @@ class Book(FromDict):
     @property
     def chapters(self):
         """Gets the list of chapters.
+
+        :returns: The list of chapters.
+        :rtype: list of Chapter
         """
         return self.__chapters
 

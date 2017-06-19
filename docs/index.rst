@@ -14,7 +14,6 @@ Contents:
    readme
    installation
    getting_started
-   apub_in_depth
    contributing
    todo
    authors

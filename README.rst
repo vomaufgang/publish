@@ -1,14 +1,15 @@
-====
-apub
-====
+===============
+apub - Overview
+===============
 
-Python package with command line interface to turn markdown files into ebooks.
+apub is a python package with command line interface to turn markdown files
+into ebooks.
 
 Created to make publishing stories a lot easier for myself.
 
 * **Free software**: `GPLv3 <http://www.gnu.org/licenses/gpl-3.0>`_
-* **Official page**: http://anited.de/apub
-* **Documentation**: http://apub.readthedocs.org.
+* **Official page**: https://anited.de/apub
+* **Documentation**: https://apub.readthedocs.org.
 
 .. .. image:: https://badge.fury.io/py/apub.png
         :target: http://badge.fury.io/py/apub
@@ -23,10 +24,10 @@ Build status
 * master: |MASTER|
 
 .. |DEVELOP| image:: https://travis-ci.org/vomaufgang/apub.svg?branch=develop
-               :target: https://travis-ci.org/vomaufgang/apub/branches
+   :target: https://travis-ci.org/vomaufgang/apub/branches
 
 .. |MASTER| image:: https://travis-ci.org/vomaufgang/apub.svg?branch=master
-               :target: https://travis-ci.org/vomaufgang/apub/branches
+   :target: https://travis-ci.org/vomaufgang/apub/branches
 
 Features
 --------
@@ -38,72 +39,62 @@ Features
   (If you don't have a favourite text editor yet, go take a look at Graeme Gott's excellent FocusWriter.
   You will not regret it.)
 
-* Describe your project and desired output in a simple json format.
+* Describe your project and desired output in a simple python file.
 
-  Place the file as :code:`.apub.json` inside a folder and the command line interface
-  will automatically identify the folder as a apub project.
+  Import apub, describe your project in python using the apub api
+  and your python file will automatically accept commands like :code:`make`
+  when called from the command line.
 
   A simple project might look like this:
 
-.. code-block:: javascript
+  .. code-block:: python
 
-    {
-      "metadata": {
-        "title": "My Book",
-        "authors": "Mr. and Ms. AwesomeSauce",
-        "language": "en",
-      },
-      "chapters": [
-        {
-          "title": "Beginnings",
-          "url_friendly_title": "beginnings",
-          "source": "chapters/01-beginnings.chapter",
-          "publish": true
-        }
-      ],
-      "output": [
-        {
-          "name": "html",
-          "type": "html",
-          "path": "output/my_book.htm"
-        },
-        {
-          "name": "epub",
-          "type": "ebook-convert",
-          "path": "output/my_book.epub",
-          "ebookconvert_params": {
-            "cover": "resources/cover.jpg"
-          }
-        }
-      ],
-      "substitutions": [
-        {
-          "type": "simple",
-          "find": "Douglas Adams",
-          "replace_with": "Terry Pratchett"
-        }
-      ]
-    }
+    from apub import Book, Chapter, HtmlOutput, setup
 
-* Make your desired outputs by calling apub's command line interface.
+    setup(book=Book(title='My Book',
+                    chapters=[Chapter(source='my_first_chapter.md'),
+                              Chapter(source='my_second_chapter.md')]),
+          outputs=[HtmlOutput(path='my_book.html',
+                              name='my_output')])
 
-  Continuing the example above:
+  Given the above is saved in a file :code:`my_project.py` and the markdown
+  files are present, the output :code:`my_book.html` can be created
+  by simply executing
 
-  :code:`apub make` builds all outputs described in the .apub.json of the current working directory.
+  .. code-block:: shell
 
-  :code:`apub make --output-name=html` builds the output with :code:`"name": "html"`.
+    python my_project.py make
 
-  :code:`apub make --output-type=ebook-convert` builds all outputs of :code:`"type": "ebook-convert`.
+  on the command line.
 
-* Don't want to create the .apub.json yourself?
+  .. note:: Unix/Linux users might have to call python3 instead, depending on
+            their distribution.
 
-  Call :code:`apub quickstart` within an empty folder or a folder that didn't contain an apub project previously
-  and apub will create the project for you - including some useful default outputs.
+  A more in depth guide to apub including additional features like multiple
+  outputs, default outputs, text substitutions and more can be found at at
+  https://apub.readthedocs.org
+
+  If complete and working examples are more to your liking you can find such a
+  documented example project in the **examples** subfolder of the repository.
 
 * The following output types are available:
 
   * HTML, as in 'good old hyper text markup language'
-  * JSON for use with the apub-WebReader
   * epub, mobi, azw3 or, to be exact, any format calibre/ebook-convert supports
 
-    (requires an additional installation of `Kavid Goyal's Calibre <http://calibre-ebook.com/>`_)
+    (requires an additional installation of `Kavid Goyal's Calibre <https://calibre-ebook.com/>`_)
+
+* The following output types are planned for an upcoming version:
+
+  * JSON for use with https://github.com/vomaufgang/areader
+
+.. note:: Several parameters of the api use trailing underscores as per pep8
+          recommendation for overlapping type and parameter names.
+
+          These parameter names may display without trailing underscores in the
+          html documentation. This is due to bug
+          https://github.com/sphinx-doc/sphinx/issues/519
+          in sphinx-doc falsely removing underscores from parameter names.
+
+          Afflicted parameters are documented accordingly until this issue is
+          resolved.

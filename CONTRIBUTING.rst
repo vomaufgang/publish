@@ -127,26 +127,15 @@ theme into your virtualenv to use it for your own builds of the documentation::
 Makefiles
 ~~~~~~~~~
 
-The repository contains makefiles to give easy access to recurring
-development tasks such as running tests, building apub, building the
-documentation and removing output folders.
+The repository contains makefiles for all major operating systems  to give
+easy access to recurring development tasks such as running tests, building
+apub, building the documentation and removing output folders.
 
-Unix/Linux/Mac users can use the traditional makefile like so::
+You can use the makefile like so::
 
     make [command]
 
-Windows users can use the PowerShell makefile from within a PowerShell session
-like so::
-
-    .\Make [command]
-
-.. note:: Windows users may have to set their PowerShell execution-policy to
-   remote-signed before PowerShell allows the execution of self-written
-   PowerShell scripts. While tinkering with the execution-policy on a
-   development machine is usually fine, **do not** change this setting in a
-   production environment.
-
-The commands that can be invoked through `make` or `\Make` are the same on
+The commands that can be invoked through `make` are the same on
 all systems. The most useful for day to day development are:
 
  * `clean`: removes all temporary build and output directories that may have

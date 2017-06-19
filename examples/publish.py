@@ -17,9 +17,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from apub.book import Book, Chapter
-from apub.output import EbookConvertOutput, HtmlOutput
-from apub.substitution import SimpleSubstitution
+from apub import (Book,
+                  Chapter,
+                  HtmlOutput,
+                  EbookConvertOutput,
+                  SimpleSubstitution)
 
 
 def main():
@@ -36,15 +38,15 @@ def main():
         find='Cows',
         replace_with='Substitutions')
 
-    output = HtmlOutput(
+    html_output = HtmlOutput(
         path='example.html',
         css_path='style.css')
-    output.make(book, [substitution])
+    html_output.make(book, [substitution])
 
-    output = EbookConvertOutput(
+    ebook_output = EbookConvertOutput(
         path='example.epub',
         css_path='style.css')
-    output.make(book, [substitution])
+    ebook_output.make(book, [substitution])
 
 
 if __name__ == '__main__':
