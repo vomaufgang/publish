@@ -20,14 +20,11 @@
 import logging
 from datetime import date
 
-from apub.errors import NoBookFoundError, NoChaptersFoundError
-from apub.fromdict import FromDict
-
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
 
-class Book(FromDict):
+class Book:
     """The Book is used to define the attributes and metadata
     required for creating a book via ebook-convert.
 
@@ -109,57 +106,8 @@ class Book(FromDict):
         """
         return self.__chapters
 
-    @classmethod
-    def from_dict(cls, dict_):
-        """Creates a new Book object from the provided python dictionary.
 
-        The structure and contents of the dictionary must be equivalent to
-        the apub JSON format.
-
-        :param dict_:
-            The dictionary to translate into a Book object.
-        :type dict_: :obj:`Dict`
-
-        :returns: A new Book created from the dictionary.
-        """
-        if 'book' not in dict_:
-            raise NoBookFoundError
-
-        book_dict = dict_['book']
-
-        book = Book()
-
-        get_value = cls.get_value_from_dict
-
-        book.author_sort = get_value('author_sort', book_dict)
-        book.authors = get_value('authors', book_dict)
-        book.book_producer = get_value('book_producer', book_dict)
-        book.comments = get_value('comments', book_dict)
-        book.cover = get_value('cover', book_dict)
-        book.isbn = get_value('isbn', book_dict)
-        book.language = get_value('language', book_dict, 'und')
-        # todo unit test this, if awkward -> store date() instead, get string
-        #      here and convert to date
-        book.pubdate = get_value(
-            'pubdate', book_dict, default=date.today().isoformat())
-        book.publisher = get_value('publisher', book_dict)
-        book.rating = get_value('rating', book_dict)
-        book.series = get_value('series', book_dict)
-        book.series_index = get_value('series_index', book_dict)
-        book.tags = get_value('tags', book_dict)
-        book.title = get_value('title', book_dict)
-        book.title_sort = get_value('title_sort', book_dict)
-
-        if 'chapters' in book_dict:
-            for chapter_dict in book_dict['chapters']:
-                book.chapters.append(Chapter.from_dict(chapter_dict))
-        else:
-            raise NoChaptersFoundError
-
-        return book
-
-
-class Chapter(FromDict):
+class Chapter:
     """The chapter class is used to define all metadata required for a chapter
     of a book.
     
@@ -174,23 +122,3 @@ class Chapter(FromDict):
         # todo unit test kwargs
         self.publish = publish
         self.source = source
-
-    @classmethod
-    def from_dict(cls, dict_):
-        """Creates a new Chapter object from the provided python dictionary.
-
-        The structure and contents of the dictionary must be equivalent to
-        the apub JSON chapter format.
-
-        :param dict_: The dictionary to translate into a Chapter object.
-
-        :returns: A new Chapter created from the dictionary.
-        """
-        chapter = Chapter()
-
-        get_value = cls.get_value_from_dict
-
-        chapter.source = get_value('source', dict_)
-        chapter.publish = get_value('publish', dict_, default=True)
-
-        return chapter

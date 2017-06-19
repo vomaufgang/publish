@@ -19,8 +19,6 @@
 
 from abc import ABCMeta, abstractmethod
 
-from apub.fromdict import FromDict
-
 import logging.config
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
@@ -29,7 +27,7 @@ log.addHandler(logging.NullHandler())
 # todo module docstring
 # todo consolidate all examples in module docstring
 
-class Substitution(FromDict, metaclass=ABCMeta):
+class Substitution(metaclass=ABCMeta):
     """The Substitution class acts as an abstract interface for future
     substitution implementations.
 
@@ -50,66 +48,6 @@ class Substitution(FromDict, metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    @classmethod
-    def from_dict(cls, dict_):
-        """Creates a new Substitution object from the provided
-        python dictionary.
-
-        The type of the Substitution is inferred from the value assigned to
-        the 'type' field of the dictionary.
-
-        The following values are supported as of Version 1.0:
-
-        * `simple` -> `SimpleSubstitution`
-
-        The structure and contents of the dictionary must be equivalent to
-        the apub JSON format, specifically the format of the substitution
-        specified by the 'type' field of the dictionary.
-
-        :param dict_:
-            The dictionary to translate into a SimpleSubstitution object.
-        :type dict_: dict
-
-        :returns: A new Substitution created from the dictionary.
-
-        :raises NotImplementedError: The value of 'type' does not equal any
-            existing Substitution implementation. See valid types above.
-
-        :Example:
-
-            .. code-block:: python
-
-                dict_ = {
-                    'type': 'simple',
-                    'find': 'Cow',
-                    'replace_with': 'Substitution'
-                }
-
-                substitution = Substitution.from_dict(dict_)
-
-                print(substitution)
-                # <apub.substitution.SimpleSubstitution object at ...>
-
-        .. note::
-
-            The parameter name is `dict_` with a trailing underscore. See
-            docs/readme.rst or index.html of the html documentation for more
-            information.
-
-
-        """
-        substitution_type = dict_['type']
-
-        if substitution_type == 'simple':
-            return SimpleSubstitution.from_dict(dict_)
-
-        elif substitution_type == 'regex':
-            raise NotImplementedError(
-                "Substitution type 'regex' is planned for Version 3.0")
-
-        raise NotImplementedError(
-            "Unrecognized substitution type: {}".format(substitution_type))
-
 
 class RegexSubstitution(Substitution):
     """Planned for Version 3.0
@@ -119,10 +57,6 @@ class RegexSubstitution(Substitution):
         raise NotImplementedError("Planned for Version 3.0")
 
     def apply_to(self, text):
-        raise NotImplementedError("Planned for Version 3.0")
-
-    @classmethod
-    def from_dict(cls, dict_):
         raise NotImplementedError("Planned for Version 3.0")
 
 
@@ -177,37 +111,3 @@ class SimpleSubstitution(Substitution):
         :rtype: str
         """
         return text.replace(self.find, self.replace_with)
-
-    @classmethod
-    def from_dict(cls, dict_):
-        """Creates a new SimpleSubstitution object from the provided
-        python dictionary.
-
-        The structure and contents of the dictionary must be equivalent to
-        the apub JSON format, specifically the format for a SimpleSubstitution.
-
-        Properties omitted in the dictionary default to en empty string.
-
-        :param dict_:
-            The dictionary to translate into a SimpleSubstitution object.
-        :type dict_: dict
-
-        :returns: A new SimpleSubstitution created from the dictionary.
-        :rtype: SimpleSubstitution
-
-        .. note::
-
-            The parameter name is `dict_` with a trailing underscore. See
-            docs/readme.rst or index.html of the html documentation for more
-            information.
-
-        """
-        substitution = SimpleSubstitution()
-
-        get_value = cls.get_value_from_dict
-
-        substitution.find = get_value('find', dict_, default='')
-        substitution.replace_with = get_value(
-            'replace_with', dict_, default='')
-
-        return substitution

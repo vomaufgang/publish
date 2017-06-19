@@ -28,7 +28,6 @@ from pkg_resources import resource_string
 from tempfile import mkdtemp
 
 from apub.errors import NoChaptersFoundError
-from apub.fromdict import FromDict
 
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler)
@@ -62,7 +61,7 @@ _supported_ebookconvert_attrs = [
 # todo what was generate_toc even for?
 
 
-class Output(FromDict, metaclass=ABCMeta):
+class Output(metaclass=ABCMeta):
     """Abstract base class for specific Output implementations.
 
     :ivar css_path: The path to the style sheet.
@@ -94,31 +93,6 @@ class Output(FromDict, metaclass=ABCMeta):
         Errors are raised as AttributeErrors."""
         if not self.path:
             raise AttributeError('Output path must be set.')
-
-    @classmethod
-    def from_dict(cls, dict_):
-        output_type = cls.get_value_from_dict('type', dict_)
-
-        if output_type == 'html':
-            output = HtmlOutput.from_dict(dict_)
-        elif output_type == 'json':
-            raise NotImplementedError('Output type \'json\' is planned '
-                                      'for Version 3.0')
-        elif output_type == 'ebook-convert':
-            output = EbookConvertOutput.from_dict(dict_)
-        else:
-            raise NotImplementedError(
-                'Unrecognized output type: {}'.format(output_type))
-
-        get_value = cls.get_value_from_dict
-
-        output.name = get_value('name', dict_)
-        output.path = get_value('path', dict_)
-        output.css_path = get_value('css_path', dict_)
-        output.force_publish = get_value(
-            'force_publish', dict_, default=False)
-
-        return output
 
 
 class EbookConvertOutput(Output):
@@ -173,15 +147,6 @@ class EbookConvertOutput(Output):
             subprocess.call(call_params)
         finally:
             shutil.rmtree(temp_directory)
-
-    @classmethod
-    def from_dict(cls, dict_):
-        ebook_convert_output = EbookConvertOutput()
-
-        ebook_convert_output.ebookconvert_params = cls.get_value_from_dict(
-            'ebookconvert_params', dict_, default=[])
-
-        return ebook_convert_output
 
 
 def _yield_attrs_as_ebookconvert_params(object_):
@@ -315,17 +280,6 @@ class HtmlOutput(Output):
 
         return markdown_
 
-    @classmethod
-    def from_dict(cls, dict_):
-        html_output = HtmlOutput()
-        get_value = cls.get_value_from_dict
-
-        html_output.css_path = get_value('css_path',
-                                         dict_,
-                                         default=None)
-
-        return html_output
-
 
 class JsonOutput(Output):
     """Planned for Version 3.0"""
@@ -335,8 +289,4 @@ class JsonOutput(Output):
         raise NotImplementedError('Planned for Version 3.0')
 
     def make(self, book, substitutions):
-        raise NotImplementedError('Planned for Version 3.0')
-
-    @classmethod
-    def from_dict(cls, dict_):
         raise NotImplementedError('Planned for Version 3.0')
