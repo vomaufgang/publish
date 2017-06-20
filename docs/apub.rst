@@ -4,53 +4,54 @@ apub package
 Submodules
 ----------
 
-apub.book module
-----------------
+apub\.book module
+-----------------
 
 .. automodule:: apub.book
     :members:
     :undoc-members:
     :show-inheritance:
 
-apub.cli module
----------------
+apub\.cli module
+----------------
 
 .. automodule:: apub.cli
     :members:
     :undoc-members:
     :show-inheritance:
 
-apub.errors module
-------------------
+apub\.errors module
+-------------------
 
 .. automodule:: apub.errors
     :members:
     :undoc-members:
     :show-inheritance:
 
-apub.quickstart module
-----------------------
-
-.. automodule:: apub.quickstart
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-apub.output module
-------------------
+apub\.output module
+-------------------
 
 .. automodule:: apub.output
     :members:
     :undoc-members:
     :show-inheritance:
 
-apub.substitution module
-------------------------
+apub\.quickstart module
+-----------------------
+
+.. automodule:: apub.quickstart
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+apub\.substitution module
+-------------------------
 
 .. automodule:: apub.substitution
     :members:
     :undoc-members:
     :show-inheritance:
+
 
 Module contents
 ---------------

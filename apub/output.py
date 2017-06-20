@@ -2,22 +2,14 @@
 # -*- coding: utf-8 -*-
 #
 # apub - Python package with cli to turn markdown files into ebooks
-# Copyright (C) 2015  Christopher Knörndel
+# Copyright (c) 2014 Christopher Knörndel
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Distributed under the MIT License
+# (license terms are at http://opensource.org/licenses/MIT).
 
 import logging
+from typing import Iterable, Generator
+
 import markdown
 import os
 import shutil
@@ -27,7 +19,10 @@ from abc import ABCMeta, abstractmethod
 from pkg_resources import resource_string
 from tempfile import mkdtemp
 
+from apub import __version__ as apub_version
+from apub.book import Book, Chapter
 from apub.errors import NoChaptersFoundError
+from apub.substitution import Substitution
 
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler)
@@ -72,20 +67,25 @@ class Output(metaclass=ABCMeta):
     :ivar path: The output path.
     """
 
-    def __init__(self):
-        self.css_path = None
-        self.force_publish = False
-        self.path = None
+    def __init__(self,
+                 path: str=None,
+                 css_path: str=None,
+                 force_publish: bool=False):
+        self.path = path
+        self.css_path = css_path
+        self.force_publish = force_publish
 
     @abstractmethod
-    def make(self, book, substitutions):
+    def make(self, book: Book, substitutions: Iterable[Substitution]=None):
         pass
 
-    def get_chapters_to_publish(self, book):
+    def get_chapters_to_publish(self,
+                                chapters: Iterable[Chapter]
+                                ) -> Iterable[Chapter]:
         if self.force_publish:
-            return book.chapters
+            return chapters
         else:
-            return list(filter(lambda x: x.publish is True, book.chapters))
+            return list(filter(lambda c: c.publish is True, chapters))
 
     def validate(self):
         """Validates the Book object.
@@ -98,20 +98,17 @@ class Output(metaclass=ABCMeta):
 class EbookConvertOutput(Output):
 
     def __init__(self,
-                 path=None,
-                 css_path=None,
-                 force_publish=False,
-                 ebookconvert_params=None):
-        super().__init__()
-        self.path = path
-        self.css_path = css_path
-        self.force_publish = force_publish
+                 path: str=None,
+                 css_path: str=None,
+                 force_publish: bool=False,
+                 ebookconvert_params: Iterable[str]=None):
+        super().__init__(path, css_path, force_publish)
         self.ebookconvert_params = \
             [] if not ebookconvert_params else ebookconvert_params
 
     def make(self,
-             book,
-             substitutions=None):
+             book: Book,
+             substitutions: Iterable[Substitution]=None):
         if not book:
             raise AttributeError("book must not be None")
 
@@ -141,7 +138,7 @@ class EbookConvertOutput(Output):
                 self.path
             ]
 
-            call_params.extend(_yield_attrs_as_ebookconvert_params(book))
+            call_params.extend(_yield_attrs_as_params(book))
             call_params.extend(self.ebookconvert_params)
 
             subprocess.call(call_params)
@@ -149,22 +146,20 @@ class EbookConvertOutput(Output):
             shutil.rmtree(temp_directory)
 
 
-def _yield_attrs_as_ebookconvert_params(object_):
-    """Takes an object and returns a generator yielding all attributes
+def _yield_attrs_as_params(book: Book) -> Generator[str, None, None]:
+    """Takes a book and returns a generator yielding all attributes
     that can be processed by the ebookconvert command line as a param array.
 
-    Args:
-        object_ (object): An object
+    :param book: The book.
 
-    Returns:
-        A generator yielding all attributes of the object supported by
+    :returns: A generator yielding all attributes of the object supported by
         ebookconvert.
     """
     # This way the book can contain attrs not supported by ebookconvert
     # (or any other specific output that follows this explicit pattern)
     for attr_name in _supported_ebookconvert_attrs:
-        if hasattr(object_, attr_name):
-            attr = getattr(object_, attr_name)
+        if hasattr(book, attr_name):
+            attr = getattr(book, attr_name)
             if not attr:
                 continue
             attr = str(attr)
@@ -174,14 +169,19 @@ def _yield_attrs_as_ebookconvert_params(object_):
 
 class HtmlOutput(Output):
 
-    def __init__(self, path=None, css_path=None, force_publish=False):
-        super().__init__()
-        self.path = path
-        self.css_path = css_path
-        self.force_publish = force_publish
+    def __init__(self,
+                 path: str=None,
+                 css_path: str=None,
+                 force_publish: bool=False):
+        super().__init__(path, css_path, force_publish)
 
-    def make(self, book, substitutions=None):
+    def make(self,
+             book: Book,
+             substitutions: Iterable[Substitution]=None):
         """Makes the HtmlOutput for the provided book and substitutions.
+
+        :param book: The book.
+        :param substitutions: The substitutions.
         """
         if not book:
             raise AttributeError("book must not be None")
@@ -194,9 +194,17 @@ class HtmlOutput(Output):
         with open(self.path, 'w') as file:
             file.write(html_document)
 
-    def _get_html_document(self, book, substitutions):
+    def _get_html_document(self,
+                           book: Book,
+                           substitutions: Iterable[Substitution]
+                           ) -> str:
+        """
 
-        html_content = self._get_html_content(book, substitutions)
+        :param book: The book.
+        :param substitutions: The substitutions.
+        """
+
+        html_content = self._get_html_content(book.chapters, substitutions)
         html_document = self._apply_template(html_content=html_content,
                                              title=book.title,
                                              css=self._get_css(),
@@ -204,8 +212,11 @@ class HtmlOutput(Output):
 
         return html_document
 
-    def _get_html_content(self, book, substitutions):
-        markdown_ = self._get_markdown_content(book)
+    def _get_html_content(self,
+                          chapters: Iterable[Chapter],
+                          substitutions: Iterable[Substitution]
+                          ) -> str:
+        markdown_ = self._get_markdown_content(chapters)
         markdown_ = self._apply_substitutions(
             markdown_,
             substitutions)
@@ -230,9 +241,10 @@ class HtmlOutput(Output):
         return template.format(content=html_content,
                                title=title,
                                css=css,
-                               language=language)
+                               language=language,
+                               apub_version=apub_version)
 
-    def _get_css(self):
+    def _get_css(self) -> str:
         if not self.css_path:
             return ''
 
@@ -243,17 +255,18 @@ class HtmlOutput(Output):
 
         return css if css else ''
 
-    def _get_markdown_content(self, book):
+    def _get_markdown_content(self,
+                              chapters: Iterable[Chapter]
+                              ) -> str:
         markdown_ = []
         md_paragraph_sep = '\n\n'
 
-        if not book.chapters or len(book.chapters) <= 0:
-            raise NoChaptersFoundError('Your book contains no chapters that'
-                                       'could be published.')
+        if not chapters:
+            raise NoChaptersFoundError('Your book contains no chapters.')
 
-        chapters_to_publish = self.get_chapters_to_publish(book)
+        chapters_to_publish = self.get_chapters_to_publish(chapters)
 
-        if len(chapters_to_publish) <= 0:
+        if not chapters_to_publish:
             raise NoChaptersFoundError('None of your chapters are set to be'
                                        'published.')
 
@@ -265,8 +278,8 @@ class HtmlOutput(Output):
 
     def _apply_substitutions(
             self,
-            markdown_,
-            substitutions):
+            markdown_: str,
+            substitutions: Iterable[Substitution]) -> str:
         """Applies the list of substitutions to the markdown content.
 
         :param markdown_: The markdown content of the chapter.
@@ -288,5 +301,7 @@ class JsonOutput(Output):
         super().__init__()
         raise NotImplementedError('Planned for Version 3.0')
 
-    def make(self, book, substitutions):
+    def make(self,
+             book: Book,
+             substitutions: Iterable[Substitution]=None):
         raise NotImplementedError('Planned for Version 3.0')

@@ -7,7 +7,7 @@ into ebooks.
 
 Created to make publishing stories a lot easier for myself.
 
-* **Free software**: `GPLv3 <http://www.gnu.org/licenses/gpl-3.0>`_
+* **Free software**: `MIT <https://opensource.org/licenses/MIT>`_
 * **Official page**: https://anited.de/apub
 * **Documentation**: https://apub.readthedocs.org.
 

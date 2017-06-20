@@ -17,8 +17,7 @@ history = open('docs/history.rst').read().replace('.. :changelog:', '')
 version = open('apub/VERSION').read().strip()
 
 requirements = [
-    'markdown>=2.6',
-    'validators>=0.11'
+    'markdown>=2.6'
 ]
 
 test_requirements = [
@@ -41,13 +40,13 @@ setup(
         'apub': ['template.html', 'VERSION']
     },
     install_requires=requirements,
-    license="GPLv3",
+    license="MIT",
     zip_safe=False,
     keywords='apub',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: End Users/Desktop',
-        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+        'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3.6',
     ],

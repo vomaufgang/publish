@@ -2,20 +2,10 @@
 # -*- coding: utf-8 -*-
 #
 # apub - Python package with cli to turn markdown files into ebooks
-# Copyright (C) 2015  Christopher Knörndel
+# Copyright (c) 2014 Christopher Knörndel
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Distributed under the MIT License
+# (license terms are at http://opensource.org/licenses/MIT).
 
 from abc import ABCMeta, abstractmethod
 
@@ -37,14 +27,12 @@ class Substitution(metaclass=ABCMeta):
     # todo write unit tests
 
     @abstractmethod
-    def apply_to(self, text):
+    def apply_to(self, text: str) -> str:
         """Applies the substitution to the text, returning the changed text.
 
         :param text: The text to apply this simple substitution to.
-        :type text: str
 
         :returns: The changed text.
-        :rtype: str
         """
         raise NotImplementedError
 
@@ -56,7 +44,7 @@ class RegexSubstitution(Substitution):
         super().__init__()
         raise NotImplementedError("Planned for Version 3.0")
 
-    def apply_to(self, text):
+    def apply_to(self, text: str) -> str:
         raise NotImplementedError("Planned for Version 3.0")
 
 
@@ -84,7 +72,7 @@ class SimpleSubstitution(Substitution):
 
         Content of example.md:
 
-        .. code-block:: markdown
+        .. code-block:: md
 
             # Hello Cow!
 
@@ -96,12 +84,12 @@ class SimpleSubstitution(Substitution):
 
     """
 
-    def __init__(self, find=None, replace_with=None):
+    def __init__(self, find: str=None, replace_with: str=None):
         super().__init__()
         self.find = find
         self.replace_with = replace_with
 
-    def apply_to(self, text):
+    def apply_to(self, text: str) -> str:
         """Applies the substitution to the text, returning the changed text.
 
         :param text: The text to apply this simple substitution to.

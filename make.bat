@@ -33,4 +33,14 @@ if "%1" == "cover" (
 	goto end
 )
 
+if "%1" == "docs" (
+    del docs\apub.rst
+    del docs\modules.rst
+    sphinx-apidoc -o ./docs apub
+    cd docs
+    make html
+    cd ..
+    goto end
+)
+
 :end

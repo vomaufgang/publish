@@ -2,23 +2,14 @@
 # -*- coding: utf-8 -*-
 #
 # apub - Python package with cli to turn markdown files into ebooks
-# Copyright (C) 2015  Christopher Knörndel
+# Copyright (c) 2014 Christopher Knörndel
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Distributed under the MIT License
+# (license terms are at http://opensource.org/licenses/MIT).
 
 import logging
 from datetime import date
+from typing import List
 
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
@@ -98,11 +89,10 @@ class Book:
         self.title_sort = title_sort
 
     @property
-    def chapters(self):
+    def chapters(self) -> List['Chapter']:
         """Gets the list of chapters.
 
         :returns: The list of chapters.
-        :rtype: list of Chapter
         """
         return self.__chapters
 
@@ -110,12 +100,10 @@ class Book:
 class Chapter:
     """The chapter class is used to define all metadata required for a chapter
     of a book.
-    
+
+    :ivar source: The full path to the source file. Example: '.\my\file.md'.
     :ivar publish: Determines wether the chapter will be included
         in the resulting output or not.
-    :ivar source: The full path to the source file.
-     
-        Example: '.\my\file.md'.
     """
 
     def __init__(self, source=None, publish=True):
