@@ -34,9 +34,7 @@ test-all:
 	tox
 
 coverage:
-	coverage run --source apub setup.py test
-	coverage report -m
-	coverage html
+	pytest --cov-report html --cov=apub
 	open htmlcov/index.html
 
 docs:

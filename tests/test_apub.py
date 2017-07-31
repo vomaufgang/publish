@@ -7,19 +7,14 @@
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
-import unittest
 
+def test_all():
+    """Test that __all__ contains only names that are actually exported.
+    """
+    import apub
 
-class TestApub(unittest.TestCase):
-    def test_all(self):
-        """Test that __all__ contains only names that are actually exported.
-        """
-        import apub
+    unresolved_names = list(set(name for name in apub.__all__
+                                if getattr(apub, name, None) is None))
 
-        missing = list(set(name for name in apub.__all__
-                           if getattr(apub, name, None) is None))
-
-        self.assertFalse(
-            missing,
-            msg="__all__ contains unresolved names: {0}"
-                .format(", ".join(missing), ))
+    assert not unresolved_names, \
+        f"__all__ contains unresolved names: {', '.join(unresolved_names)}"

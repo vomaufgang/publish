@@ -7,9 +7,10 @@
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
-from abc import ABCMeta, abstractmethod
-
 import logging.config
+from abc import ABCMeta, abstractmethod
+from typing import Iterable
+
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
@@ -35,17 +36,6 @@ class Substitution(metaclass=ABCMeta):
         :returns: The changed text.
         """
         raise NotImplementedError
-
-
-class RegexSubstitution(Substitution):
-    """Planned for Version 3.0
-    """
-    def __init__(self):
-        super().__init__()
-        raise NotImplementedError("Planned for Version 3.0")
-
-    def apply_to(self, text: str) -> str:
-        raise NotImplementedError("Planned for Version 3.0")
 
 
 class SimpleSubstitution(Substitution):
@@ -99,3 +89,26 @@ class SimpleSubstitution(Substitution):
         :rtype: str
         """
         return text.replace(self.find, self.replace_with)
+
+
+def apply_substitutions(
+        markdown_: str,
+        substitutions: Iterable[Substitution]) -> str:
+    """Applies the list of substitutions to the markdown content.
+
+    :param markdown_: The markdown content of the chapter.
+    :param substitutions: The list of substitutions to be applied.
+
+    :returns: The dict of markdown strings by chapter with
+        the substitutions applied.
+    """
+    if substitutions:
+        log.info('Applying substitutions ...')
+
+    substitution_count = len(list(substitutions))
+
+    for index, substitution in enumerate(substitutions):
+        markdown_ = substitution.apply_to(markdown_)
+        log.info(f'{index + 1} of {substitution_count} applied')
+
+    return markdown_

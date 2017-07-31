@@ -38,9 +38,9 @@ class Book:
     :ivar comments: The ebook description.
     :ivar cover: The path or url to the cover image.
     :ivar isbn: The ISBN of the book.
-    :ivar language: The language. Should be an ISO 639-2 code, see:
+    :ivar language: The language. Should be an ISO 639-1 code, see:
 
-        https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
+        https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
     :ivar pubdate: The publication date.
     :ivar publisher: The ebook publisher.
     :ivar rating: The rating. Should be a number between 1 and 5.
@@ -70,6 +70,7 @@ class Book:
             title_sort=None,
             chapters=None):
         self.__chapters = [] if not chapters else [].extend(chapters)
+        # todo test if param chapters is not iterable, .extend throws TypeError
 
         # attributes supported as metadata by ebook-convert:
         self.author_sort = author_sort

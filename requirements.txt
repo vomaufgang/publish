@@ -1,9 +1,10 @@
 markdown>=2.6
-nose
 tox
 Sphinx
 sphinx-rtd-theme
 sphinx-autodoc-typehints
 flake8
-coverage
 wheel
+pytest
+pytest-cov
+pytest-runner

@@ -14,7 +14,7 @@ if "%1" == "help" (
 )
 
 if "%1" == "test" (
-	nosetests
+	python setup.py test
 	goto end
 )
 
@@ -24,12 +24,15 @@ if "%1" == "test-all" (
 )
 
 if "%1" == "cover" (
-	nosetests && coverage html
 	if "%2" == "show" (
+	    pytest --cov-report html --cov=apub
         cd htmlcov
         index.html
         cd ..
+        goto end
 	)
+
+	pytest --cov-report term-missing --cov=apub
 	goto end
 )
 

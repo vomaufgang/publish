@@ -16,10 +16,11 @@ __version__ = resource_string(__name__, 'VERSION').decode('utf-8').strip()
 # Expose the 'public' API on the top level package
 from apub.book import Book, Chapter  # NOQA
 from apub.substitution import SimpleSubstitution  # NOQA
-from apub.output import HtmlOutput, EbookConvertOutput  # NOQA
+from apub.output import HtmlOutput, EbookConvertOutput, NoChaptersFoundError  # NOQA
 
 __all__ = ['Book',
            'Chapter',
            'SimpleSubstitution',
            'HtmlOutput',
-           'EbookConvertOutput']
+           'EbookConvertOutput',
+           'NoChaptersFoundError']

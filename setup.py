@@ -21,7 +21,12 @@ requirements = [
 ]
 
 test_requirements = [
-    'nose'
+    'pytest',
+    'pytest-cov'
+]
+
+setup_requirements = [
+    'pytest-runner'
 ]
 
 setup(
@@ -40,6 +45,7 @@ setup(
         'apub': ['template.html', 'VERSION']
     },
     install_requires=requirements,
+    setup_requires=setup_requirements,
     license="MIT",
     zip_safe=False,
     keywords='apub',
@@ -50,6 +56,5 @@ setup(
         'Natural Language :: English',
         'Programming Language :: Python :: 3.6',
     ],
-    test_suite='nose.collector',
     tests_require=test_requirements
 )

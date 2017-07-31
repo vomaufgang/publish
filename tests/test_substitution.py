@@ -14,15 +14,12 @@ test_chapter
 Tests for `apub.model.chapter` module.
 """
 
-import unittest
-
 from apub.substitution import SimpleSubstitution
 
 
-class TestSimpleSubstitution(unittest.TestCase):
+class TestSimpleSubstitution:
     def test_apply_to(self):
-        substitution = SimpleSubstitution(find='foo',
-                                          replace_with='bar')
+        substitution = SimpleSubstitution(find='foo', replace_with='bar')
 
         text = '\n'.join([
             'foo',
@@ -32,7 +29,7 @@ class TestSimpleSubstitution(unittest.TestCase):
             '',
             'foo else',
         ])
-        excpected = '\n'.join([
+        expected = '\n'.join([
             'bar',
             'bar',
             'something else',
@@ -43,19 +40,14 @@ class TestSimpleSubstitution(unittest.TestCase):
 
         actual = substitution.apply_to(text)
 
-        self.assertEqual(actual, excpected)
+        assert actual == expected
 
     def test_apply_to_empty_input(self):
-        substitution = SimpleSubstitution(find='foo',
-                                          replace_with='bar')
+        substitution = SimpleSubstitution(find='foo', replace_with='bar')
 
         text = ''
-        excpected = ''
+        expected = ''
 
         actual = substitution.apply_to(text)
 
-        self.assertEqual(actual, excpected)
-
-
-if __name__ == '__main__':
-    unittest.main()
+        assert actual == expected

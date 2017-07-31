@@ -14,15 +14,14 @@ test_chapter
 Tests for `apub.book` module.
 """
 
-import unittest
-
+import pytest
 from apub.book import Book, Chapter
 
 
-class TestBook(unittest.TestCase):
+class TestBook:
     def test_chapters_is_get_only(self):
         book = Book()
-        with self.assertRaises(AttributeError):
+        with pytest.raises(AttributeError):
             book.chapters = []
 
     def test_chapters_is_iterable(self):
@@ -47,165 +46,160 @@ class TestBook(unittest.TestCase):
         book = Book()
         book.language = 'de'
 
-        self.assertEqual('de', book.language)
+        assert 'de' == book.language
 
         book.language = 'eng'
 
-        self.assertEqual('eng', book.language)
+        assert 'eng' == book.language
 
     def test_language_defaults_to_und(self):
         book = Book()
 
-        self.assertEqual('und', book.language)
+        assert 'und' == book.language
 
     def test_author_sort(self):
         book = Book()
         book.author_sort = "abc"
 
-        self.assertEqual("abc", book.author_sort)
+        assert "abc" == book.author_sort
 
     def test_author_sort_defaults_to_none(self):
         book = Book()
 
-        self.assertEqual(None, book.author_sort)
+        assert book.author_sort is None
 
     def test_authors(self):
         book = Book()
         book.authors = "abc"
 
-        self.assertEqual("abc", book.authors)
+        assert "abc" == book.authors
 
     def test_authors_defaults_to_none(self):
         book = Book()
 
-        self.assertEqual(None, book.authors)
+        assert book.authors is None
 
     def test_book_producer(self):
         book = Book()
         book.book_producer = "abc"
 
-        self.assertEqual("abc", book.book_producer)
+        assert "abc" == book.book_producer
 
     def test_book_producer_defaults_to_none(self):
         book = Book()
 
-        self.assertEqual(None, book.book_producer)
+        assert book.book_producer is None
 
     def test_comments(self):
         book = Book()
         book.comments = "abc"
 
-        self.assertEqual("abc", book.comments)
+        assert "abc" == book.comments
 
     def test_comments_defaults_to_none(self):
         book = Book()
 
-        self.assertEqual(None, book.comments)
+        assert book.comments is None
 
     def test_cover(self):
         book = Book()
         book.cover = "abc"
 
-        self.assertEqual("abc", book.cover)
+        assert "abc" == book.cover
 
     def test_cover_defaults_to_none(self):
         book = Book()
 
-        self.assertEqual(None, book.cover)
+        assert book.cover is None
 
     def test_isbn(self):
         book = Book()
         book.isbn = "abc"
 
-        self.assertEqual("abc", book.isbn)
+        assert "abc" == book.isbn
 
     def test_isbn_defaults_to_none(self):
         book = Book()
 
-        self.assertEqual(None, book.isbn)
+        assert book.isbn is None
 
     def test_publisher(self):
         book = Book()
         book.publisher = "abc"
 
-        self.assertEqual("abc", book.publisher)
+        assert "abc" == book.publisher
 
     def test_publisher_defaults_to_none(self):
         book = Book()
 
-        self.assertEqual(None, book.publisher)
+        assert book.publisher is None
 
     def test_series(self):
         book = Book()
         book.series = "abc"
 
-        self.assertEqual("abc", book.series)
+        assert "abc" == book.series
 
     def test_series_defaults_to_none(self):
         book = Book()
 
-        self.assertEqual(None, book.series)
+        assert book.series is None
 
     def test_tags(self):
         book = Book()
         book.tags = "abc"
 
-        self.assertEqual("abc", book.tags)
+        assert "abc" == book.tags
 
     def test_tags_defaults_to_none(self):
         book = Book()
 
-        self.assertEqual(None, book.tags)
+        assert book.tags is None
 
     def test_title(self):
         book = Book()
         book.title = "abc"
 
-        self.assertEqual("abc", book.title)
+        assert "abc" == book.title
 
     def test_title_defaults_to_none(self):
         book = Book()
 
-        self.assertEqual(None, book.title)
+        assert book.title is None
 
     def test_title_sort(self):
         book = Book()
         book.title_sort = "abc"
 
-        self.assertEqual("abc", book.title_sort)
+        assert "abc" == book.title_sort
 
     def test_title_sort_defaults_to_none(self):
         book = Book()
 
-        self.assertEqual(None, book.title_sort)
+        assert book.title_sort is None
 
 
-class TestChapter(unittest.TestCase):
-
+class TestChapter:
     # todo from_dict
 
     def test_publish(self):
         chapter = Chapter()
         chapter.publish = False
 
-        self.assertEqual(False, chapter.publish)
+        assert chapter.publish is False
 
     def test_publish_defaults_to_true(self):
         chapter = Chapter()
 
-        self.assertEqual(True, chapter.publish)
+        assert chapter.publish is True
 
     def test_source(self):
         chapter = Chapter()
         chapter.source = "abc"
 
-        self.assertEqual("abc", chapter.source)
+        assert "abc" == chapter.source
 
     def test_source_defaults_to_none(self):
         chapter = Chapter()
 
-        self.assertEqual(None, chapter.source)
-
-
-if __name__ == '__main__':
-    unittest.main()
+        assert chapter.source is None
