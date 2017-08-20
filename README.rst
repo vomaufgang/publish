@@ -20,7 +20,7 @@ Created to make publishing stories a lot easier for myself.
 Build status
 ------------
 
-* develop: |DEVELOP|
+* develop: |DEVELOP| |DEVCOVERAGE|
 * master: |MASTER|
 
 .. |DEVELOP| image:: https://travis-ci.org/vomaufgang/apub.svg?branch=develop
@@ -28,6 +28,10 @@ Build status
 
 .. |MASTER| image:: https://travis-ci.org/vomaufgang/apub.svg?branch=master
    :target: https://travis-ci.org/vomaufgang/apub/branches
+
+.. |DEVCOVERAGE| image:: https://coveralls.io/repos/github/vomaufgang/apub/badge.svg?branch=develop
+   :target: https://coveralls.io/github/vomaufgang/apub?branch=develop
+
 
 Features
 --------
