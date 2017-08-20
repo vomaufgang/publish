@@ -19,7 +19,7 @@ from apub.substitution import SimpleSubstitution
 
 class TestSimpleSubstitution:
     def test_apply_to(self):
-        substitution = SimpleSubstitution(find='foo', replace_with='bar')
+        substitution = SimpleSubstitution(old='foo', new='bar')
 
         text = '\n'.join([
             'foo',
@@ -43,7 +43,7 @@ class TestSimpleSubstitution:
         assert actual == expected
 
     def test_apply_to_empty_input(self):
-        substitution = SimpleSubstitution(find='foo', replace_with='bar')
+        substitution = SimpleSubstitution(old='foo', new='bar')
 
         text = ''
         expected = ''

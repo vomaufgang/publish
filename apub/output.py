@@ -251,7 +251,7 @@ class HtmlOutput(Output):
     """Turns a Book object and its chapters into an html document.
 
     :ivar css_path: The path to the style sheet.
-    :ivar force_publish: Determines wether to force publish all chapters.
+    :ivar force_publish: Determines whether to force publish all chapters.
 
         If set to true, all chapters of the book will be published
         no matter how the chapters are configured.

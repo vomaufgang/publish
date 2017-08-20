@@ -12,3 +12,6 @@ install: pip install -r requirements.txt
 script: pytest --cov=apub tests/
 
 sudo: false
+
+env:
+  CODECLIMATE_REPO_TOKEN: 90eb604bf1487fcf4eff2c2aa7b5bb429e26d6f75dd93eb55b0daff3f7613bbb

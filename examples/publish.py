@@ -31,8 +31,8 @@ def main():
          Chapter(source='second_chapter.md')])
 
     substitution = SimpleSubstitution(
-        find='Cows',
-        replace_with='Substitutions')
+        old='Cows',
+        new='Substitutions')
 
     html_output = HtmlOutput(
         path='example.html',

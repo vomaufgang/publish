@@ -44,10 +44,10 @@ class SimpleSubstitution(Substitution):
     Substitutions are always applied to all chapters when calling
     `*Output.make(book, substitutions)`.
 
-    :ivar find: The string to find.
-    :type find: str
-    :ivar replace_with: The string to replace the find string with.
-    :type replace_with: str
+    :ivar old: The string to find.
+    :type old: str
+    :ivar new: The string to replace the find string with.
+    :type new: str
 
     :Example:
 
@@ -74,10 +74,10 @@ class SimpleSubstitution(Substitution):
 
     """
 
-    def __init__(self, find: str=None, replace_with: str=None):
+    def __init__(self, old: str=None, new: str=None):
         super().__init__()
-        self.find = find
-        self.replace_with = replace_with
+        self.old = old
+        self.new = new
 
     def apply_to(self, text: str) -> str:
         """Applies the substitution to the text, returning the changed text.
@@ -88,7 +88,7 @@ class SimpleSubstitution(Substitution):
         :returns: The changed text.
         :rtype: str
         """
-        return text.replace(self.find, self.replace_with)
+        return text.replace(self.old, self.new)
 
 
 def apply_substitutions(
