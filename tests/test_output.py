@@ -31,6 +31,7 @@ def test_supported_ebookconvert_attrs():
     assert 'tags' in SUPPORTED_EBOOKCONVERT_ATTRS
     assert 'title' in SUPPORTED_EBOOKCONVERT_ATTRS
 
+
 TEST_HTML_TEMPLATE = """<!DOCTYPE html>
 <html lang="{language}">
 <head>
