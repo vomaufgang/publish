@@ -21,7 +21,7 @@ Build status
 ------------
 
 * develop: |DEVELOP| |DEVCOVERAGE|
-* master: |MASTER|
+* master: |MASTER| |MASTERCOVERAGE|
 
 .. |DEVELOP| image:: https://travis-ci.org/vomaufgang/apub.svg?branch=develop
    :target: https://travis-ci.org/vomaufgang/apub/branches
@@ -32,6 +32,8 @@ Build status
 .. |DEVCOVERAGE| image:: https://coveralls.io/repos/github/vomaufgang/apub/badge.svg?branch=develop
    :target: https://coveralls.io/github/vomaufgang/apub?branch=develop
 
+.. |MASTERCOVERAGE| image:: https://coveralls.io/repos/github/vomaufgang/apub/badge.svg?branch=develop
+   :target: https://coveralls.io/github/vomaufgang/apub?branch=develop
 
 Features
 --------
