@@ -33,7 +33,7 @@ Build status
    :target: https://coveralls.io/github/vomaufgang/apub?branch=develop
 
 .. |MASTERCOVERAGE| image:: https://coveralls.io/repos/github/vomaufgang/apub/badge.svg?branch=develop
-   :target: https://coveralls.io/github/vomaufgang/apub?branch=develop
+   :target: https://coveralls.io/github/vomaufgang/apub?branch=master
 
 Features
 --------
