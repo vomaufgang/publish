@@ -8,10 +8,10 @@ python:
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install: pip install -r requirements.txt
 
+# command to run code quality tool
+before-script: flake8
+
 # command to run tests, e.g. python setup.py test
 script: pytest --cov-report term-missing --cov=apub tests/
 
 sudo: false
-
-after_success:
-  - CODECLIMATE_REPO_TOKEN=90eb604bf1487fcf4eff2c2aa7b5bb429e26d6f75dd93eb55b0daff3f7613bbb codeclimate-test-reporter
