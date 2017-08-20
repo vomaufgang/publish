@@ -9,7 +9,7 @@ python:
 install: pip install -r requirements.txt
 
 # command to run tests, e.g. python setup.py test
-script: pytest --cov=apub tests/
+script: pytest --cov-report term-missing --cov=apub tests/
 
 sudo: false
 
