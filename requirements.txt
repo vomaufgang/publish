@@ -8,3 +8,4 @@ wheel
 pytest
 pytest-cov
 pytest-runner
+codeclimate-test-reporter
