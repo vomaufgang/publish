@@ -3,6 +3,7 @@ tox
 Sphinx
 sphinx-rtd-theme
 sphinx-autodoc-typehints
+sphinxcontrib-napoleon
 flake8
 wheel
 pytest
