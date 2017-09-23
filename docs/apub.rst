@@ -4,30 +4,11 @@ apub package
 Submodules
 ----------
 
-apub\.book module
------------------
+.. toctree::
 
-.. automodule:: apub.book
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-apub\.output module
--------------------
-
-.. automodule:: apub.output
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-apub\.substitution module
--------------------------
-
-.. automodule:: apub.substitution
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   apub.book
+   apub.output
+   apub.substitution
 
 Module contents
 ---------------

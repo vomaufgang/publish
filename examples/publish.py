@@ -7,11 +7,9 @@
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
-from apub import (Book,
-                  Chapter,
-                  HtmlOutput,
-                  EbookConvertOutput,
-                  SimpleSubstitution)
+from apub.book import Book, Chapter
+from apub.output import HtmlOutput, EbookConvertOutput
+from apub.substitution import SimpleSubstitution
 import logging
 
 

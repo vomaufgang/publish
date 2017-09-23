@@ -1,47 +1,42 @@
+====
 TODO
 ====
 
-.. todo:: switch from .py project files to a .apub, .git like json metadata
-          file or folder. Use http://www.diveintopython3.net/serializing.html
-          for (de-)serialization.
-          Each folder can only contain one apub project - adjust the data
-          structures and classes accordingly, i.e. the Output class
-          loses its project property. The project will be passed to the
-          make() method as a parameter instead.
+.. todo:: Review CONTRIBUTING, esp. Get Started!, Testing, ff.
 
 .. todo:: Incorporate this advice with regards to "type checking is
           unnessecary":
           http://stackoverflow.com/questions/9816878/how-do-ruby-programmers-do-type-checking
 
-.. todo:: Implement logging, don't use print() statements esp. when apub is
-          used as a package and not from the command line:
-          http://stackoverflow.com/questions/6918493/in-python-why-use-logging-instead-of-print
-
-.. todo:: What should I do with the documentation? Keep it in rst? Migrate
-          to md?
-
-.. todo:: Update example json to new json format
-
-.. todo:: clean main folder, i.e. move TODO.rst one folder down into /docs
-
-.. todo:: remove type hinting outside of comments (from typing import bla)
-          remove typing requirement from req.txt & setup.py
-
-.. todo:: !!!Move todos to issue tracker!!!
+.. todo:: Move todos to issue tracker
 
 .. todo:: https://github.com/sphinx-doc/sphinx/issues/3545 autodoc generates duplicate entries when subpackage 'redeclares' package contents via __all__.
 
-.. todo:: todo You don't even need the project. Get rid of it.
-          The cli can just pass the book, list of outputs and substitutions
-          to make, no need to encapsulate 3 parameters.
-          The json will stay the same, with the cli json.load-ing the
-          'project' file, but simply passing the three dicts to their
-          corresponding ctors by itself.
-          make.make is also only needed by the cli - via the api
-          it's plain simplet to just call my_output.make.
+.. todo::
+
+    Use consistent markup for page titles and headings:
+
+    ::
+
+        ==========
+        Page title
+        ==========
+
+        Heading 1
+        =========
+
+        Heading 2
+        ---------
+
+        Heading 3
+        ~~~~~~~~~
+
+    Not all pages follow this style yet.
+
+.. todo:: Move to google style docstrings. Inform contributors about the docstring style.
 
 IDEAS
------
+=====
 
 .. todo:: Connect apub to apub-server instances via
           apub-push [*|1-5|1,3,5]
@@ -53,60 +48,50 @@ IDEAS
             You will be able to drop the files anywhere on your webserver as
             long as you point areader to them.
 
-.. todo:: transfer Markdown inside JSON, let the server parse it via
-          http://parsedown.org/
-
-
 Long Term Goals
----------------
+===============
 
 .. todo:: Create a standalone implementation of ebook-convert OR take
           ebook-convert, remove all gui references and dependencies on calibre
           and offer it as a pure python package with optional cli.
 
+.. todo::
 
-"""
-apub make --outputs=1,2,5
-apub make --outputs=1
-apub make --outputs=1
-apub make --outputs=1
-apub make html
-apub make html,epub chapters:1,2,3
-apub make *
-apub make
-  (equals the above)
+    Wouldn't it suffice to have setup.py- and manage.py-*like* capabilities
+    instead of a full blown json project format?
 
-apub push
+    Define your project in a `project.py`, import apub.cli and your project.py
+    gains command line parameters like `python project.py make my_output`
 
-apub pull
+    Of course that would mean that I need to somehow provide the project
+    metadata to the cli - maybe offer some global fields that have to be
+    set in project.py?
 
-apub list
+    ::
 
-apub init
+        from apub.cli import apub
+        apub(book=Book(), outputs=[Output(name='my_output')], ...)
 
-"""
+    would allow for
+
+    ::
+
+        >>> python my_project.py make my_output
 
 
-        # todo: parser for output ranges
-        # everything - outputs everything in a single file using the project
-        # metadata
-        # books:a - outputs the book in a single file, the book metadata
-        #  overrides the project metadata
-        # chapters:1,2,3,4 - outputs the selected chapters into a single file
-        #  using the project metadata where it applies
-        # chapters:1-15
-        # chapters:1-4,7,9-15
-        # chapters:slug-a,slug-b
-        # chapter slugs must be unique for the project
-        # books:a,b,c
+    Note that this would also mean that I don't need from_dict anymore, since
+    the entire implementation and usage would be strictly bound to python
+    files - and from_dict is really only needed für json project files.
 
-        # html output gets an additional parameter: output every chapter into
-        #  a separate file for easy inspection
+    I think I'll go with yagni on this one - and remove from_dict.
 
-        # todo: chapters are defined @project level, books use ranges, just like outputs
+    As for quick execution of apub - `python project.py` allows for the
+    author to provide his own default action via `__main__`, which could be
+    ignored if any parameters are given - or apub() takes additional
+    parameters offering the possibility to define default actions.
 
-        # todo resolve chapter range
+    ::
 
-        # todo redo and rethink the metadata structure - project, book, chapter
-        #  for example: title and subtitle should be inherited from project
-        #  to book, unless the book defines its own title or subtitle
+        from apub.cli import apub
+        apub(..., default_output='my_output')
+

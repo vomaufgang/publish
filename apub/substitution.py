@@ -18,6 +18,8 @@ log.addHandler(logging.NullHandler())
 # todo module docstring
 # todo consolidate all examples in module docstring
 
+# todo move back to google docstrings, now that the autodoc type hint module works with napoleon.
+
 class Substitution(metaclass=ABCMeta):
     """The Substitution class acts as an abstract interface for future
     substitution implementations.
@@ -25,17 +27,18 @@ class Substitution(metaclass=ABCMeta):
     In order for a substitution to be executable by an output class,
     it must offer the apply_to method described below.
     """
-    # todo write unit tests
 
     @abstractmethod
     def apply_to(self, text: str) -> str:
         """Applies the substitution to the text, returning the changed text.
 
-        :param text: The text to apply this simple substitution to.
+        Args:
+            text: The text to apply this simple substitution to.
 
-        :returns: The changed text.
+        Returns:
+            The changed text.
         """
-        raise NotImplementedError
+        pass
 
 
 class SimpleSubstitution(Substitution):
@@ -44,12 +47,11 @@ class SimpleSubstitution(Substitution):
     Substitutions are always applied to all chapters when calling
     `*Output.make(book, substitutions)`.
 
-    :ivar old: The string to find.
-    :type old: str
-    :ivar new: The string to replace the find string with.
-    :type new: str
+    Attributes:
+        old (str): The string to find.
+        new (str): The string to replace the find string with.
 
-    :Example:
+    Examples:
 
         .. code-block:: python
 
@@ -75,6 +77,8 @@ class SimpleSubstitution(Substitution):
     """
 
     def __init__(self, old: str=None, new: str=None):
+        """Initializes a new instance of the :class:`SimpleSubstitution` class.
+        """
         super().__init__()
         self.old = old
         self.new = new
@@ -82,33 +86,36 @@ class SimpleSubstitution(Substitution):
     def apply_to(self, text: str) -> str:
         """Applies the substitution to the text, returning the changed text.
 
-        :param text: The text to apply this simple substitution to.
-        :type text: str
+        Args:
+            text: The text to apply this simple substitution to.
 
-        :returns: The changed text.
-        :rtype: str
+        Returns:
+            The changed text.
         """
         return text.replace(self.old, self.new)
 
 
 def apply_substitutions(
-        markdown_: str,
+        text: str,
         substitutions: Iterable[Substitution]) -> str:
     """Applies the list of substitutions to the markdown content.
 
-    :param markdown_: The markdown content of the chapter.
-    :param substitutions: The list of substitutions to be applied.
+    Args:
+        text: The text to apply the substitutions to.
+        substitutions: The list of substitutions to be applied.
 
-    :returns: The dict of markdown strings by chapter with
-        the substitutions applied.
+    Returns:
+        The changed text.
     """
+    text = str(text)
+
     if substitutions:
         log.info('Applying substitutions ...')
 
     substitution_count = len(list(substitutions))
 
     for index, substitution in enumerate(substitutions):
-        markdown_ = substitution.apply_to(markdown_)
+        text = substitution.apply_to(text)
         log.info(f'{index + 1} of {substitution_count} applied')
 
-    return markdown_
+    return text

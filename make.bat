@@ -37,10 +37,10 @@ if "%1" == "cover" (
 )
 
 if "%1" == "docs" (
-    del docs\apub.rst
-    del docs\modules.rst
-    sphinx-apidoc -o ./docs apub
+    REM Documentation: http://www.sphinx-doc.org/en/stable/man/sphinx-apidoc.html
+    sphinx-apidoc -o ./docs apub -e -f -T
     cd docs
+    make clean
     make html
     cd ..
     goto end

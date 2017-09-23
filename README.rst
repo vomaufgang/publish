@@ -18,7 +18,7 @@ Created to make publishing stories a lot easier for myself.
         :target: https://pypi.python.org/pypi/apub
 
 Build status
-------------
+============
 
 * develop: |DEVELOP| |DEVCOVERAGE|
 * master: |MASTER| |MASTERCOVERAGE|
@@ -36,7 +36,7 @@ Build status
    :target: https://coveralls.io/github/vomaufgang/apub?branch=master
 
 Features
---------
+========
 
 * Write your book entirely in markdown.
 
@@ -55,13 +55,32 @@ Features
 
   .. code-block:: python
 
-    from apub import Book, Chapter, HtmlOutput, setup
+    from apub.book import Book, Chapter
+    from apub.output import HtmlOutput, EbookConvertOutput
+    from apub.substitution import SimpleSubstitution
 
-    setup(book=Book(title='My Book',
-                    chapters=[Chapter(source='my_first_chapter.md'),
-                              Chapter(source='my_second_chapter.md')]),
-          outputs=[HtmlOutput(path='my_book.html',
-                              name='my_output')])
+    book = Book(
+        title='Example',
+        authors='Max Mustermann',
+        language='en')
+
+    book.chapters.extend(
+        [Chapter(source='first_chapter.md'),
+         Chapter(source='second_chapter.md')])
+
+    substitution = SimpleSubstitution(
+        old='Cows',
+        new='Substitutions')
+
+    html_output = HtmlOutput(
+        path='example.html',
+        css_path='style.css')
+    html_output.make(book, [substitution])
+
+    ebook_output = EbookConvertOutput(
+        path='example.epub',
+        css_path='style.css')
+    ebook_output.make(book, [substitution])
 
   Given the above is saved in a file :code:`my_project.py` and the markdown
   files are present, the output :code:`my_book.html` can be created
@@ -69,7 +88,7 @@ Features
 
   .. code-block:: shell
 
-    python my_project.py make
+    python my_project.py
 
   on the command line.
 
@@ -93,14 +112,3 @@ Features
 * The following output types are planned for an upcoming version:
 
   * JSON for use with https://github.com/vomaufgang/areader
-
-.. note:: Several parameters of the api use trailing underscores as per pep8
-          recommendation for overlapping type and parameter names.
-
-          These parameter names may display without trailing underscores in the
-          html documentation. This is due to bug
-          https://github.com/sphinx-doc/sphinx/issues/519
-          in sphinx-doc falsely removing underscores from parameter names.
-
-          Afflicted parameters are documented accordingly until this issue is
-          resolved.

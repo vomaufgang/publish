@@ -1,7 +1,8 @@
-apub
-====
+==================
+Modules & Packages
+==================
 
-.. toctree::
-   :maxdepth: 4
+..  toctree::
+    :maxdepth: 4
 
-   apub
+    apub

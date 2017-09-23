@@ -40,15 +40,19 @@ import apub  # NOQA
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
+#
+# sphinx_autodoc_typehints must come after napoleon or it will not work.
+# (see: https://github.com/agronholm/sphinx-autodoc-typehints/issues/15)
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx_autodoc_typehints',
+    'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
-    'sphinx.ext.todo'
+    'sphinx.ext.todo',
+    'sphinx_autodoc_typehints',
 ]
 
 # Napoleon settings
-# napoleon_google_docstring = False
+napoleon_google_docstring = True
 # napoleon_numpy_docstring = False
 # napoleon_include_private_with_doc = False
 # napoleon_include_special_with_doc = True

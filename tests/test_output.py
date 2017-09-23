@@ -8,8 +8,8 @@
 # (license terms are at http://opensource.org/licenses/MIT).
 
 import pytest
-
 from apub import __version__ as apub_version
+# noinspection PyProtectedMember
 from apub.output import (SUPPORTED_EBOOKCONVERT_ATTRS,
                          _apply_template)
 
@@ -69,22 +69,4 @@ def test_apply_template():
 
     assert actual == expected
 
-
-# noinspection PyArgumentList
-def test_apply_template_args():
-    with pytest.raises(TypeError):
-        _apply_template(title=None,
-                        css=None,
-                        language=None)
-    with pytest.raises(TypeError):
-        _apply_template(html_content=None,
-                        css=None,
-                        language=None)
-    with pytest.raises(TypeError):
-        _apply_template(html_content=None,
-                        title=None,
-                        language=None)
-    with pytest.raises(TypeError):
-        _apply_template(html_content=None,
-                        title=None,
-                        css=None)
+# todo: edge cases

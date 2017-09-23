@@ -19,6 +19,7 @@ Contents:
     authors
     history
     misc
+    modules
 
 Indices and tables
 ==================
