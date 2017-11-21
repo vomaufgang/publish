@@ -10,11 +10,10 @@ install:
   - pip install -r requirements.txt
   - pip install coveralls
 
-# command to run tests, e.g. python setup.py test
-script: pytest --cov-report term-missing --cov=apub tests/
-
-# command to run code quality tool
-after_script: pylint apub tests examples setup.py
+# command to run tests, e.g. python setup.py test & run code quality tool
+script:
+  - pytest --cov-report term-missing --cov=apub tests/
+  - pylint apub tests examples setup.py
 
 after_success: coveralls
 
