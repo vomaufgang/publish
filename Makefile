@@ -6,7 +6,7 @@ help:
 	@echo "lint - check style with flake8"
 	@echo "test - run tests quickly with the default Python"
 	@echo "test-all - run tests on every Python version with tox"
-	@echo "coverage - check code coverage quickly with the default Python"
+	@echo "cover - check code coverage quickly with the default Python"
 	@echo "docs - generate Sphinx HTML documentation, including API docs"
 	@echo "release - package and upload a release"
 	@echo "dist - package"
@@ -25,7 +25,7 @@ clean-pyc:
 	find . -name '*~' -exec rm -f {} +
 
 lint:
-	flake8 apub tests
+	pylint apub tests setup.py
 
 test:
 	python setup.py test
@@ -33,7 +33,7 @@ test:
 test-all:
 	tox
 
-coverage:
+cover:
 	pytest --cov-report html --cov=apub
 	open htmlcov/index.html
 

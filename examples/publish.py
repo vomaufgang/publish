@@ -7,10 +7,10 @@
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
+import logging
 from apub.book import Book, Chapter
 from apub.output import HtmlOutput, EbookConvertOutput
 from apub.substitution import SimpleSubstitution
-import logging
 
 
 def main():
@@ -25,8 +25,8 @@ def main():
         language='en')
 
     book.chapters.extend(
-        [Chapter(source='first_chapter.md'),
-         Chapter(source='second_chapter.md')])
+        [Chapter(source_path='first_chapter.md'),
+         Chapter(source_path='second_chapter.md')])
 
     substitution = SimpleSubstitution(
         old='Cows',

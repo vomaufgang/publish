@@ -13,6 +13,9 @@ test_chapter
 
 Tests for `apub.model.chapter` module.
 """
+
+# pylint: disable=missing-docstring,no-self-use,invalid-name
+
 from abc import ABCMeta
 
 import pytest
@@ -23,24 +26,10 @@ from apub.substitution import (Substitution,
 
 class TestSubstitution:
     def test_substitution_is_abc(self):
-        with pytest.raises(TypeError) as exception_info:
-            Substitution()
+        assert isinstance(Substitution, ABCMeta)
 
-        assert "Can't instantiate abstract class Substitution " \
-               "with abstract methods apply_to" in str(exception_info.value)
-        assert isinstance(SimpleSubstitution, ABCMeta)
-
-    # noinspection PyAbstractClass
     def test_apply_to_is_abstract(self):
-        class TestAbstract(Substitution):
-            pass
-
-        with pytest.raises(TypeError) as exception_info:
-            TestAbstract()
-
-        assert "Can't instantiate abstract class TestAbstract " \
-               "with abstract methods apply_to" in str(exception_info.value)
-        assert Substitution.apply_to.__isabstractmethod__
+        assert 'apply_to' in Substitution.__abstractmethods__
 
 
 class TestSimpleSubstitution:
@@ -100,30 +89,3 @@ def test_apply_substitutions():
     actual = apply_substitutions(text, [substitution1, substitution2])
 
     assert actual == expected
-
-
-# noinspection PyTypeChecker
-def test_apply_substitutions_text_is_cast_to_str():
-    actual = apply_substitutions(None, [SimpleSubstitution('None', 'All')])
-    expected = 'All'
-
-    assert actual == expected
-
-
-# noinspection PyTypeChecker
-def test_apply_substitutions_substitutions_not_iterable():
-    with pytest.raises(TypeError) as exception_info:
-        apply_substitutions('', None)
-
-    assert "is not iterable" in str(exception_info.value)
-
-
-# noinspection PyTypeChecker
-def test_apply_substitutions_substitutions_wrong_type():
-    class NotADuckType:
-        pass
-
-    with pytest.raises(AttributeError) as exception_info:
-        apply_substitutions('', [NotADuckType()])
-
-    assert "has no attribute 'apply_to'" in str(exception_info.value)

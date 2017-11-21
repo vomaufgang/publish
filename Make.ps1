@@ -22,7 +22,7 @@ function get-coverage(){
 }
 
 function lint(){
-    &flake8 apub tests
+    &pylint apub tests
 }
 
 function test(){

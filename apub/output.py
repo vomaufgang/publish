@@ -24,10 +24,10 @@ from apub import __version__ as apub_version
 from apub.book import Book, Chapter
 from apub.substitution import Substitution, apply_substitutions
 
-log = logging.getLogger(__name__)
-log.addHandler(logging.NullHandler())
+LOG = logging.getLogger(__name__)
+LOG.addHandler(logging.NullHandler())
 
-SUPPORTED_EBOOKCONVERT_ATTRS = [
+SUPPORTED_EBOOKCONVERT_ATTRIBUTES = (
     'author_sort',
     'authors',
     'book_producer',
@@ -42,34 +42,36 @@ SUPPORTED_EBOOKCONVERT_ATTRS = [
     'series_index',
     'tags',
     'title'
-]
+)
 
-
-# todo validate mandatory book attributes - are there even any
-#      mandatory ones?
-# todo optional subtitle, supported by HtmlOutput and JsonOutput
+# todo: Isn't EbookConvertOutput just a specialization of HtmlOutput, thus rendering Output
+#       as an ABC obsolete? 90% of
 
 
 class Output(metaclass=ABCMeta):
     """Abstract base class for specific Output implementations.
 
-    :ivar css_path: The path to the style sheet.
-    :ivar force_publish: Determines wether to force publish all chapters.
-        
-        If set to true, all chapters of the book will be published
-        no matter how the chapters are configured.
+    Args:
+        path: The output path.
+        **kwargs: Any other attribute of this class. (see Attributes)
 
-        Defaults to False.
-    :ivar path: The output path.
+    Attributes:
+        path (str): The output path.
+        css_path (str): The path to the style sheet.
+        force_publish (bool): Determines whether to force publish all chapters.
+
+            If set to true, all chapters of the book will be published
+            no matter how the chapters are configured.
     """
 
     def __init__(self,
                  path: str,
-                 css_path: Optional[str] = None,
-                 force_publish: Optional[bool] = False):
+                 **kwargs):
+        """Initializes a new instance of the :class:`Output` class.
+        """
         self.path = path
-        self.css_path = css_path
-        self.force_publish = force_publish
+        self.css_path = kwargs.pop('css_path', None)
+        self.force_publish = kwargs.pop('force_publish', False)
 
     @abstractmethod
     def make(self, book: Book, substitutions: Iterable[Substitution] = None):
@@ -78,16 +80,19 @@ class Output(metaclass=ABCMeta):
         Abstract method: Implementation has to be provided by any Output
         subclass.
         """
-        pass
+        pass  # pragma: no cover
 
-    def get_chapters_to_publish(self,
-                                chapters: Iterable[Chapter]
-                                ) -> Iterable[Chapter]:
-        """Gets the list of chapters set to be published based on
-        each chapters 'publish' attribute and the outputs force_publish
-        override.
+    def get_chapters_to_be_published(self,
+                                     chapters: Iterable[Chapter]
+                                    ) -> Iterable[Chapter]:
+        """Gets the list of chapters to be published based on each chapters
+        `publish` attribute.
 
-        :returns: The list of chapters set to be published.
+        If the outputs `force_publish` override is set to true, all chapters
+        will be published regardless of their individual `publish` attributes.
+
+        Returns:
+            The list of chapters to be published.
         """
         if self.force_publish:
             return chapters
@@ -101,7 +106,7 @@ class Output(metaclass=ABCMeta):
 
         css_path = os.path.join(os.getcwd(), self.css_path)
 
-        log.info('Collecting stylesheet ...')
+        LOG.info('Collecting stylesheet ...')
         with open(css_path, 'r') as file:
             css = file.read()
 
@@ -111,13 +116,6 @@ class Output(metaclass=ABCMeta):
                            book: Book,
                            substitutions: Iterable[Substitution]) -> str:
         # todo document _get_html_document
-        # todo this also means that EbookconvertOutput doesn't have to call HtmlOut anymore
-        """
-
-        :param book: The book.
-        :param substitutions: The substitutions.
-        """
-
         html_content = self._get_html_content(book.chapters, substitutions)
         html_document = _apply_template(html_content=html_content,
                                         title=book.title,
@@ -135,12 +133,12 @@ class Output(metaclass=ABCMeta):
             markdown_,
             substitutions)
 
-        log.info('Rendering markdown to html ...')
+        LOG.info('Rendering markdown to html ...')
         return markdown.markdown(markdown_)
 
     def _get_markdown_content(self,
                               chapters: Iterable[Chapter]
-                              ) -> str:
+                             ) -> str:
         # todo document _get_markdown_content
         markdown_ = []
         md_paragraph_sep = '\n\n'
@@ -148,15 +146,15 @@ class Output(metaclass=ABCMeta):
         if not chapters:
             raise NoChaptersFoundError('Your book contains no chapters.')
 
-        chapters_to_publish = self.get_chapters_to_publish(chapters)
+        chapters_to_publish = self.get_chapters_to_be_published(chapters)
 
         if not chapters_to_publish:
             raise NoChaptersFoundError('None of your chapters are set to be'
                                        'published.')
 
-        log.info('Collecting chapters ...')
+        LOG.info('Collecting chapters ...')
         for chapter in chapters_to_publish:
-            with open(chapter.source, 'r') as file:
+            with open(chapter.source_path, 'r') as file:
                 markdown_.append(file.read())
 
         return md_paragraph_sep.join(markdown_)
@@ -164,8 +162,9 @@ class Output(metaclass=ABCMeta):
     def validate(self):
         """Validates the Output object.
 
-        :raises AttributeError: Errors encountered during validation are
-            raised as AttributeErrors.
+        Raises:
+            AttributeError: Errors encountered during validation are
+                raised as AttributeErrors.
         """
         if not self.path:
             raise AttributeError('Output path must be set.')
@@ -175,33 +174,40 @@ class EbookConvertOutput(Output):
     """Turns Book objects and its chapters into an ebook using
     Kavid Goyals ebookconvert command line tool.
 
-    :ivar css_path: The path to the style sheet.
-    :ivar force_publish: Determines wether to force publish all chapters.
+    .. todo:: document format of ebookconvert_params -> {'key':'value'} or object.key = value
 
-        If set to true, all chapters of the book will be published
-        no matter how the chapters are configured.
+    Args:
+        path: The output path.
+        **kwargs: Any other attribute of this class. (see Attributes below)
 
-        Defaults to False.
-    :ivar path: The output path.
-    :ivar ebookconvert_params: An optional list of additional command
-        line arguments that will be passed to ebookconvert.
+
+    Attributes:
+        ebookconvert_params (List[str]): An optional list of additional command
+            line arguments that will be passed to ebookconvert.
+        path (str): The output path.
+        css_path (str): The path to the style sheet.
+        force_publish (bool): Determines wether to force publish all chapters.
+
+            If set to true, all chapters of the book will be published
+            no matter how the chapters are configured.
+
+            Defaults to False.
     """
 
     def __init__(self,
                  path: str,
-                 css_path: Optional[str] = None,
-                 force_publish: Optional[bool] = False,
-                 ebookconvert_params: Optional[Iterable[str]] = None):
-        super().__init__(path, css_path, force_publish)
-        self.ebookconvert_params = \
-            [] if not ebookconvert_params else ebookconvert_params
+                 **kwargs):
+        """Initializes a new instance of the :class:`EbookConvertOutput` class.
+        """
+        super().__init__(path, **kwargs)
+        self.ebookconvert_params = kwargs.pop('ebookconvert_params', [])
 
     def make(self,
              book: Book,
              substitutions: Optional[Iterable[Substitution]] = None):
         """Makes the Output for the provided book and substitutions.
         """
-        log.info('Making EbookConvertOutput ...')
+        LOG.info('Making EbookConvertOutput ...')
         if not book:
             raise AttributeError("book must not be None")
 
@@ -225,26 +231,31 @@ class EbookConvertOutput(Output):
             with open(temp_path, 'w') as file:
                 file.write(html_document)
 
-            call_params = [
-                'ebook-convert',
-                temp_path,
-                self.path
-            ]
+            call_params = self._get_call_params(book, temp_path)
 
-            call_params.extend(_yield_attrs_as_params(book))
-            call_params.extend(self.ebookconvert_params)
+            LOG.info('Calling ebook-convert ...')
 
-            log.info('Calling ebook-convert ...')
-            subprocess.call(call_params)
-            log.info('... EbookConvertOutput finished')
-        except FileNotFoundError:
-            # todo split into multiple try's, FNFE may also be raised by _get_css, open, etc.
-            # -> don't split, but use sub-trys because all temp activity must be rmtree'd
-            log.error(fill('Could not find ebook-convert. Please install calibre if you want to '
-                           'use EbookconvertOutput and make sure ebook-convert is accessible '
-                           'through the PATH variable.'))
+            try:
+                subprocess.call(call_params)
+            except FileNotFoundError:
+                LOG.error(
+                    fill('Could not find ebook-convert. Please install calibre if you want to '
+                         'use EbookconvertOutput and make sure ebook-convert is accessible '
+                         'through the PATH variable.'))
+            LOG.info('... EbookConvertOutput finished')
         finally:
             shutil.rmtree(temp_directory)
+
+    def _get_call_params(self, book, temp_path):
+        # todo document _get_call_params
+        call_params = [
+            'ebook-convert',
+            temp_path,
+            self.path
+        ]
+        call_params.extend(_yield_attributes_as_params(book))
+        call_params.extend(self.ebookconvert_params)
+        return call_params
 
 
 class HtmlOutput(Output):
@@ -260,12 +271,6 @@ class HtmlOutput(Output):
     :ivar path: The output path.
     """
 
-    def __init__(self,
-                 path: str,
-                 css_path: Optional[str] = None,
-                 force_publish: Optional[bool] = False):
-        super().__init__(path, css_path, force_publish)
-
     def make(self,
              book: Book,
              substitutions: Optional[Iterable[Substitution]] = None):
@@ -274,7 +279,7 @@ class HtmlOutput(Output):
         :param book: The book.
         :param substitutions: The substitutions.
         """
-        log.info('Making HtmlOutput ...')
+        LOG.info('Making HtmlOutput ...')
         if not book:
             raise AttributeError("book must not be None")
 
@@ -286,23 +291,7 @@ class HtmlOutput(Output):
         with open(self.path, 'w') as file:
             file.write(html_document)
 
-        log.info('... HtmlOutput finished')
-
-
-class JsonOutput(Output):
-    """Planned for Version 3.0"""
-
-    def __init__(self,
-                 path: str,
-                 css_path: Optional[str] = None,
-                 force_publish: Optional[bool] = False, ):
-        super().__init__(path, css_path, force_publish)
-        raise NotImplementedError('Planned for Version 3.0')
-
-    def make(self,
-             book: Book,
-             substitutions: Iterable[Substitution] = None):
-        raise NotImplementedError('Planned for Version 3.0')
+        LOG.info('... HtmlOutput finished')
 
 
 def _apply_template(html_content: str,
@@ -327,29 +316,36 @@ def _apply_template(html_content: str,
                            apub_version=apub_version)
 
 
-def _yield_attrs_as_params(book: Book) -> Generator[str, None, None]:
-    """Takes a book and returns a generator yielding all attributes
-    that can be processed by the ebookconvert command line as a param
-    array.
+def _yield_attributes_as_params(object_) -> Generator[str, None, None]:
+    """Takes an object or dictionary and returns a generator yielding all
+    attributes that can be processed by the ebookconvert command line as a
+    parameter array.
 
-    :param book: The book.
+    Args:
+        object_: An object or dictionary.
 
-    :returns: A generator yielding all attributes of the object supported
+    Returns:
+        A generator yielding all attributes of the object supported
         by ebookconvert.
     """
-    # This way the book can contain attrs not supported by ebookconvert
+    # This way the book can contain attributes not supported by ebookconvert
     # (or any other specific output that follows this explicit pattern)
-    for attr_name in SUPPORTED_EBOOKCONVERT_ATTRS:
-        if hasattr(book, attr_name):
-            attr = getattr(book, attr_name)
-            if not attr:
+    for attr_name in SUPPORTED_EBOOKCONVERT_ATTRIBUTES:
+        if hasattr(object_, attr_name):
+            attr = getattr(object_, attr_name)
+        else:
+            try:
+                attr = object_[attr_name]
+            except TypeError:
                 continue
-            attr = str(attr)
-            if attr and not attr.isspace():
-                yield "--{0}=\"{1}\"".format(attr_name, attr)
 
+        if not attr:
+            continue
 
-# Errors
+        attr = str(attr)
+        if attr and not attr.isspace():
+            yield '--{0}="{1}"'.format(attr_name, attr)
+
 
 class NoChaptersFoundError(Exception):
     pass

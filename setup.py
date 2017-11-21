@@ -3,8 +3,12 @@
 
 import sys
 
-if sys.version_info < (3, 6):
-    sys.exit('Sorry, Python < 3.6 is not supported.')
+MIN_SUPPORTED_PYTHON_VERSION = (3, 6)
+
+if sys.version_info < MIN_SUPPORTED_PYTHON_VERSION:
+    sys.exit('Sorry, Python < {} is not supported.'.format(
+        '.'.join(map(str, MIN_SUPPORTED_PYTHON_VERSION))
+    ))
 
 try:
     from setuptools import setup
@@ -12,29 +16,26 @@ except ImportError:
     from distutils.core import setup
 
 
-readme = open('README.rst').read()
-history = open('docs/history.rst').read().replace('.. :changelog:', '')
-version = open('apub/VERSION').read().strip()
+README = open('README.rst').read()
+HISTORY = open('docs/history.rst').read().replace('.. :changelog:', '')
+VERSION = open('apub/VERSION').read().strip()
 
-requirements = [
+REQUIREMENTS = [
     'markdown>=2.6'
 ]
 
-test_requirements = [
+TEST_REQUIREMENTS = [
     'pytest',
-    'pytest-cov'
-]
-
-setup_requirements = [
-    'pytest-runner'
+    'pytest-cov',
+    'pytest-runner',
 ]
 
 setup(
     name='apub',
-    version=version,
+    version=VERSION,
     description='Python package with command line interface to turn markdown '
                 'files into ebooks.',
-    long_description=readme + '\n\n' + history,
+    long_description=README + '\n\n' + HISTORY,
     author='Christopher Knörndel',
     author_email='cknoerndel@anited.de',
     url='https://github.com/vomaufgang/apub/',
@@ -44,8 +45,7 @@ setup(
     package_data={
         'apub': ['template.html', 'VERSION']
     },
-    install_requires=requirements,
-    setup_requires=setup_requirements,
+    install_requires=REQUIREMENTS,
     license="MIT",
     zip_safe=False,
     keywords='apub',
@@ -56,5 +56,5 @@ setup(
         'Natural Language :: English',
         'Programming Language :: Python :: 3.6',
     ],
-    tests_require=test_requirements
+    tests_require=TEST_REQUIREMENTS
 )

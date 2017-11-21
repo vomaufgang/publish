@@ -7,12 +7,16 @@
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
+"""The `apub.book` module defines types to hold the metadata of a book and its chapters.
+"""
+
+
 import logging
 from datetime import date
-from typing import List, Optional
+from typing import List
 
-log = logging.getLogger(__name__)
-log.addHandler(logging.NullHandler())
+LOG = logging.getLogger(__name__)
+LOG.addHandler(logging.NullHandler())
 
 
 class Book:
@@ -28,90 +32,68 @@ class Book:
     More information on the attributes can be found here:
     http://manual.calibre-ebook.com/cli/ebook-convert.html#metadata
 
-    :param title: The title of the book.
-    :type title: str
-    :param authors: The authors. Multiple authors should be separated by
-        ampersands.
-    :type authors: Optional[str]
-    :param cover: The path or url to the cover image.
-    :type cover: Optional[str]
-    :param language: The language. Should be an ISO 639-1 code, see:
+    Args:
+        title: The title of the book.
+        **kwargs: Any other attribute of this class except `chapters`. (see Attributes)
 
-        https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
-    :type language: Optional[str]
-    :param publisher: The ebook publisher.
-    :type publisher: Optional[str]
-    :param series: The series this ebook belongs to.
-    :type series: Optional[str]
-    :param series_index: The series this ebook belongs to.
-    :type series_index: Optional[str]
+    Attributes:
+        author_sort (str): The string to be used when sorting by author.
+        authors (str): The authors. Multiple authors should be separated by
+            ampersands.
+        book_producer (str): The book producer.
+        comments (str): The ebook description.
+        cover (str): The path or url to the cover image.
+        isbn (str): The ISBN of the book.
+        language (str): The language. Should be an ISO 639-1 code, see:
 
-    :ivar author_sort: The string to be used when sorting by author.
-    :ivar authors: The authors. Multiple authors should be separated by
-        ampersands.
-    :ivar book_producer: The book producer.
-    :ivar comments: The ebook description.
-    :ivar cover: The path or url to the cover image.
-    :ivar isbn: The ISBN of the book.
-    :ivar language: The language. Should be an ISO 639-1 code, see:
-
-        https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
-    :ivar pubdate: The publication date.
-    :ivar publisher: The ebook publisher.
-    :ivar rating: The rating. Should be a number between 1 and 5.
-    :ivar series: The series this ebook belongs to.
-    :ivar series_index: The index of the book in this series.
-    :ivar tags: The tags for the book. Should be a comma separated list.
-    :ivar title: The title of the book.
-    :ivar title_sort: The version of the title to be used for sorting.
-
-    :raises AttributeError: when the required parameter 'title' was omitted or
-        empty.
+            https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
+        pubdate (str): The publication date.
+        publisher (str): The ebook publisher.
+        rating (int): The rating. Should be a number between 1 and 5.
+        series (str): The series this ebook belongs to.
+        series_index (int): The index of the book in this series.
+        tags (str): The tags for the book. Should be a comma separated list.
+        title (str): The title of the book.
+        title_sort (str): The version of the title to be used for sorting.
     """
+
+    # pylint: disable=too-few-public-methods,too-many-instance-attributes
 
     def __init__(
             self,
             title: str,
-            authors: Optional[str]=None,
-            cover: Optional[str]=None,
-            language: Optional[str]=None,
-            publisher: Optional[str]=None,
-            series: Optional[str]=None,
-            series_index: Optional[int]=None):
+            **kwargs):
+        """Initializes a new instance of the :class:`Book` class.
         """
-
-        Returns:
-            :
-        """
-        if not title:
-            raise AttributeError("'title' cannot be empty")
-            # todo test for 'title' cannot be empty AttributeError
-
         self.__chapters = []
-        # todo test if param chapters is not iterable, .extend throws TypeError
 
-        # attributes supported as metadata by ebook-convert:
-        self.author_sort: str = None
-        self.authors: str = authors
-        self.book_producer: str = None
-        self.comments: str = None
-        self.cover: str = cover
-        self.isbn: str = None
-        self.language: str = 'und' if not language else language
-        self.pubdate: str = date.today().isoformat()
-        self.publisher: str = publisher
-        self.rating: int = None
-        self.series: str = series
-        self.series_index: int = series_index
-        self.tags: str = None
-        self.title: str = title
-        self.title_sort: str = None
+        # required attributes
+        self.title = title
+
+        # auto generated attributes
+        self.language = kwargs.pop('language', 'und')
+        self.pubdate = kwargs.pop('pubdate', date.today().isoformat())
+
+        # optional attributes
+        self.author_sort = kwargs.pop('author_sort', None)
+        self.authors = kwargs.pop('authors', None)
+        self.book_producer = kwargs.pop('book_producer', None)
+        self.comments = kwargs.pop('comments', None)
+        self.cover = kwargs.pop('cover', None)
+        self.isbn = kwargs.pop('isbn', None)
+        self.publisher = kwargs.pop('publisher', None)
+        self.rating = kwargs.pop('rating', None)
+        self.series = kwargs.pop('series', None)
+        self.series_index = kwargs.pop('series_index', None)
+        self.tags = kwargs.pop('tags', None)
+        self.title_sort = kwargs.pop('title_sort', None)
 
     @property
     def chapters(self) -> List['Chapter']:
         """Gets the list of chapters.
 
-        :returns: The list of chapters.
+        Returns:
+            The list of chapters.
         """
         return self.__chapters
 
@@ -120,26 +102,27 @@ class Chapter:
     """The chapter class is used to define all metadata required for a chapter
     of a book.
 
-    :param source: The full path to the source file. Example: '\.\\my\\file.md\'.
-    :type source: str
-    :param publish: Determines whether the chapter will be included
-        in the resulting output or not.
+    Args:
+        source_path: The path to the source file.
+        publish: Determines whether the chapter will be included
+            in the resulting output or not.
 
-        Default: True
-    :type publish: Optional[bool]
+            Default: True
 
-    :ivar source: The full path to the source file. Example: '\.\\my\\file.md\'.
-    :ivar publish: Determines whether the chapter will be included
-        in the resulting output or not.
+    Attributes:
+        source_path (str): The path to the source file.
+        publish (bool): Determines whether the chapter will be included
+            in the resulting output or not.
 
-        Default: True
+            Default: True
     """
 
-    def __init__(self, source: str, publish: Optional[bool]=True):
-        if not source:
-            raise AttributeError("'source' cannot be empty")
-            # todo test for 'source' cannot be empty AttributeError
+    # pylint: disable=too-few-public-methods
 
-        # todo unit test kwargs
-        self.publish: Optional[bool] = publish
-        self.source: str = source
+    def __init__(self,
+                 source_path: str,
+                 publish: bool = True):
+        """Initializes a new instance of the :class:`Chapter` class.
+        """
+        self.source_path = source_path
+        self.publish = publish

@@ -1,10 +1,11 @@
-markdown>=2.6
+-e .
+markdown
 tox
 Sphinx
 sphinx-rtd-theme
 sphinx-autodoc-typehints
 sphinxcontrib-napoleon
-flake8
+pylint
 wheel
 pytest
 pytest-cov

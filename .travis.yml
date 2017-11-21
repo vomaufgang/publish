@@ -11,7 +11,7 @@ install:
   - pip install coveralls
 
 # command to run code quality tool
-before_script: flake8
+before_script: pylint apub tests examples setup.py
 
 # command to run tests, e.g. python setup.py test
 script: pytest --cov-report term-missing --cov=apub tests/

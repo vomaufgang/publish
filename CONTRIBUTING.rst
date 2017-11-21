@@ -85,7 +85,7 @@ Ready to contribute? Here's how to set up `apub` for local development.
 
 6. When you're done making changes, check that your changes pass flake8 and the tests, including testing other Python versions with tox::
 
-    $ flake8 apub tests
+    $ pylint apub tests
     $ pytest apub tests
     $ tox
 
@@ -155,6 +155,6 @@ all systems. The most useful for day to day development are:
  * `test`: runs the test suit against the current python version
  * `test-all`: calls tox to run the test suit against any specified python
    versions
- * `coverage`: calculates the test coverage using pytest-cov
+ * `cover`: calculates the test coverage using pytest-cov
  * `docs`: builds and displays the documentation
 
