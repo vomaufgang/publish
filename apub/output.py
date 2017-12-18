@@ -7,6 +7,9 @@
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
+"""This module offers the output classes used to transform book objects into html or epub files.
+"""
+
 import logging
 import os
 import shutil
@@ -295,7 +298,7 @@ class HtmlOutput(Output):
     def __init__(self,
                  path: str,
                  **kwargs):
-        """Initializes a new instance of the :class:`EbookConvertOutput` class.
+        """Initializes a new instance of the :class:`HtmlOutput` class.
         """
         super().__init__(path, **kwargs)
 

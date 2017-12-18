@@ -7,6 +7,9 @@
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
+"""Python package with cli to turn markdown files into ebooks.
+"""
+
 from pkg_resources import resource_string
 
 __author__ = 'Christopher Knörndel'

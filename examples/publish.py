@@ -7,6 +7,10 @@
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
+"""This module offers a working example of how to use apub and its class model to produce html
+and epub files from markdown files.
+"""
+
 import logging
 from apub.book import Book, Chapter
 from apub.output import HtmlOutput, EbookConvertOutput
@@ -14,6 +18,12 @@ from apub.substitution import SimpleSubstitution
 
 
 def main():
+    """Shows how to use apub to produce an html file and an epub file while also
+    applying a substitution to the markdown text in the process.
+
+    Note that logging of everything but exceptions is turned off by default and has to be
+    turned on by the user by configuring the python standard logging module, for example
+    by calling logging.basicConfig with the desired configuration."""
     logging.basicConfig(format='%(message)s', level=logging.INFO)
 
     book = Book(

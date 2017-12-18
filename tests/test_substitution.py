@@ -7,18 +7,13 @@
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
-"""
-test_chapter
-----------------------------------
-
-Tests for `apub.model.chapter` module.
+"""Tests for `apub.substitution` module.
 """
 
 # pylint: disable=missing-docstring,no-self-use,invalid-name
 
 from abc import ABCMeta
 
-import pytest
 from apub.substitution import (Substitution,
                                SimpleSubstitution,
                                apply_substitutions)

@@ -7,6 +7,9 @@
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
+"""Tests for `apub.output` module.
+"""
+
 # pylint: disable=missing-docstring,no-self-use,invalid-name
 
 from typing import Iterable

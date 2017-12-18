@@ -7,11 +7,7 @@
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
-"""
-test_chapter
-----------------------------------
-
-Tests for the module `apub.book`.
+"""Tests for `apub.book` module.
 """
 
 # pylint: disable=missing-docstring,no-self-use,invalid-name

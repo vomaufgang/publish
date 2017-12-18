@@ -7,7 +7,8 @@
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
-"""The `apub.book` module defines types to hold the metadata of a book and its chapters.
+"""This module defines the book and chapter classes designed to hold the metadata of a book
+and its chapters required by apub.output to produce its output.
 """
 
 
