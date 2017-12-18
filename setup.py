@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#
+# apub - Python package with cli to turn markdown files into ebooks
+# Copyright (c) 2014 Christopher Knörndel
+#
+# Distributed under the MIT License
+# (license terms are at http://opensource.org/licenses/MIT).
+
+"""Setup script for easy_install and pip."""
 
 import sys
 
@@ -17,11 +25,10 @@ except ImportError:
 
 
 README = open('README.rst').read()
-HISTORY = open('docs/history.rst').read().replace('.. :changelog:', '')
 VERSION = open('apub/VERSION').read().strip()
 
 REQUIREMENTS = [
-    'markdown>=2.6'
+    'markdown>=2.6',
 ]
 
 TEST_REQUIREMENTS = [
@@ -30,12 +37,19 @@ TEST_REQUIREMENTS = [
     'pytest-runner',
 ]
 
+DEV_REQUIREMENTS = [
+    'tox',
+    'pylint',
+    'wheel',
+]
+DEV_REQUIREMENTS.extend(TEST_REQUIREMENTS)
+
 setup(
     name='apub',
     version=VERSION,
     description='Python package with command line interface to turn markdown '
                 'files into ebooks.',
-    long_description=README + '\n\n' + HISTORY,
+    long_description=README,
     author='Christopher Knörndel',
     author_email='cknoerndel@anited.de',
     url='https://github.com/vomaufgang/apub/',
@@ -46,6 +60,10 @@ setup(
         'apub': ['template.html', 'VERSION']
     },
     install_requires=REQUIREMENTS,
+    tests_require=TEST_REQUIREMENTS,
+    extras_require={
+        'dev': DEV_REQUIREMENTS
+    },
     license="MIT",
     zip_safe=False,
     keywords='apub',
@@ -56,5 +74,4 @@ setup(
         'Natural Language :: English',
         'Programming Language :: Python :: 3.6',
     ],
-    tests_require=TEST_REQUIREMENTS
 )

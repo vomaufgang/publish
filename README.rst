@@ -47,10 +47,6 @@ Features
 
 * Describe your project and desired output in a simple python file.
 
-  Import apub, describe your project in python using the apub api
-  and your python file will automatically accept commands like :code:`make`
-  when called from the command line.
-
   A simple project might look like this:
 
   .. code-block:: python
@@ -84,7 +80,7 @@ Features
 
   Given the above is saved in a file :code:`my_project.py` and the markdown
   files are present, the output :code:`my_book.html` can be created
-  by simply executing
+  by executing
 
   .. code-block:: shell
 
@@ -99,8 +95,8 @@ Features
   outputs, default outputs, text substitutions and more can be found at at
   https://apub.readthedocs.org
 
-  If complete and working examples are more to your liking you can find such a
-  documented example project in the **examples** subfolder of the repository.
+  If complete and working examples are more to your liking you can find such an
+  example project in the **examples** directory of the repository.
 
 * The following output types are available:
 
@@ -111,4 +107,14 @@ Features
 
 * The following output types are planned for an upcoming version:
 
-  * JSON for use with https://github.com/vomaufgang/areader
+  * HTML in JSON for use with https://github.com/vomaufgang/areader
+
+Installation
+============
+
+For the time being apub is only available via this git repository. You can use pip to install it
+into your local or virtual Python environment:
+
+.. code-block:: shell
+
+  pip install https://github.com/vomaufgang/apub/archive/master.zip

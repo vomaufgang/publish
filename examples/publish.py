@@ -15,9 +15,6 @@ from apub.substitution import SimpleSubstitution
 
 def main():
     logging.basicConfig(format='%(message)s', level=logging.INFO)
-    # todo document, logging off by default, needs to be configured by user, example
-    # with basicConfig, info is good level for general information, level only affects apub, does
-    # not affect ebook-convert's logging / console output
 
     book = Book(
         title='Example',

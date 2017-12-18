@@ -67,15 +67,13 @@ Ready to contribute? Here's how to set up `apub` for local development.
 
     $ python -m venv path_to_your_env && path_to_your_env/Scripts/activate
     $ cd apub/
-    $ pip install -e .
+    $ pip install -e .[dev]
 
 .. note:: Setup of your virtualenv may differ based on your operating system and whether your Python 3 executable is suffixed as `python3` or not.
 
   The example above is for Python 3 on Windows.
 
-4. Install development requirements like flake8 and pytest::
-
-    $ pip install -r requirements.txt
+  `pip install -e .[dev]` installs your local copy as an editable python package and also installs all required development requirements like pylint and pytest.
 
 5. Create a branch for local development::
 
@@ -83,15 +81,18 @@ Ready to contribute? Here's how to set up `apub` for local development.
    
    Now you can make your changes locally.
 
-6. When you're done making changes, check that your changes pass flake8 and the tests, including testing other Python versions with tox::
+6. When you're done making changes, check that your changes pass pylint and the tests::
 
-    $ pylint apub tests
-    $ pytest apub tests
+    $ pylint apub tests examples setup.py
+    $ python setup.py test
+
+   Including testing other Python versions with tox::
+
     $ tox
 
   Check the code coverage of your changes and unit tests::
 
-   $ pytest --cov=apub tests
+    $ pytest --cov-report term-missing --cov=apub
 
 7. Commit your changes and push your branch to GitHub::
 
@@ -100,6 +101,8 @@ Ready to contribute? Here's how to set up `apub` for local development.
     $ git push origin name-of-your-bugfix-or-feature
 
 8. Submit a pull request through the GitHub website.
+
+.. note:: Don't forget to add yourself to the list of contributors in AUTHORS.rst. :)
 
 Pull Request Guidelines
 =======================
@@ -125,15 +128,6 @@ To run a subset of tests::
 
 	$ pytest tests/test_apub.py
 
-Documentation
--------------
-
-The documentation is tailored to the readthedocs theme. The theme is part of the
-requirements, so if you pip installed those before using `pip install -r requirements.txt`
-you are good to go.
-
-.. note:: If the theme is not installed `make docs` will fall back to the
-   default sphinx theme.
 
 Makefiles
 ---------
@@ -144,13 +138,14 @@ apub, building the documentation and removing output folders.
 
 You can use the makefile like so::
 
-    make [command]
+    $ make [command]
 
 The commands that can be invoked through `make` are the same on
 all systems. The most useful for day to day development are:
 
  * `clean`: removes all temporary build and output directories that may have
-   been created during testing or simply running the package
+   been created during testing or simply running the package (only available on
+   *nix operating systems for now)
  * `lint`: runs flake8 on apub and the tests to verify pep8 compliance
  * `test`: runs the test suit against the current python version
  * `test-all`: calls tox to run the test suit against any specified python

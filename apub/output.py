@@ -44,9 +44,6 @@ SUPPORTED_EBOOKCONVERT_ATTRIBUTES = (
     'title'
 )
 
-# todo: Isn't EbookConvertOutput just a specialization of HtmlOutput, thus rendering Output
-#       as an ABC obsolete? 90% of
-
 
 class Output(metaclass=ABCMeta):
     """Abstract base class for specific Output implementations.
@@ -96,8 +93,8 @@ class Output(metaclass=ABCMeta):
         """
         if self.force_publish:
             return chapters
-        else:
-            return list(filter(lambda c: c.publish is True, chapters))
+
+        return list(filter(lambda c: c.publish is True, chapters))
 
     def _get_css(self) -> str:
         # todo document _get_css
@@ -205,7 +202,15 @@ class EbookConvertOutput(Output):
     def make(self,
              book: Book,
              substitutions: Optional[Iterable[Substitution]] = None):
-        """Makes the Output for the provided book and substitutions.
+        """Makes an ebook from the provided book object and the markdown chapters
+        specified therein.
+
+        Substitutions are applied to the raw markdown before the markdown is
+        processed.
+
+        Args:
+            book: The book.
+            substitutions: The list of substitutions.
         """
         LOG.info('Making EbookConvertOutput ...')
         if not book:
@@ -247,7 +252,17 @@ class EbookConvertOutput(Output):
             shutil.rmtree(temp_directory)
 
     def _get_call_params(self, book, temp_path):
-        # todo document _get_call_params
+        """Gets the call params for the ebookconvert commandline.
+
+        The book's attributes are translated into ebookconvert metadata commandline options
+        while any additional options present in EbookConvertOutput.ebookconvert_params are
+        appended to the call params as is.
+
+        Args:
+            book: The book object.
+            temp_path: The temporary path the html file that will be passed to ebookconvert
+                was written to.
+        """
         call_params = [
             'ebook-convert',
             temp_path,
@@ -261,23 +276,37 @@ class EbookConvertOutput(Output):
 class HtmlOutput(Output):
     """Turns a Book object and its chapters into an html document.
 
-    :ivar css_path: The path to the style sheet.
-    :ivar force_publish: Determines whether to force publish all chapters.
+    Args:
+        path: The output path.
+        **kwargs: Any other attribute of this class. (see Attributes below)
 
-        If set to true, all chapters of the book will be published
-        no matter how the chapters are configured.
 
-        Defaults to False.
-    :ivar path: The output path.
+    Attributes:
+        path (str): The output path.
+        css_path (str): The path to the style sheet.
+        force_publish (bool): Determines wether to force publish all chapters.
+
+            If set to true, all chapters of the book will be published
+            no matter how the chapters are configured.
+
+            Defaults to False.
     """
+
+    def __init__(self,
+                 path: str,
+                 **kwargs):
+        """Initializes a new instance of the :class:`EbookConvertOutput` class.
+        """
+        super().__init__(path, **kwargs)
 
     def make(self,
              book: Book,
              substitutions: Optional[Iterable[Substitution]] = None):
         """Makes the Output for the provided book and substitutions.
 
-        :param book: The book.
-        :param substitutions: The substitutions.
+        Args:
+            book: The book.
+            substitutions: The substitutions.
         """
         LOG.info('Making HtmlOutput ...')
         if not book:
@@ -348,4 +377,5 @@ def _yield_attributes_as_params(object_) -> Generator[str, None, None]:
 
 
 class NoChaptersFoundError(Exception):
+    """No chapters found."""
     pass

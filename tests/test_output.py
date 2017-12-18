@@ -56,13 +56,15 @@ TEST_HTML_TEMPLATE = """<!DOCTYPE html>
 </html>"""
 
 
+# noinspection PyMissingOrEmptyDocstring
+class OutputStub(Output):
+    def make(self, book: Book, substitutions: Iterable[Substitution] = None):
+        pass
+
+
 class TestOutput:
     def test_constructor(self):
-        class TestOutput(Output):
-            def make(self, book: Book, substitutions: Iterable[Substitution] = None):
-                pass
-
-        output = TestOutput('a',
+        output = OutputStub('a',
                             css_path='b',
                             force_publish=True)
 
@@ -71,22 +73,14 @@ class TestOutput:
         assert output.force_publish
 
     def test_constructor_default_values(self):
-        class TestOutput(Output):
-            def make(self, book: Book, substitutions: Iterable[Substitution] = None):
-                pass
-
-        output = TestOutput('a')
+        output = OutputStub('a')
 
         assert output.path == 'a'
         assert output.css_path is None
         assert output.force_publish is not True
 
     def test_get_chapters_to_be_published(self):
-        class TestOutput(Output):
-            def make(self, book: Book, substitutions: Iterable[Substitution] = None):
-                pass
-
-        output = TestOutput('a')
+        output = OutputStub('a')
         chapters = [Chapter('1', publish=True),
                     Chapter('2', publish=False),
                     Chapter('3')]  # defaults to True
@@ -98,11 +92,7 @@ class TestOutput:
         assert actual == expected
 
     def test_get_chapters_to_be_published_force_publish_true(self):
-        class TestOutput(Output):
-            def make(self, book: Book, substitutions: Iterable[Substitution] = None):
-                pass
-
-        output = TestOutput('a', force_publish=True)
+        output = OutputStub('a', force_publish=True)
         chapters = [Chapter('1', publish=True),
                     Chapter('2', publish=False),
                     Chapter('3')]  # defaults to True
@@ -115,11 +105,7 @@ class TestOutput:
         assert actual == expected
 
     def test_get_chapters_to_be_published_force_publish_false(self):
-        class TestOutput(Output):
-            def make(self, book: Book, substitutions: Iterable[Substitution] = None):
-                pass
-
-        output = TestOutput('a', force_publish=False)
+        output = OutputStub('a', force_publish=False)
         chapters = [Chapter('1', publish=True),
                     Chapter('2', publish=False),
                     Chapter('3')]  # defaults to True
