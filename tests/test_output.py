@@ -20,7 +20,7 @@ from apub.book import Book, Chapter
 from apub.output import (SUPPORTED_EBOOKCONVERT_ATTRIBUTES,
                          _apply_template,
                          _yield_attributes_as_params,
-                         Output)
+                         HtmlOutput)
 from apub.substitution import Substitution
 from tests import get_test_book
 
@@ -60,7 +60,7 @@ TEST_HTML_TEMPLATE = """<!DOCTYPE html>
 
 
 # noinspection PyMissingOrEmptyDocstring
-class OutputStub(Output):
+class OutputStub(HtmlOutput):
     def make(self, book: Book, substitutions: Iterable[Substitution] = None):
         pass
 

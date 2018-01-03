@@ -15,13 +15,13 @@ import os
 import shutil
 import subprocess
 import uuid
-from abc import ABCMeta, abstractmethod
+from pkg_resources import resource_string
 from tempfile import mkdtemp
 from textwrap import fill
 from typing import Iterable, Generator, Optional
 
 import markdown
-from pkg_resources import resource_string
+from jinja2 import Template
 
 from apub import __version__ as apub_version
 from apub.book import Book, Chapter
@@ -48,39 +48,57 @@ SUPPORTED_EBOOKCONVERT_ATTRIBUTES = (
 )
 
 
-class Output(metaclass=ABCMeta):
-    """Abstract base class for specific Output implementations.
+class HtmlOutput:
+    """Turns a Book object and its chapters into an html document.
 
     Args:
         path: The output path.
-        **kwargs: Any other attribute of this class. (see Attributes)
+        **kwargs: Any other attribute of this class. (see Attributes below)
+
 
     Attributes:
         path (str): The output path.
         css_path (str): The path to the style sheet.
-        force_publish (bool): Determines whether to force publish all chapters.
+        force_publish (bool): Determines wether to force publish all chapters.
 
             If set to true, all chapters of the book will be published
             no matter how the chapters are configured.
+
+            Defaults to False.
     """
 
     def __init__(self,
                  path: str,
                  **kwargs):
-        """Initializes a new instance of the :class:`Output` class.
+        """Initializes a new instance of the :class:`HtmlOutput` class.
         """
         self.path = path
         self.css_path = kwargs.pop('css_path', None)
         self.force_publish = kwargs.pop('force_publish', False)
 
-    @abstractmethod
-    def make(self, book: Book, substitutions: Iterable[Substitution] = None):
+    def make(self,
+             book: Book,
+             substitutions: Optional[Iterable[Substitution]] = None):
         """Makes the Output for the provided book and substitutions.
 
-        Abstract method: Implementation has to be provided by any Output
-        subclass.
+        Args:
+            book: The book.
+            substitutions: The substitutions.
         """
-        pass  # pragma: no cover
+        # todo: test for AttributeError, integration test everything else
+        LOG.info('Making HtmlOutput ...')
+        if not book:
+            raise AttributeError("book must not be None")
+
+        if not substitutions:
+            substitutions = []
+
+        html_document = self._get_html_document(book, substitutions)
+
+        with open(self.path, 'w') as file:
+            file.write(html_document)
+
+        LOG.info('... HtmlOutput finished')
 
     def get_chapters_to_be_published(self,
                                      chapters: Iterable[Chapter]
@@ -170,7 +188,7 @@ class Output(metaclass=ABCMeta):
             raise AttributeError('Output path must be set.')
 
 
-class EbookConvertOutput(Output):
+class EbookConvertOutput(HtmlOutput):
     """Turns Book objects and its chapters into an ebook using
     Kavid Goyals ebookconvert command line tool.
 
@@ -276,56 +294,6 @@ class EbookConvertOutput(Output):
         return call_params
 
 
-class HtmlOutput(Output):
-    """Turns a Book object and its chapters into an html document.
-
-    Args:
-        path: The output path.
-        **kwargs: Any other attribute of this class. (see Attributes below)
-
-
-    Attributes:
-        path (str): The output path.
-        css_path (str): The path to the style sheet.
-        force_publish (bool): Determines wether to force publish all chapters.
-
-            If set to true, all chapters of the book will be published
-            no matter how the chapters are configured.
-
-            Defaults to False.
-    """
-
-    def __init__(self,
-                 path: str,
-                 **kwargs):
-        """Initializes a new instance of the :class:`HtmlOutput` class.
-        """
-        super().__init__(path, **kwargs)
-
-    def make(self,
-             book: Book,
-             substitutions: Optional[Iterable[Substitution]] = None):
-        """Makes the Output for the provided book and substitutions.
-
-        Args:
-            book: The book.
-            substitutions: The substitutions.
-        """
-        LOG.info('Making HtmlOutput ...')
-        if not book:
-            raise AttributeError("book must not be None")
-
-        if not substitutions:
-            substitutions = []
-
-        html_document = self._get_html_document(book, substitutions)
-
-        with open(self.path, 'w') as file:
-            file.write(html_document)
-
-        LOG.info('... HtmlOutput finished')
-
-
 def _apply_template(html_content: str,
                     title: str,
                     css: str,
@@ -341,11 +309,11 @@ def _apply_template(html_content: str,
     # would produce double line breaks when writing the resulting string
     # back to disc, thus we have to do the replacement ourselves, too.
 
-    return template.format(content=html_content,
-                           title=title,
-                           css=css,
-                           language=language,
-                           apub_version=apub_version)
+    return Template(template).render(content=html_content,
+                                     title=title,
+                                     css=css,
+                                     language=language,
+                                     apub_version=apub_version)
 
 
 def _yield_attributes_as_params(object_) -> Generator[str, None, None]:

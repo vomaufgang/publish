@@ -29,6 +29,7 @@ VERSION = open('apub/VERSION').read().strip()
 
 REQUIREMENTS = [
     'markdown>=2.6',
+    'Jinja2>=2.10'
 ]
 
 TEST_REQUIREMENTS = [
