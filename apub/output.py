@@ -271,6 +271,7 @@ class EbookConvertOutput(HtmlOutput):
                     fill('Could not find ebook-convert. Please install calibre if you want to '
                          'use EbookconvertOutput and make sure ebook-convert is accessible '
                          'through the PATH variable.'))
+                return
             LOG.info('... EbookConvertOutput finished')
         finally:
             shutil.rmtree(temp_directory)
