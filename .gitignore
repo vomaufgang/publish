@@ -54,3 +54,6 @@ docs/_build
 !.vscode/launch.json
 !.vscode/extensions.json
 .history
+
+# virtual environments
+/venv/
