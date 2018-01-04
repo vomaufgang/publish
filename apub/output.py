@@ -102,7 +102,7 @@ class HtmlOutput:
 
     def get_chapters_to_be_published(self,
                                      chapters: Iterable[Chapter]
-                                    ) -> Iterable[Chapter]:
+                                     ) -> Iterable[Chapter]:
         """Gets the list of chapters to be published based on each chapters
         `publish` attribute.
 
@@ -132,7 +132,8 @@ class HtmlOutput:
 
     def _get_html_document(self,
                            book: Book,
-                           substitutions: Iterable[Substitution]) -> str:
+                           substitutions: Iterable[Substitution]
+                           ) -> str:
         # todo document _get_html_document
         html_content = self._get_html_content(book.chapters, substitutions)
         html_document = _apply_template(html_content=html_content,
@@ -155,8 +156,7 @@ class HtmlOutput:
         return markdown.markdown(markdown_)
 
     def _get_markdown_content(self,
-                              chapters: Iterable[Chapter]
-                             ) -> str:
+                              chapters: Iterable[Chapter]) -> str:
         # todo document _get_markdown_content
         markdown_ = []
         md_paragraph_sep = '\n\n'
@@ -257,7 +257,10 @@ class EbookConvertOutput(HtmlOutput):
             with open(temp_path, 'w') as file:
                 file.write(html_document)
 
-            call_params = self._get_call_params(book, temp_path)
+            call_params = _get_ebook_convert_params(book,
+                                                    input_path=temp_path,
+                                                    output_path=self.path,
+                                                    additional_params=self.ebookconvert_params)
 
             LOG.info('Calling ebook-convert ...')
 
@@ -272,26 +275,40 @@ class EbookConvertOutput(HtmlOutput):
         finally:
             shutil.rmtree(temp_directory)
 
-    def _get_call_params(self, book, temp_path):
-        """Gets the call params for the ebookconvert commandline.
 
-        The book's attributes are translated into ebookconvert metadata commandline options
-        while any additional options present in EbookConvertOutput.ebookconvert_params are
-        appended to the call params as is.
+def _get_ebook_convert_params(book: Book,
+                              input_path: str,
+                              output_path: str,
+                              additional_params: Optional[Iterable[str]] = None
+                              ) -> Iterable[str]:
+    """Gets the call params for the ebookconvert commandline.
 
-        Args:
-            book: The book object.
-            temp_path: The temporary path the html file that will be passed to ebookconvert
-                was written to.
-        """
-        call_params = [
-            'ebook-convert',
-            temp_path,
-            self.path
-        ]
-        call_params.extend(_yield_attributes_as_params(book))
-        call_params.extend(self.ebookconvert_params)
-        return call_params
+    The book's attributes are translated into ebookconvert metadata commandline options
+    while any additional options present in EbookConvertOutput.ebookconvert_params are
+    appended to the call params as is.
+
+    Args:
+        book: The book object.
+        input_path: The path the html file that will be passed to ebookconvert.
+        output_path: The output path.
+    """
+    if not input_path:
+        raise AttributeError('input_path is missing')
+
+    if not output_path:
+        raise AttributeError('output_path is missing')
+
+    if not additional_params:
+        additional_params = []
+
+    call_params = [
+        'ebook-convert',
+        input_path,
+        output_path
+    ]
+    call_params.extend(_yield_attributes_as_params(book))
+    call_params.extend(additional_params)
+    return call_params
 
 
 def _apply_template(html_content: str,

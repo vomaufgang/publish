@@ -29,7 +29,7 @@ VERSION = open('apub/VERSION').read().strip()
 
 REQUIREMENTS = [
     'markdown>=2.6',
-    'Jinja2>=2.10'
+    'Jinja2>=2.10',
 ]
 
 TEST_REQUIREMENTS = [
@@ -69,7 +69,7 @@ setup(
     zip_safe=False,
     keywords='apub',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: End Users/Desktop',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
