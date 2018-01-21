@@ -15,10 +15,10 @@ import os
 import shutil
 import subprocess
 import uuid
-from pkg_resources import resource_string
 from tempfile import mkdtemp
 from textwrap import fill
 from typing import Iterable, Generator, Optional
+from pkg_resources import resource_string
 
 import markdown
 from jinja2 import Template
