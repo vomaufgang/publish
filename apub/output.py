@@ -118,7 +118,11 @@ class HtmlOutput:
         return list(filter(lambda c: c.publish is True, chapters))
 
     def _get_css(self) -> str:
-        # todo document _get_css
+        """Gets the css from the css file specified in css_path as a string.
+
+        Returns:
+            The css from the css file specified in css_path as a string.
+        """
         if not self.css_path:
             return ''
 
@@ -134,7 +138,16 @@ class HtmlOutput:
                            book: Book,
                            substitutions: Iterable[Substitution]
                            ) -> str:
-        # todo document _get_html_document
+        """Takes a book, renders it to html, applying the list of substitutions in the process
+        and returns the finished html document as a string.
+
+        Args:
+            book: The book.
+            substitutions: The list of substitutions.
+
+        Returns:
+            The html document as a string.
+        """
         html_content = self._get_html_content(book.chapters, substitutions)
         html_document = _apply_template(html_content=html_content,
                                         title=book.title,
@@ -146,6 +159,23 @@ class HtmlOutput:
     def _get_html_content(self,
                           chapters: Iterable[Chapter],
                           substitutions: Iterable[Substitution]) -> str:
+        """Gets the content of the provided list of chapters as as an html string.
+
+        The list of substitutions is applied to the markdown content before it is rendered to
+        html.
+
+        The order of the chapters is preserved.
+
+        The resulting html string does not include a head or body, only the chapters markdown
+        turned into html.
+
+        Args:
+            chapters: The list of chapters.
+            substitutions: The list of substitutions.
+
+        Returns:
+            The content of the provided list of chapters as an html string.
+        """
         # todo document _get_html_content
         markdown_ = self._get_markdown_content(chapters)
         markdown_ = apply_substitutions(
@@ -157,7 +187,17 @@ class HtmlOutput:
 
     def _get_markdown_content(self,
                               chapters: Iterable[Chapter]) -> str:
-        # todo document _get_markdown_content
+        """Gets the markdown content of the provided list of chapters concatenated into a single
+        string.
+
+        The order of the chapters is preserved.
+
+        Args:
+            chapters: The list of chapters.
+
+        Returns:
+            The markdown content of the list of chapters concatenated into a single string.
+        """
         markdown_ = []
         md_paragraph_sep = '\n\n'
 
