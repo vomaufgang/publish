@@ -93,6 +93,8 @@ class HtmlOutput:
         if not substitutions:
             substitutions = []
 
+        self.validate()
+
         html_document = self._get_html_document(book, substitutions)
 
         with open(self.path, 'w') as file:
