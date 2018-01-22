@@ -404,7 +404,7 @@ def _yield_attributes_as_params(object_) -> Generator[str, None, None]:
 
         attr = str(attr)
         if attr and not attr.isspace():
-            yield '--{0}="{1}"'.format(attr_name, attr)
+            yield '--{0}={1}'.format(attr_name, attr)
 
 
 class NoChaptersFoundError(Exception):
