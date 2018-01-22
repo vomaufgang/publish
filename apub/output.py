@@ -201,7 +201,7 @@ class HtmlOutput:
             The markdown content of the list of chapters concatenated into a single string.
         """
         markdown_ = []
-        md_paragraph_sep = os.linesep + os.linesep
+        md_paragraph_sep = '\n\n'
 
         if not chapters:
             raise NoChaptersFoundError('Your book contains no chapters.')
