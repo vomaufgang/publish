@@ -12,7 +12,7 @@ apub.output to apply text substitutions to the markdown content before it is ren
 or epub.
 """
 
-# pylint: disable=too-few-public-methods
+# pylint: disable=too-few-public-methods,anomalous-backslash-in-string
 
 import logging.config
 import re
@@ -99,14 +99,60 @@ class SimpleSubstitution(Substitution):
 
 
 class RegexSubstitution(Substitution):
-    # todo document RegexSubstitution
+    """The RegexSubstitution allows you to use regular expressions to make
+    text replacements.
+
+    Substitutions are always applied to all chapters when calling
+    `*Output.make(book, substitutions)`.
+
+    Args:
+        pattern: The search pattern.
+        replace_with: The string to replace the pattern with. If the regular expression
+            uses groups to only replace part of the expression use standard python regex
+            syntax to denote these groups, i.e. \1, \2 and so on.
+
+            See the documentation of the python re package for more information.
+
+    Examples:
+
+        .. code-block:: python
+
+            book = Book()
+            book.chapters.append(Chapter(source='example.md'))
+
+            substitution = RegexSubstitution(pattern=r'\+\+(.*?)\+\+',
+                                             replace_with='<span class="hello">\1</span>')
+
+            HtmlOutput(path='example.html').make(book, [substitution])
+
+        Content of example.md:
+
+        .. code-block:: md
+
+            ++World!++
+
+        This leads to the following output in example.html (shortened):
+
+        .. code-block:: html
+
+            <span class="hello">World!</span>
+
+    """
+
     def __init__(self, pattern, replace_with):
-        self.re = re.compile(pattern)
+        self.regular_expression = re.compile(pattern)
         self.replace_with = replace_with
 
     def apply_to(self, text: str):
-        # todo document apply_to
-        return self.re.sub(self.replace_with, text)
+        """Applies the substitution to the text, returning the changed text.
+
+        Args:
+            text: The text to apply this simple substitution to.
+
+        Returns:
+            The changed text.
+        """
+        return self.regular_expression.sub(self.replace_with, text)
 
 
 def apply_substitutions(
