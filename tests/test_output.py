@@ -146,7 +146,7 @@ def test_yield_attributes_as_params_from_dict():
     attributes = {attribute: attribute
                   for attribute in SUPPORTED_EBOOKCONVERT_ATTRIBUTES}
 
-    expected = [f'--{attribute}="{attribute}"'
+    expected = [f'--{attribute}={attribute}'
                 for attribute in SUPPORTED_EBOOKCONVERT_ATTRIBUTES]
     actual = list(_yield_attributes_as_params(attributes))
 
@@ -158,7 +158,7 @@ def test_yield_attributes_as_params_from_dict_omits_unsupported():
                   for attribute in SUPPORTED_EBOOKCONVERT_ATTRIBUTES}
     attributes['unsupported'] = 'unsupported'
 
-    expected = [f'--{attribute}="{attribute}"'
+    expected = [f'--{attribute}={attribute}'
                 for attribute in SUPPORTED_EBOOKCONVERT_ATTRIBUTES]
     actual = list(_yield_attributes_as_params(attributes))
 
@@ -168,7 +168,7 @@ def test_yield_attributes_as_params_from_dict_omits_unsupported():
 def test_yield_attributes_as_params_from_object():
     object_ = get_test_book()
 
-    expected = [f'--{attribute}="{attribute}"'
+    expected = [f'--{attribute}={attribute}'
                 for attribute in SUPPORTED_EBOOKCONVERT_ATTRIBUTES]
     actual = list(_yield_attributes_as_params(object_))
 
@@ -179,7 +179,7 @@ def test_yield_attributes_as_params_from_object_omits_unsupported():
     object_ = get_test_book()
     object_.unsupported = 'unsupported'
 
-    expected = [f'--{attribute}="{attribute}"'
+    expected = [f'--{attribute}={attribute}'
                 for attribute in SUPPORTED_EBOOKCONVERT_ATTRIBUTES]
     actual = list(_yield_attributes_as_params(object_))
 

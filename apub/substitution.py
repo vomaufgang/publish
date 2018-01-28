@@ -15,17 +15,13 @@ or epub.
 # pylint: disable=too-few-public-methods
 
 import logging.config
+import re
 from abc import ABCMeta, abstractmethod
 from typing import Iterable
 
 LOG = logging.getLogger(__name__)
 LOG.addHandler(logging.NullHandler())
 
-
-# todo module docstring
-# todo consolidate all examples in module docstring
-
-# todo move back to google docstrings, now that the autodoc type hint module works with napoleon.
 
 class Substitution(metaclass=ABCMeta):
     """The Substitution class acts as an abstract interface for future
@@ -100,6 +96,17 @@ class SimpleSubstitution(Substitution):
             The changed text.
         """
         return text.replace(self.old, self.new)
+
+
+class RegexSubstitution(Substitution):
+    # todo document RegexSubstitution
+    def __init__(self, pattern, replace_with):
+        self.re = re.compile(pattern)
+        self.replace_with = replace_with
+
+    def apply_to(self, text: str):
+        # todo document apply_to
+        return self.re.sub(self.replace_with, text)
 
 
 def apply_substitutions(
