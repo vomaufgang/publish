@@ -185,4 +185,27 @@ def test_yield_attributes_as_params_from_object_omits_unsupported():
 
     assert actual == expected
 
+
+def test_yield_attributes_as_params_from_dict_missing_supported_attribute_omits_attribute():
+    attributes = {attribute: attribute
+                  for attribute in SUPPORTED_EBOOKCONVERT_ATTRIBUTES[:-1]}
+
+    expected = [f'--{attribute}={attribute}'
+                for attribute in SUPPORTED_EBOOKCONVERT_ATTRIBUTES[:-1]]
+    actual = list(_yield_attributes_as_params(attributes))
+
+    assert actual == expected
+
+
+def test_yield_attributes_as_params_value_none_omits_attribute():
+    attributes = {attribute: attribute
+                  for attribute in SUPPORTED_EBOOKCONVERT_ATTRIBUTES[:-1]}
+    attributes[SUPPORTED_EBOOKCONVERT_ATTRIBUTES[-1]] = None
+
+    expected = [f'--{attribute}={attribute}'
+                for attribute in SUPPORTED_EBOOKCONVERT_ATTRIBUTES[:-1]]
+    actual = list(_yield_attributes_as_params(attributes))
+
+    assert actual == expected
+
 # todo: edge cases

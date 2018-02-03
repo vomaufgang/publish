@@ -396,7 +396,7 @@ def _yield_attributes_as_params(object_) -> Generator[str, None, None]:
         else:
             try:
                 attr = object_[attr_name]
-            except TypeError:
+            except (TypeError, KeyError):
                 continue
 
         if not attr:
