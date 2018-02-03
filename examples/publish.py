@@ -14,7 +14,7 @@ and epub files from markdown files.
 import logging
 from apub.book import Book, Chapter
 from apub.output import HtmlOutput, EbookConvertOutput
-from apub.substitution import SimpleSubstitution
+from apub.substitution import SimpleSubstitution, RegexSubstitution
 
 
 def main():
@@ -35,19 +35,21 @@ def main():
         [Chapter(source_path='first_chapter.md'),
          Chapter(source_path='second_chapter.md')])
 
-    substitution = SimpleSubstitution(
-        old='Cows',
-        new='Substitutions')
+    substitutions = [
+        SimpleSubstitution(old='Cows',
+                           new='Substitutions'),
+        RegexSubstitution(pattern=r'\+\+(.*?)\+\+',
+                          replace_with=r'<span class="small-caps">\1</span>')]
 
     html_output = HtmlOutput(
         path='example.html',
         css_path='style.css')
-    html_output.make(book, [substitution])
+    html_output.make(book, substitutions)
 
     ebook_output = EbookConvertOutput(
         path='example.epub',
         css_path='style.css')
-    ebook_output.make(book, [substitution])
+    ebook_output.make(book, substitutions)
 
 
 if __name__ == '__main__':

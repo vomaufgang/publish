@@ -5,3 +5,5 @@
 <div>See?</div>
 
 Cows work too.
+
+++RegexSubstitution allows for more advanced substitutions.++
