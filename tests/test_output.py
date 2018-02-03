@@ -14,13 +14,15 @@
 
 from typing import Iterable
 
+import pytest
+
 from apub import __version__ as apub_version
 from apub.book import Book, Chapter
 # noinspection PyProtectedMember
 from apub.output import (SUPPORTED_EBOOKCONVERT_ATTRIBUTES,
                          _apply_template,
                          _yield_attributes_as_params,
-                         HtmlOutput)
+                         HtmlOutput, _get_ebook_convert_params)
 from apub.substitution import Substitution
 from tests import get_test_book
 
@@ -208,4 +210,20 @@ def test_yield_attributes_as_params_value_none_omits_attribute():
 
     assert actual == expected
 
-# todo: edge cases
+
+def test_get_ebook_convert_params_book_none_raises_attribute_error():
+    with pytest.raises(AttributeError):
+        # noinspection PyTypeChecker
+        _get_ebook_convert_params(None, input_path='not none', output_path='not none')
+
+
+def test_get_ebook_convert_params_input_path_none_raises_attribute_error():
+    with pytest.raises(AttributeError):
+        # noinspection PyTypeChecker
+        _get_ebook_convert_params(Book(''), input_path=None, output_path='not none')
+
+
+def test_get_ebook_convert_params_output_path_none_raises_attribute_error():
+    with pytest.raises(AttributeError):
+        # noinspection PyTypeChecker
+        _get_ebook_convert_params(Book(''), input_path='not none', output_path=None)

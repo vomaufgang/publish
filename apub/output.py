@@ -178,7 +178,6 @@ class HtmlOutput:
         Returns:
             The content of the provided list of chapters as an html string.
         """
-        # todo document _get_html_content
         markdown_ = self._get_markdown_content(chapters)
         markdown_ = apply_substitutions(
             markdown_,
@@ -335,6 +334,9 @@ def _get_ebook_convert_params(book: Book,
         input_path: The path the html file that will be passed to ebookconvert.
         output_path: The output path.
     """
+    if not book:
+        raise AttributeError('book is missing')
+
     if not input_path:
         raise AttributeError('input_path is missing')
 
