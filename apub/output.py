@@ -360,7 +360,18 @@ def _apply_template(html_content: str,
                     title: str,
                     css: str,
                     language: str) -> str:
-    # todo document _apply_template
+    """Renders the html content, title, css and document language into the jinja2 formatted
+    template and returns the resulting html document.
+
+    Args:
+        html_content: The html content gets inserted into the {{ content }} of the template.
+        title: The title gets inserted into the {{ title }} of the template.
+        css: The css gets inserted into the {{ css }} of the template.
+        language: The language gets inserted into the {{ language }} of the template.
+
+    Returns:
+        The html document.
+    """
     template = resource_string(__name__, 'template.html') \
         .decode('utf-8') \
         .replace('\r\n', '\n')
