@@ -17,7 +17,7 @@ or epub.
 import logging.config
 import re
 from abc import ABCMeta, abstractmethod
-from typing import Iterable
+from typing import Iterable, Union
 
 LOG = logging.getLogger(__name__)
 LOG.addHandler(logging.NullHandler())
@@ -139,7 +139,8 @@ class RegexSubstitution(Substitution):
 
     """
 
-    def __init__(self, pattern, replace_with):
+    def __init__(self, pattern: Union[bytes, str],
+                 replace_with: Union[bytes, str]):
         self.regular_expression = re.compile(pattern)
         self.replace_with = replace_with
 

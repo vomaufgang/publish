@@ -10,10 +10,12 @@
 """Tests for `apub.output` module.
 """
 
-# pylint: disable=missing-docstring,no-self-use,invalid-name
+# pylint: disable=missing-docstring,no-self-use,invalid-name,protected-access
 
 from typing import Iterable
+from unittest.mock import patch, mock_open
 
+import os
 import pytest
 
 from apub import __version__ as apub_version
@@ -23,7 +25,7 @@ from apub.output import (SUPPORTED_EBOOKCONVERT_ATTRIBUTES,
                          _apply_template,
                          _yield_attributes_as_params,
                          HtmlOutput, _get_ebook_convert_params)
-from apub.substitution import Substitution
+from apub.substitution import Substitution, SimpleSubstitution
 from tests import get_test_book
 
 
@@ -67,7 +69,7 @@ class OutputStub(HtmlOutput):
         pass
 
 
-class TestOutput:
+class TestHtmlOutput:
     def test_constructor(self):
         output = OutputStub('a',
                             css_path='b',
@@ -120,6 +122,57 @@ class TestOutput:
         actual = output.get_chapters_to_be_published(chapters)
 
         assert actual == expected
+
+    def test_get_css(self):
+        with patch('builtins.open', mock_open(read_data='css')) as mock_file:
+            output = HtmlOutput('some.path', css_path='some.css')
+            actual = output._get_css()
+
+        expected = 'css'
+
+        assert actual == expected
+        mock_file.assert_called_once_with(os.path.join(os.getcwd(), 'some.css'), 'r')
+
+    def test_get_css_returns_empty_str_if_no_css_path(self):
+        output = HtmlOutput('some.path')
+
+        expected = ''
+        actual = output._get_css()
+
+        assert actual == expected
+
+    def test_make(self):
+        output = HtmlOutput('some.path')
+        book = Book('title')
+        substitution = SimpleSubstitution(old='a', new='b')
+        substitutions = [substitution]
+
+        with patch('builtins.open', mock_open(read_data='css'), create=True) as mock_file, \
+                patch.object(output, '_get_html_document') as mock_get_html_document, \
+                patch.object(output, 'validate') as mock_validate:
+            mock_get_html_document.return_value = 'document'
+            output.make(book, substitutions)
+
+        mock_get_html_document.assert_called_once_with(book, substitutions)
+        mock_file.assert_called_once_with('some.path', 'w')
+        mock_file_handle = mock_file()
+        mock_file_handle.write.assert_called_once_with('document')
+        mock_validate.assert_called_once()
+
+    def test_make_without_substitutions(self):
+        output = HtmlOutput('some.path')
+        book = Book('title')
+
+        with patch('builtins.open', mock_open(read_data='css'), create=True) as mock_file, \
+                patch.object(output, '_get_html_document') as mock_get_html_document, \
+                patch.object(output, 'validate') as mock_validate:
+            mock_get_html_document.return_value = 'document'
+            output.make(book)
+
+        mock_file.assert_called_once_with('some.path', 'w')
+        mock_file_handle = mock_file()
+        mock_file_handle.write.assert_called_once_with('document')
+        mock_validate.assert_called_once()
 
 
 def test_apply_template():

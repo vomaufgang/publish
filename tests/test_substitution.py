@@ -16,7 +16,7 @@ from abc import ABCMeta
 
 from apub.substitution import (Substitution,
                                SimpleSubstitution,
-                               apply_substitutions)
+                               apply_substitutions, RegexSubstitution)
 
 
 class TestSubstitution:
@@ -60,14 +60,45 @@ class TestSimpleSubstitution:
         assert actual == ''
 
 
+class TestRegexSubstitution:
+    def test_apply_to(self):
+        substitution = RegexSubstitution(pattern=r'\+\+(.*?)\+\+',
+                                         replace_with=r'<span class="small-caps">\1</span>')
+        text = '\n'.join([
+            'foo',
+            '++something else++',
+            'something foo',
+        ])
+        expected = '\n'.join([
+            'foo',
+            '<span class="small-caps">something else</span>',
+            'something foo',
+        ])
+
+        actual = substitution.apply_to(text)
+
+        assert actual == expected
+
+    def test_apply_to_empty_input(self):
+        substitution = RegexSubstitution(pattern=r'\+\+(.*?)\+\+',
+                                         replace_with='<span class="small-caps">\1</span>')
+
+        actual = substitution.apply_to('')
+
+        assert actual == ''
+
+
 def test_apply_substitutions():
     substitution1 = SimpleSubstitution(old='foo', new='bar')
     substitution2 = SimpleSubstitution(old='something', new='anything')
+    substitution3 = RegexSubstitution(pattern=r'\+\+(.*?)\+\+',
+                                      replace_with=r'<span class="small-caps">\1</span>')
 
     text = '\n'.join([
         'foo',
         'foo',
         'something else',
+        '++something else++',
         'something foo',
         '',
         'foo else',
@@ -76,11 +107,12 @@ def test_apply_substitutions():
         'bar',
         'bar',
         'anything else',
+        '<span class="small-caps">anything else</span>',
         'anything bar',
         '',
         'bar else',
     ])
 
-    actual = apply_substitutions(text, [substitution1, substitution2])
+    actual = apply_substitutions(text, [substitution1, substitution2, substitution3])
 
     assert actual == expected

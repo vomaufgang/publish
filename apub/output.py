@@ -85,10 +85,7 @@ class HtmlOutput:
             book: The book.
             substitutions: The substitutions.
         """
-        # todo: test for AttributeError, integration test everything else
         LOG.info('Making HtmlOutput ...')
-        if not book:
-            raise AttributeError("book must not be None")
 
         if not substitutions:
             substitutions = []
