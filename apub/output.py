@@ -331,15 +331,6 @@ def _get_ebook_convert_params(book: Book,
         input_path: The path the html file that will be passed to ebookconvert.
         output_path: The output path.
     """
-    if not book:
-        raise AttributeError('book is missing')
-
-    if not input_path:
-        raise AttributeError('input_path is missing')
-
-    if not output_path:
-        raise AttributeError('output_path is missing')
-
     if not additional_params:
         additional_params = []
 
