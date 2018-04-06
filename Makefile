@@ -34,7 +34,7 @@ test-all:
 	tox
 
 cover:
-	pytest --cov-report term-missing --cov=apub
+	pytest --cov-report term-missing --cov=apub tests/
 
 cover-pretty:
 	pytest --cov-report html --cov=apub

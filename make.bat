@@ -36,7 +36,7 @@ if "%1" == "lint" (
 )
 
 if "%1" == "cover" (
-	pytest --cov-report term-missing --cov=apub
+	pytest --cov-report term-missing --cov=apub tests/
 	goto end
 )
 

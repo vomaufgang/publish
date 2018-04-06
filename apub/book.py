@@ -35,7 +35,25 @@ class Book:
 
     Args:
         title: The title of the book.
-        **kwargs: Any other attribute of this class except `chapters`. (see Attributes)
+
+    Keyword Args:
+        author_sort (str): The string to be used when sorting by author.
+        authors (str): The authors. Multiple authors should be separated by
+            ampersands.
+        book_producer (str): The book producer.
+        comments (str): The ebook description.
+        cover (str): The path or url to the cover image.
+        isbn (str): The ISBN of the book.
+        language (str): The language. Should be an ISO 639-1 code, see:
+
+            https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
+        pubdate (str): The publication date.
+        publisher (str): The ebook publisher.
+        rating (int): The rating. Should be a number between 1 and 5.
+        series (str): The series this ebook belongs to.
+        series_index (int): The index of the book in this series.
+        tags (str): The tags for the book. Should be a comma separated list.
+        title_sort (str): The version of the title to be used for sorting.
 
     Attributes:
         author_sort (str): The string to be used when sorting by author.

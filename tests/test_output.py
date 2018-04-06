@@ -16,7 +16,6 @@ from typing import Iterable
 from unittest.mock import patch, mock_open
 
 import os
-import pytest
 
 from apub import __version__ as apub_version
 from apub.book import Book, Chapter
@@ -24,7 +23,7 @@ from apub.book import Book, Chapter
 from apub.output import (SUPPORTED_EBOOKCONVERT_ATTRIBUTES,
                          _apply_template,
                          _yield_attributes_as_params,
-                         HtmlOutput, _get_ebook_convert_params)
+                         HtmlOutput)
 from apub.substitution import Substitution, SimpleSubstitution
 from tests import get_test_book
 
