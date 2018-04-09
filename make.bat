@@ -32,6 +32,7 @@ if "%1" == "test-all" (
 
 if "%1" == "lint" (
     pylint apub tests examples setup.py
+	flake8 apub tests examples setup.py
     goto end
 )
 
@@ -47,6 +48,7 @@ if "%1" == "cover-pretty" (
 )
 
 if "%1" == "dist" (
+	del dist\*.* /F /Q
 	python setup.py sdist
 	python setup.py bdist_wheel
 	dir dist

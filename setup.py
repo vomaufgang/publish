@@ -41,6 +41,8 @@ TEST_REQUIREMENTS = [
 DEV_REQUIREMENTS = [
     'tox',
     'pylint',
+    'flake8',  # pylint does not support E301&E303 -> required blank lines between functions
+               # and/or classes - let flake8 handle these checks
     'wheel',
 ]
 DEV_REQUIREMENTS.extend(TEST_REQUIREMENTS)
