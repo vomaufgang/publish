@@ -24,11 +24,8 @@ before_script:
   - source venv/bin/activate
   - pip install .[dev]
 
-test:
+test_and_lint:
   script:
   - pytest --cov-report term-missing --cov=apub tests/
-
-lint:
-  script:
   - pylint apub tests examples setup.py
   - flake8 apub tests examples setup.py

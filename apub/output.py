@@ -48,6 +48,7 @@ SUPPORTED_EBOOKCONVERT_ATTRIBUTES = (
 )
 
 
+
 class HtmlOutput:
     """Turns a Book object and its chapters into an html document.
 
