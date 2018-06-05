@@ -25,7 +25,6 @@ class TestBook:
         book.rating = 36
         book.series_index = 42
 
-        assert False
         assert book.title == 'title'
         assert book.author_sort == 'author_sort'
         assert book.authors == 'authors'

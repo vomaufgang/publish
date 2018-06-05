@@ -19,8 +19,8 @@ import re
 from abc import ABCMeta, abstractmethod
 from typing import Iterable, Union
 
-log = logging.getLogger(__name__)
-log.addHandler(logging.NullHandler())
+LOG = logging.getLogger(__name__)
+LOG.addHandler(logging.NullHandler())
 
 
 class Substitution(metaclass=ABCMeta):
@@ -171,12 +171,12 @@ def apply_substitutions(
     text = str(text)
 
     if substitutions:
-        log.info('Applying substitutions ...')
+        LOG.info('Applying substitutions ...')
 
     substitution_count = len(list(substitutions))
 
     for index, substitution in enumerate(substitutions):
         text = substitution.apply_to(text)
-        log.info(f'{index + 1} of {substitution_count} applied')
+        LOG.info(f'{index + 1} of {substitution_count} applied')
 
     return text
