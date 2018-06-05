@@ -1,9 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#
+# apub - Python package with cli to turn markdown files into ebooks
+# Copyright (c) 2014 Christopher Knörndel
+#
+# Distributed under the MIT License
+# (license terms are at http://opensource.org/licenses/MIT).
 
-import os
+"""Setup script for easy_install and pip."""
+
 import sys
 
+MIN_SUPPORTED_PYTHON_VERSION = (3, 6)
+
+if sys.version_info < MIN_SUPPORTED_PYTHON_VERSION:
+    sys.exit('Sorry, Python < {} is not supported.'.format(
+        '.'.join(map(str, MIN_SUPPORTED_PYTHON_VERSION))
+    ))
 
 try:
     from setuptools import setup
@@ -11,51 +24,57 @@ except ImportError:
     from distutils.core import setup
 
 
-readme = open('README.rst').read()
-history = open('HISTORY.rst').read().replace('.. :changelog:', '')
+README = open('README.rst').read()
+VERSION = open('apub/VERSION').read().strip()
 
-requirements = [
-    'markdown>=2.4.1',
+REQUIREMENTS = [
+    'markdown>=2.6',
+    'Jinja2>=2.10',
 ]
 
-test_requirements = [
-    # TODO: put package test requirements here
+TEST_REQUIREMENTS = [
+    'pytest',
+    'pytest-cov',
+    'pytest-runner',
 ]
+
+DEV_REQUIREMENTS = [
+    'tox',
+    'pylint',
+    'flake8',  # pylint does not support E301&E303 -> required blank lines between functions
+               # and/or classes - let flake8 handle these checks
+    'wheel',
+]
+DEV_REQUIREMENTS.extend(TEST_REQUIREMENTS)
 
 setup(
     name='apub',
-    version='0.1.0',
-    # TODO: put meaningful description here
-    description='Python Boilerplate contains all the boilerplate you need to create a Python package.',
-    long_description=readme + '\n\n' + history,
+    version=VERSION,
+    description='Python package with command line interface to turn markdown '
+                'files into ebooks.',
+    long_description=README,
     author='Christopher Knörndel',
     author_email='cknoerndel@anited.de',
-    url='https://bitbucket.org/vomaufgang/apub/',
+    url='https://github.com/vomaufgang/apub/',
     packages=[
         'apub',
-        'apub.cli',
-        'apub.extensions',
-        'apub.extensions.markdown',
-        'apub.facades',
     ],
-    entry_points = {
-        'console_scripts': [
-            'apub = apub.cli.cli:main',
-        ],
+    package_data={
+        'apub': ['template.html', 'VERSION']
     },
-    include_package_data=True,
-    install_requires=requirements,
+    install_requires=REQUIREMENTS,
+    tests_require=TEST_REQUIREMENTS,
+    extras_require={
+        'dev': DEV_REQUIREMENTS
+    },
     license="MIT",
     zip_safe=False,
     keywords='apub',
     classifiers=[
-        'Development Status :: 1 - Planning',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: End Users/Desktop',
-        'License :: OSI Approved :: BSD License',
+        'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.6',
     ],
-    test_suite='tests',
-    tests_require=test_requirements
 )

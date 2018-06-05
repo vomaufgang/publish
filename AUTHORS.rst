@@ -5,7 +5,7 @@ Credits
 Development Lead
 ----------------
 
-* Christopher Knörndel <cknoerndel@anited.de>
+* Christopher "vomaufgang" Knörndel <cknoerndel@gmail.com>
 
 Contributors
 ------------

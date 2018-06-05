@@ -1,0 +1,9 @@
+[run]
+omit =
+  *s/markdown*
+  *s/validators*
+  *s/decorator*
+  */xml/etree*
+  *s/six*
+  */site-packages/*
+  */examples/*

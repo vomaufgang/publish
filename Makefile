@@ -3,11 +3,11 @@
 help:
 	@echo "clean-build - remove build artifacts"
 	@echo "clean-pyc - remove Python file artifacts"
-	@echo "lint - check style with flake8"
+	@echo "lint - check style with pylint"
 	@echo "test - run tests quickly with the default Python"
 	@echo "test-all - run tests on every Python version with tox"
-	@echo "coverage - check code coverage quickly with the default Python"
-	@echo "docs - generate Sphinx HTML documentation, including API docs"
+	@echo "cover - check code coverage quickly with the default Python"
+	@echo "cover-pretty - check code coverage quickly with the default Python and display as an html report in your browser"
 	@echo "release - package and upload a release"
 	@echo "dist - package"
 
@@ -25,7 +25,8 @@ clean-pyc:
 	find . -name '*~' -exec rm -f {} +
 
 lint:
-	flake8 apub tests
+	pylint apub tests examples setup.py
+	flake8 apub tests examples setup.py
 
 test:
 	python setup.py test
@@ -33,23 +34,16 @@ test:
 test-all:
 	tox
 
-coverage:
-	coverage run --source apub setup.py test
-	coverage report -m
-	coverage html
+cover:
+	pytest --cov-report term-missing --cov=apub tests/
+
+cover-pretty:
+	pytest --cov-report html --cov=apub
 	open htmlcov/index.html
 
-docs:
-	rm -f docs/apub.rst
-	rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ apub
-	$(MAKE) -C docs clean
-	$(MAKE) -C docs html
-	open docs/_build/html/index.html
-
 release: clean
-	python setup.py sdist
-	python setup.py bdist_wheel
+	python setup.py sdist upload
+	python setup.py bdist_wheel upload
 
 dist: clean
 	python setup.py sdist
