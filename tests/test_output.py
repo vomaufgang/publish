@@ -11,6 +11,7 @@
 """
 
 # pylint: disable=missing-docstring,no-self-use,invalid-name,protected-access
+# pylint: disable=too-few-public-methods
 
 from typing import Iterable
 from unittest.mock import patch, mock_open
@@ -25,7 +26,10 @@ from apub.book import Book, Chapter
 from apub.output import (SUPPORTED_EBOOKCONVERT_ATTRIBUTES,
                          _apply_template,
                          _yield_attributes_as_params,
-                         HtmlOutput, NoChaptersFoundError)
+                         _get_ebook_convert_params,
+                         HtmlOutput,
+                         NoChaptersFoundError,
+                         EbookConvertOutput)
 from apub.substitution import Substitution, SimpleSubstitution
 from tests import get_test_book
 
@@ -65,30 +69,36 @@ TEST_HTML_TEMPLATE = """<!DOCTYPE html>
 
 
 # noinspection PyMissingOrEmptyDocstring
-class OutputStub(HtmlOutput):
+class HtmlOutputStub(HtmlOutput):
+    def make(self, book: Book, substitutions: Iterable[Substitution] = None):
+        pass
+
+
+# noinspection PyMissingOrEmptyDocstring
+class EbookConvertOutputStub(EbookConvertOutput):
     def make(self, book: Book, substitutions: Iterable[Substitution] = None):
         pass
 
 
 class TestHtmlOutput:
     def test_constructor(self):
-        output = OutputStub('a',
-                            css_path='b',
-                            force_publish=True)
+        output = HtmlOutputStub('a',
+                                css_path='b',
+                                force_publish=True)
 
         assert output.path == 'a'
         assert output.css_path == 'b'
         assert output.force_publish
 
     def test_constructor_default_values(self):
-        output = OutputStub('a')
+        output = HtmlOutputStub('a')
 
         assert output.path == 'a'
         assert output.css_path is None
         assert output.force_publish is not True
 
     def test_get_chapters_to_be_published(self):
-        output = OutputStub('a')
+        output = HtmlOutputStub('a')
         chapters = [Chapter('1', publish=True),
                     Chapter('2', publish=False),
                     Chapter('3')]  # defaults to True
@@ -100,7 +110,7 @@ class TestHtmlOutput:
         assert actual == expected
 
     def test_get_chapters_to_be_published_force_publish_true(self):
-        output = OutputStub('a', force_publish=True)
+        output = HtmlOutputStub('a', force_publish=True)
         chapters = [Chapter('1', publish=True),
                     Chapter('2', publish=False),
                     Chapter('3')]  # defaults to True
@@ -113,7 +123,7 @@ class TestHtmlOutput:
         assert actual == expected
 
     def test_get_chapters_to_be_published_force_publish_false(self):
-        output = OutputStub('a', force_publish=False)
+        output = HtmlOutputStub('a', force_publish=False)
         chapters = [Chapter('1', publish=True),
                     Chapter('2', publish=False),
                     Chapter('3')]  # defaults to True
@@ -170,6 +180,43 @@ class TestHtmlOutput:
         mock_file.assert_called_once_with('some.path', 'w')
         mock_file_handle = mock_file()
         mock_file_handle.write.assert_called_once_with('document')
+
+
+class TestEbookConvertOutput:
+    def test_constructor(self):
+        output = EbookConvertOutputStub('a',
+                                        css_path='b',
+                                        force_publish=True,
+                                        ebookconvert_params=['--param=value'])
+
+        assert output.path == 'a'
+        assert output.css_path == 'b'
+        assert output.force_publish
+        assert output.ebookconvert_params == ['--param=value']
+
+
+def test_get_html_document():
+    title = 'Foo'
+    html_content = '<h1>This is the first file</h1>\n<p>With some content.</p>'
+    css = ''
+    language = 'en'
+
+    book = Book(title, language='en')
+    book.chapters.extend([Chapter('tests/resources/1.md')])
+
+    expected = TEST_HTML_TEMPLATE.format(
+        content=html_content,
+        title=title,
+        css=css,
+        language=language,
+        apub_version=apub_version)
+
+    actual = HtmlOutput('')._get_html_document(
+        book,
+        [SimpleSubstitution('text', 'content')]
+    )
+
+    assert actual == expected
 
 
 def test_apply_template():
@@ -261,6 +308,20 @@ def test_yield_attributes_as_params_value_none_omits_attribute():
     assert actual == expected
 
 
+def test_get_html_content():
+    output = HtmlOutput('')
+    actual = output._get_html_content([Chapter('tests/resources/1.md'),
+                                       Chapter('tests/resources/2.md')],
+                                      [SimpleSubstitution('text', 'content')])
+
+    expected = '\n'.join(("<h1>This is the first file</h1>",
+                          "<p>With some content.</p>",
+                          "<h1>This is the second file</h1>",
+                          "<p>With some more content.</p>"))
+
+    assert actual == expected
+
+
 def test_get_markdown_content_no_chapters_raises_error():
     output = HtmlOutput('')
     with pytest.raises(NoChaptersFoundError):
@@ -311,5 +372,35 @@ def test_get_markdown_content_omits_chapters_not_set_to_publish():
                           "# This is the second file",
                           "",
                           "With some more text."))
+
+    assert actual == expected
+
+
+def test_get_ebook_convert_params_no_additional_params():
+    book = get_test_book()
+    input_path = 'input_path'
+    output_path = 'output_path'
+
+    actual = _get_ebook_convert_params(book, input_path, output_path)
+
+    expected = ['ebook-convert', input_path, output_path]
+    expected.extend([f'--{attribute}={attribute}'
+                     for attribute in SUPPORTED_EBOOKCONVERT_ATTRIBUTES])
+
+    assert actual == expected
+
+
+def test_get_ebook_convert_params_additional_params():
+    book = get_test_book()
+    input_path = 'input_path'
+    output_path = 'output_path'
+    additional_params = ['--param1=value1', '--param2=value2']
+
+    actual = _get_ebook_convert_params(book, input_path, output_path, additional_params)
+
+    expected = ['ebook-convert', input_path, output_path]
+    expected.extend([f'--{attribute}={attribute}'
+                     for attribute in SUPPORTED_EBOOKCONVERT_ATTRIBUTES])
+    expected.extend(additional_params)
 
     assert actual == expected

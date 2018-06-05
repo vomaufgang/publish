@@ -17,7 +17,7 @@ import subprocess
 import uuid
 from tempfile import mkdtemp
 from textwrap import fill
-from typing import Iterable, Generator, Optional
+from typing import Iterable, Generator, Optional, Sequence
 from pkg_resources import resource_string
 
 import markdown
@@ -305,7 +305,7 @@ def _get_ebook_convert_params(book: Book,
                               input_path: str,
                               output_path: str,
                               additional_params: Optional[Iterable[str]] = None
-                              ) -> Iterable[str]:
+                              ) -> Sequence[str]:
     """Gets the call params for the ebookconvert commandline.
 
     The book's attributes are translated into ebookconvert metadata commandline options
