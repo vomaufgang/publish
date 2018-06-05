@@ -14,6 +14,7 @@ install:
 script:
   - pytest --cov-report term-missing --cov=apub tests/
   - pylint apub tests examples setup.py
+  - flake8 apub tests examples setup.py
 
 after_success: coveralls
 

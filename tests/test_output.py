@@ -283,8 +283,8 @@ def test_get_markdown_content_invalid_path_raises_error():
 
 def test_get_markdown_content_joins_multiple_markdown_files():
     output = HtmlOutput('')
-    actual = output._get_markdown_content([Chapter('resources/1.md'),
-                                           Chapter('resources/2.md')])
+    actual = output._get_markdown_content([Chapter('tests/resources/1.md'),
+                                           Chapter('tests/resources/2.md')])
 
     expected = '\n'.join(("# This is the first file",
                           "",
@@ -299,9 +299,9 @@ def test_get_markdown_content_joins_multiple_markdown_files():
 
 def test_get_markdown_content_omits_chapters_not_set_to_publish():
     output = HtmlOutput('')
-    actual = output._get_markdown_content([Chapter('resources/1.md'),
-                                           Chapter('resources/2.md'),
-                                           Chapter('resources/2.md',
+    actual = output._get_markdown_content([Chapter('tests/resources/1.md'),
+                                           Chapter('tests/resources/2.md'),
+                                           Chapter('tests/resources/2.md',
                                                    publish=False)])
 
     expected = '\n'.join(("# This is the first file",

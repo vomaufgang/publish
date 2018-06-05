@@ -31,3 +31,4 @@ test:
 lint:
   script:
   - pylint apub tests examples setup.py
+  - flake8 apub tests examples setup.py

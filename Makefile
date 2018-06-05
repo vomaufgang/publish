@@ -26,6 +26,7 @@ clean-pyc:
 
 lint:
 	pylint apub tests examples setup.py
+	flake8 apub tests examples setup.py
 
 test:
 	python setup.py test
