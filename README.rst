@@ -11,29 +11,11 @@ Created to make publishing stories a lot easier for myself.
 * **Official page**: https://anited.de/apub
 * **Documentation**: https://apub.readthedocs.org.
 
-.. .. image:: https://badge.fury.io/py/apub.png
-        :target: http://badge.fury.io/py/apub
-
-.. .. image:: https://pypip.in/d/apub/badge.png
-        :target: https://pypi.python.org/pypi/apub
-
 Build status
 ============
 
 * develop: |DEVELOP| |DEVCOVERAGE|
 * master: |MASTER| |MASTERCOVERAGE|
-
-.. |DEVELOP| image:: https://travis-ci.org/vomaufgang/apub.svg?branch=develop
-   :target: https://travis-ci.org/vomaufgang/apub/branches
-
-.. |MASTER| image:: https://travis-ci.org/vomaufgang/apub.svg?branch=master
-   :target: https://travis-ci.org/vomaufgang/apub/branches
-
-.. |DEVCOVERAGE| image:: https://coveralls.io/repos/github/vomaufgang/apub/badge.svg?branch=develop
-   :target: https://coveralls.io/github/vomaufgang/apub?branch=develop
-
-.. |MASTERCOVERAGE| image:: https://coveralls.io/repos/github/vomaufgang/apub/badge.svg?branch=master
-   :target: https://coveralls.io/github/vomaufgang/apub?branch=master
 
 Features
 ========
@@ -42,8 +24,8 @@ Features
 
 * Use whatever text editor you like, as long as it produces utf8 plain text files.
 
-  (If you don't have a favourite text editor yet, go take a look at Graeme Gott's excellent FocusWriter.
-  You will not regret it.)
+  (If you don't have a favourite text editor yet, go take a look at Graeme Gott's excellent
+  FocusWriter. You will not regret it.)
 
 * Describe your project and desired output in a simple python file.
 
@@ -93,7 +75,7 @@ Features
 
   A more in depth guide to apub including additional features like multiple
   outputs, default outputs, text substitutions and more can be found at at
-  https://apub.readthedocs.org
+  https://apub.readthedocs.org .
 
   If complete and working examples are more to your liking you can find such an
   example project in the **examples** directory of the repository.
@@ -118,3 +100,23 @@ into your local or virtual Python environment:
 .. code-block:: shell
 
   pip install https://github.com/vomaufgang/apub/archive/master.zip
+
+
+
+.. |DEVELOP| image:: https://travis-ci.org/vomaufgang/apub.svg?branch=develop
+   :target: https://travis-ci.org/vomaufgang/apub/branches
+
+.. |MASTER| image:: https://travis-ci.org/vomaufgang/apub.svg?branch=master
+   :target: https://travis-ci.org/vomaufgang/apub/branches
+
+.. |DEVCOVERAGE| image:: https://coveralls.io/repos/github/vomaufgang/apub/badge.svg?branch=develop
+   :target: https://coveralls.io/github/vomaufgang/apub?branch=develop
+
+.. |MASTERCOVERAGE| image:: https://coveralls.io/repos/github/vomaufgang/apub/badge.svg?branch=master
+   :target: https://coveralls.io/github/vomaufgang/apub?branch=master
+
+.. Currently unused badges:
+   image:: https://badge.fury.io/py/apub.png
+        :target: http://badge.fury.io/py/apub
+   image:: https://pypip.in/d/apub/badge.png
+        :target: https://pypi.python.org/pypi/apub

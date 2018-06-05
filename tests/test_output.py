@@ -17,13 +17,15 @@ from unittest.mock import patch, mock_open
 
 import os
 
+import pytest
+
 from apub import __version__ as apub_version
 from apub.book import Book, Chapter
 # noinspection PyProtectedMember
 from apub.output import (SUPPORTED_EBOOKCONVERT_ATTRIBUTES,
                          _apply_template,
                          _yield_attributes_as_params,
-                         HtmlOutput)
+                         HtmlOutput, NoChaptersFoundError)
 from apub.substitution import Substitution, SimpleSubstitution
 from tests import get_test_book
 
@@ -147,8 +149,7 @@ class TestHtmlOutput:
         substitutions = [substitution]
 
         with patch('builtins.open', mock_open(read_data='css'), create=True) as mock_file, \
-                patch.object(output, '_get_html_document') as mock_get_html_document, \
-                patch.object(output, 'validate') as mock_validate:
+                patch.object(output, '_get_html_document') as mock_get_html_document:
             mock_get_html_document.return_value = 'document'
             output.make(book, substitutions)
 
@@ -156,22 +157,19 @@ class TestHtmlOutput:
         mock_file.assert_called_once_with('some.path', 'w')
         mock_file_handle = mock_file()
         mock_file_handle.write.assert_called_once_with('document')
-        mock_validate.assert_called_once()
 
     def test_make_without_substitutions(self):
         output = HtmlOutput('some.path')
         book = Book('title')
 
         with patch('builtins.open', mock_open(read_data='css'), create=True) as mock_file, \
-                patch.object(output, '_get_html_document') as mock_get_html_document, \
-                patch.object(output, 'validate') as mock_validate:
+                patch.object(output, '_get_html_document') as mock_get_html_document:
             mock_get_html_document.return_value = 'document'
             output.make(book)
 
         mock_file.assert_called_once_with('some.path', 'w')
         mock_file_handle = mock_file()
         mock_file_handle.write.assert_called_once_with('document')
-        mock_validate.assert_called_once()
 
 
 def test_apply_template():
@@ -259,5 +257,59 @@ def test_yield_attributes_as_params_value_none_omits_attribute():
     expected = [f'--{attribute}={attribute}'
                 for attribute in SUPPORTED_EBOOKCONVERT_ATTRIBUTES[:-1]]
     actual = list(_yield_attributes_as_params(attributes))
+
+    assert actual == expected
+
+
+def test_get_markdown_content_no_chapters_raises_error():
+    output = HtmlOutput('')
+    with pytest.raises(NoChaptersFoundError):
+        output._get_markdown_content([])
+
+
+def test_get_markdown_content_no_chapters_set_to_publish_raises_error():
+    output = HtmlOutput('')
+    with pytest.raises(NoChaptersFoundError):
+        output._get_markdown_content([Chapter(source_path='',
+                                              publish=False)])
+
+
+def test_get_markdown_content_invalid_path_raises_error():
+    output = HtmlOutput('')
+    with pytest.raises(FileNotFoundError):
+        output._get_markdown_content([Chapter(source_path='',
+                                              publish=True)])
+
+
+def test_get_markdown_content_joins_multiple_markdown_files():
+    output = HtmlOutput('')
+    actual = output._get_markdown_content([Chapter('resources/1.md'),
+                                           Chapter('resources/2.md')])
+
+    expected = '\n'.join(("# This is the first file",
+                          "",
+                          "With some text.",
+                          "",
+                          "# This is the second file",
+                          "",
+                          "With some more text."))
+
+    assert actual == expected
+
+
+def test_get_markdown_content_omits_chapters_not_set_to_publish():
+    output = HtmlOutput('')
+    actual = output._get_markdown_content([Chapter('resources/1.md'),
+                                           Chapter('resources/2.md'),
+                                           Chapter('resources/2.md',
+                                                   publish=False)])
+
+    expected = '\n'.join(("# This is the first file",
+                          "",
+                          "With some text.",
+                          "",
+                          "# This is the second file",
+                          "",
+                          "With some more text."))
 
     assert actual == expected

@@ -90,8 +90,6 @@ class HtmlOutput:
         if not substitutions:
             substitutions = []
 
-        self.validate()
-
         html_document = self._get_html_document(book, substitutions)
 
         with open(self.path, 'w') as file:
@@ -215,16 +213,6 @@ class HtmlOutput:
 
         return md_paragraph_sep.join(markdown_)
 
-    def validate(self):
-        """Validates the Output object.
-
-        Raises:
-            AttributeError: Errors encountered during validation are
-                raised as AttributeErrors.
-        """
-        if not self.path:
-            raise AttributeError('Output path must be set.')
-
 
 class EbookConvertOutput(HtmlOutput):
     """Turns Book objects and its chapters into an ebook using
@@ -277,8 +265,6 @@ class EbookConvertOutput(HtmlOutput):
 
         if not substitutions:
             substitutions = []
-
-        self.validate()
 
         temp_directory = mkdtemp()
         # mkstmp and NamedTemporaryFile won't work, because the html file
