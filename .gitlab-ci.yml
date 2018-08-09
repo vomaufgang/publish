@@ -13,9 +13,7 @@ lint:flake8:
 
 lint:pylint:
   stage: test
-  script:
-    - ls -al
-    - pylint apub tests examples setup.py
+  script: pylint apub tests examples setup.py
 
 test:py36:
   image: python:3.6
