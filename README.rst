@@ -14,6 +14,7 @@ Created to make publishing stories a lot easier for myself.
 Build status
 ============
 
+* feature/project-yaml: |YAML| |YAMLCOVERAGE|
 * develop: |DEVELOP| |DEVCOVERAGE|
 * master: |MASTER| |MASTERCOVERAGE|
 
@@ -101,13 +102,17 @@ into your local or virtual Python environment:
 
   pip install https://github.com/vomaufgang/apub/archive/master.zip
 
-
+.. |YAML| image:: https://gitlab.com/anited/apub/badges/feature/project-yaml/build.svg
+   :target: https://travis-ci.org/vomaufgang/apub/branches
 
 .. |DEVELOP| image:: https://travis-ci.org/vomaufgang/apub.svg?branch=develop
    :target: https://travis-ci.org/vomaufgang/apub/branches
 
 .. |MASTER| image:: https://travis-ci.org/vomaufgang/apub.svg?branch=master
    :target: https://travis-ci.org/vomaufgang/apub/branches
+
+.. |YAMLCOVERAGE| image:: https://gitlab.com/anited/apub/badges/feature/project-yaml/coverage.svg?job=cover
+   :target: https://coveralls.io/github/vomaufgang/apub?branch=develop
 
 .. |DEVCOVERAGE| image:: https://coveralls.io/repos/github/vomaufgang/apub/badge.svg?branch=develop
    :target: https://coveralls.io/github/vomaufgang/apub?branch=develop
