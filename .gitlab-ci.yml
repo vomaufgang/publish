@@ -5,15 +5,14 @@ before_script:
   - pip install .[dev]
 
 stages:
-  - lint
   - test
 
 lint:flake8:
-  stage: lint
+  stage: test
   script: flake8 apub tests examples setup.py
 
 lint:pylint:
-  stage: lint
+  stage: test
   script: pylint apub tests examples setup.py
 
 test:py36:
