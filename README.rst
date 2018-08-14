@@ -14,8 +14,6 @@ Created to make publishing stories a lot easier for myself.
 Build status
 ============
 
-* feature/project-yaml: |YAML| |YAMLCOVERAGE|
-* develop: |DEVELOP| |DEVCOVERAGE|
 * master: |MASTER| |MASTERCOVERAGE|
 
 Features
@@ -100,25 +98,13 @@ into your local or virtual Python environment:
 
 .. code-block:: shell
 
-  pip install https://github.com/vomaufgang/apub/archive/master.zip
+  pip install https://gitlab.com/anited/apub/-/archive/master/apub-master.zip
 
-.. |YAML| image:: https://gitlab.com/anited/apub/badges/feature/project-yaml/build.svg
-   :target: https://gitlab.com/anited/apub/commits/feature/project-yaml
+.. |MASTER| image:: https://gitlab.com/anited/apub/badges/master/build.svg
+   :target: https://gitlab.com/anited/apub/commits/master
 
-.. |DEVELOP| image:: https://travis-ci.org/vomaufgang/apub.svg?branch=develop
-   :target: https://travis-ci.org/vomaufgang/apub/branches
-
-.. |MASTER| image:: https://travis-ci.org/vomaufgang/apub.svg?branch=master
-   :target: https://travis-ci.org/vomaufgang/apub/branches
-
-.. |YAMLCOVERAGE| image:: https://gitlab.com/anited/apub/badges/feature/project-yaml/coverage.svg?job=cover
-   :target: https://gitlab.com/anited/apub/commits/feature/project-yaml
-
-.. |DEVCOVERAGE| image:: https://coveralls.io/repos/github/vomaufgang/apub/badge.svg?branch=develop
-   :target: https://coveralls.io/github/vomaufgang/apub?branch=develop
-
-.. |MASTERCOVERAGE| image:: https://coveralls.io/repos/github/vomaufgang/apub/badge.svg?branch=master
-   :target: https://coveralls.io/github/vomaufgang/apub?branch=master
+.. |MASTERCOVERAGE| image:: https://gitlab.com/anited/apub/badges/master/coverage.svg?job=cover
+   :target: https://gitlab.com/anited/apub/commits/master
 
 .. Currently unused badges:
    image:: https://badge.fury.io/py/apub.png
