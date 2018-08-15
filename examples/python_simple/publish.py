@@ -33,7 +33,8 @@ def main():
 
     book.chapters.extend(
         [Chapter(source_path='first_chapter.md'),
-         Chapter(source_path='second_chapter.md')])
+         Chapter(source_path='second_chapter.md'),
+         Chapter(source_path='unfinished_chapter.md', publish=False)])
 
     substitutions = [
         SimpleSubstitution(old='Cows',

@@ -79,6 +79,24 @@ class TestRegexSubstitution:
 
         assert actual == expected
 
+    def test_apply_to_new_syntax(self):
+        substitution = RegexSubstitution(pattern=r'\+\+(?P<text>.*?)\+\+',
+                                         replace_with=r'<span class="small-caps">\g<text></span>')
+        text = '\n'.join([
+            'foo',
+            '++something else++',
+            'something foo',
+        ])
+        expected = '\n'.join([
+            'foo',
+            '<span class="small-caps">something else</span>',
+            'something foo',
+        ])
+
+        actual = substitution.apply_to(text)
+
+        assert actual == expected
+
     def test_apply_to_empty_input(self):
         substitution = RegexSubstitution(pattern=r'\+\+(.*?)\+\+',
                                          replace_with='<span class="small-caps">\1</span>')
