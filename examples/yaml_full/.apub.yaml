@@ -15,25 +15,21 @@ substitutions:
     replace_with: <span class="small-caps">\g<text></span>
 
 ebookconvert_params:
-  default:
-    - --level1-toc=//h:h1
-    - --level2-toc=//h:h2
-    - --change-justification=left
-  mobi:
-    - --mobi-file-type=both
+  - level1-toc=//h:h1
+  - level2-toc=//h:h2
+  - change-justification=left
 
 stylesheet: style.css
 
 outputs:
   - type: html
     output: example.html
-  - type: ebook
+  - type: ebookconvert
     output: example.epub
-  - type: ebook
+  - type: ebookconvert
     output: example.mobi
     ebookconvert_params:
-      - default
-      - mobi
-  - type: ebook
-    output: overridden_stylesheet.epub
-    stylesheet: overridden.css
+      - mobi-file-type=both
+  - type: ebookconvert
+    output: additional_stylesheet.epub
+    stylesheet: additional.css

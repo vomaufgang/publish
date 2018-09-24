@@ -19,5 +19,5 @@ stylesheet: style.css
 outputs:
   - type: html
     output: example.html
-  - type: ebook
+  - type: ebookconvert
     output: example.epub
