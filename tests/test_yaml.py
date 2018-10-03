@@ -202,7 +202,7 @@ language: en
 unknown_attribute: hello
 """
     with pytest.raises(TypeError, match=r'missing 1 required positional argument: \'title\''):
-        _ = _load_book(load_yaml(yaml))
+        _load_book(load_yaml(yaml))
 
 
 def test_load_chapters():

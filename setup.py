@@ -56,7 +56,7 @@ setup(
     long_description=README,
     author='Christopher Knörndel',
     author_email='cknoerndel@anited.de',
-    url='https://github.com/vomaufgang/anited_publish/',
+    url='https://gitlab.com/anited/publish/',
     packages=[
         'anited_publish',
     ],

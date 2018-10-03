@@ -360,7 +360,7 @@ def _apply_template(html_content: str,
                                      title=title,
                                      css=css,
                                      language=language,
-                                     apub_version=package_version)
+                                     package_version=package_version)
 
 
 def _yield_attributes_as_params(object_) -> Generator[str, None, None]:

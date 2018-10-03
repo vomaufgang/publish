@@ -8,8 +8,8 @@ into ebooks.
 Created to make publishing stories a lot easier for myself.
 
 * **Free software**: `MIT <https://opensource.org/licenses/MIT>`_
-* **Official page**: https://anited.de/apub
-* **Documentation**: https://apub.readthedocs.org.
+* **Official page**: https://anited.de/publish
+* **Documentation**: https://docs.anited.de/publish
 
 Build status
 ============
@@ -72,9 +72,9 @@ Features
   .. note:: Unix/Linux users might have to call python3 instead, depending on
             their distribution.
 
-  A more in depth guide to apub including additional features like multiple
+  A more in depth guide to anited_publish including additional features like multiple
   outputs, default outputs, text substitutions and more can be found at at
-  https://apub.readthedocs.org .
+  https://docs.anited.de/publish.
 
   If complete and working examples are more to your liking you can find such an
   example project in the **examples** directory of the repository.
@@ -88,7 +88,7 @@ Features
 
 * The following output types are planned for an upcoming version:
 
-  * HTML in JSON for use with https://github.com/vomaufgang/areader
+  * HTML in JSON for use with https://gitlab.com/anited/read
 
 Installation
 ============
@@ -98,13 +98,13 @@ into your local or virtual Python environment:
 
 .. code-block:: shell
 
-  pip install https://gitlab.com/anited/apub/-/archive/master/apub-master.zip
+  pip install https://gitlab.com/anited/publish/-/archive/master/publish-master.zip
 
-.. |MASTER| image:: https://gitlab.com/anited/apub/badges/master/build.svg
-   :target: https://gitlab.com/anited/apub/commits/master
+.. |MASTER| image:: https://gitlab.com/anited/publish/badges/master/build.svg
+   :target: https://gitlab.com/anited/publish/commits/master
 
-.. |MASTERCOVERAGE| image:: https://gitlab.com/anited/apub/badges/master/coverage.svg?job=cover
-   :target: https://gitlab.com/anited/apub/commits/master
+.. |MASTERCOVERAGE| image:: https://gitlab.com/anited/publish/badges/master/coverage.svg?job=cover
+   :target: https://gitlab.com/anited/publish/commits/master
 
 .. Currently unused badges:
    image:: https://badge.fury.io/py/apub.png
