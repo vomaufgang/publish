@@ -42,8 +42,8 @@ Features
         language='en')
 
     book.chapters.extend(
-        [Chapter(source='first_chapter.md'),
-         Chapter(source='second_chapter.md')])
+        [Chapter(src='first_chapter.md'),
+         Chapter(src='second_chapter.md')])
 
     substitution = SimpleSubstitution(
         old='Cows',

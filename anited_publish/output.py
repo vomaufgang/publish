@@ -208,7 +208,7 @@ class HtmlOutput:
 
         LOG.info('Collecting chapters ...')
         for chapter in chapters_to_publish:
-            with open(chapter.source_path, 'r') as file:
+            with open(chapter.src, 'r') as file:
                 markdown_.append(file.read())
 
         return md_paragraph_sep.join(markdown_)

@@ -156,7 +156,7 @@ class TestChapter:
         chapter = Chapter('source',
                           publish=False)
 
-        assert chapter.source_path == 'source'
+        assert chapter.src == 'source'
         assert chapter.publish is False
 
     def test_default_attribute_values(self):
@@ -172,12 +172,12 @@ class TestChapter:
 
     def test_source(self):
         chapter1 = Chapter('source')
-        chapter1.source_path = "abc"
+        chapter1.src = "abc"
 
         chapter2 = Chapter('source')
 
-        assert chapter1.source_path == "abc"
-        assert chapter2.source_path == "source"
+        assert chapter1.src == "abc"
+        assert chapter2.src == "source"
 
     def test_source_is_required(self):
         with pytest.raises(TypeError):

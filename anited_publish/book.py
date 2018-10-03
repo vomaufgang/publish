@@ -122,14 +122,14 @@ class Chapter:
     of a book.
 
     Args:
-        source_path: The path to the source file.
+        src: The path to the source file.
         publish: Determines whether the chapter will be included
             in the resulting output or not.
 
             Default: True
 
     Attributes:
-        source_path (str): The path to the source file.
+        src (str): The path to the source file.
         publish (bool): Determines whether the chapter will be included
             in the resulting output or not.
 
@@ -143,5 +143,5 @@ class Chapter:
                  publish: bool = True):
         """Initializes a new instance of the :class:`Chapter` class.
         """
-        self.source_path = src
+        self.src = src
         self.publish = publish
