@@ -32,9 +32,9 @@ def main():
         language='en')
 
     book.chapters.extend(
-        [Chapter(source_path='first_chapter.md'),
-         Chapter(source_path='second_chapter.md'),
-         Chapter(source_path='unfinished_chapter.md', publish=False)])
+        [Chapter(src='first_chapter.md'),
+         Chapter(src='second_chapter.md'),
+         Chapter(src='unfinished_chapter.md', publish=False)])
 
     substitutions = [
         SimpleSubstitution(old='Cows',
@@ -44,12 +44,12 @@ def main():
 
     html_output = HtmlOutput(
         path='example.html',
-        css_path='style.css')
+        stylesheet='style.css')
     html_output.make(book, substitutions)
 
     ebook_output = EbookConvertOutput(
         path='example.epub',
-        css_path='style.css')
+        stylesheet='style.css')
     ebook_output.make(book, substitutions)
 
 

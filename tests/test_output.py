@@ -83,18 +83,18 @@ class EbookConvertOutputStub(EbookConvertOutput):
 class TestHtmlOutput:
     def test_constructor(self):
         output = HtmlOutputStub('a',
-                                css_path='b',
+                                stylesheet='b',
                                 force_publish=True)
 
         assert output.path == 'a'
-        assert output.css_path == 'b'
+        assert output.stylesheet == 'b'
         assert output.force_publish
 
     def test_constructor_default_values(self):
         output = HtmlOutputStub('a')
 
         assert output.path == 'a'
-        assert output.css_path is None
+        assert output.stylesheet is None
         assert output.force_publish is not True
 
     def test_get_chapters_to_be_published(self):
@@ -136,7 +136,7 @@ class TestHtmlOutput:
 
     def test_get_css(self):
         with patch('builtins.open', mock_open(read_data='css')) as mock_file:
-            output = HtmlOutput('some.path', css_path='some.css')
+            output = HtmlOutput('some.path', stylesheet='some.css')
             actual = output._get_css()
 
         expected = 'css'
@@ -185,12 +185,12 @@ class TestHtmlOutput:
 class TestEbookConvertOutput:
     def test_constructor(self):
         output = EbookConvertOutputStub('a',
-                                        css_path='b',
+                                        stylesheet='b',
                                         force_publish=True,
                                         ebookconvert_params=['--param=value'])
 
         assert output.path == 'a'
-        assert output.css_path == 'b'
+        assert output.stylesheet == 'b'
         assert output.force_publish
         assert output.ebookconvert_params == ['--param=value']
 
@@ -331,14 +331,14 @@ def test_get_markdown_content_no_chapters_raises_error():
 def test_get_markdown_content_no_chapters_set_to_publish_raises_error():
     output = HtmlOutput('')
     with pytest.raises(NoChaptersFoundError):
-        output._get_markdown_content([Chapter(source_path='',
+        output._get_markdown_content([Chapter(src='',
                                               publish=False)])
 
 
 def test_get_markdown_content_invalid_path_raises_error():
     output = HtmlOutput('')
     with pytest.raises(FileNotFoundError):
-        output._get_markdown_content([Chapter(source_path='',
+        output._get_markdown_content([Chapter(src='',
                                               publish=True)])
 
 

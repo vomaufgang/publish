@@ -15,7 +15,7 @@ from typing import Dict, Tuple, Iterable, Union
 import ruamel.yaml
 
 from anited_publish.book import Book, Chapter
-from anited_publish.output import HtmlOutput, EbookConvertOutput
+from anited_publish.output import HtmlOutput, EbookConvertOutput, NoChaptersFoundError
 from anited_publish.substitution import Substitution, SimpleSubstitution, RegexSubstitution
 
 LOG = logging.getLogger(__name__)
@@ -59,9 +59,6 @@ def _load_chapters(dict_: Dict):
         for chapter in dict_['chapters']:
             chapters.append(Chapter(**chapter))
         return chapters
-    else:
-        # todo: raise NoChaptersFoundError
-        pass
 
 
 def _load_substitutions(dict_: Dict):

@@ -12,18 +12,20 @@
 
 # pylint: disable=missing-docstring,no-self-use,invalid-name,protected-access
 # pylint: disable=too-few-public-methods
-from anited_publish.book import Book
+import pytest
+
+from anited_publish.book import Book, Chapter
 # noinspection PyProtectedMember
-from anited_publish.yaml import (load_yaml, _load_book)
+from anited_publish.yaml import (load_yaml, _load_book, _load_chapters)
 
 
 # todo: split huge yaml unit test into multiple unit tests testing one section each
 
 # todo: add missing book metadata to test yaml
 BOOK_SECTION = r"""
-title: title
-author: author
-language: language
+title: My book
+author: Max Mustermann
+language: en
 """
 
 CHAPTER_SECTION = r"""
@@ -31,7 +33,7 @@ chapters:
   - src: first_chapter.md
   - src: second_chapter.md
   - src: unfinished_chapter.md
-    anited_publish: False
+    publish: False
 """
 
 SUBSTITUTION_SECTION = r"""
@@ -71,7 +73,7 @@ chapters:
   - src: first_chapter.md
   - src: second_chapter.md
   - src: unfinished_chapter.md
-    anited_publish: False
+    publish: False
 
 substitutions:
   - old: Some
@@ -120,7 +122,7 @@ def test_load_yaml():
             },
             {
                 'src': 'unfinished_chapter.md',
-                'anited_publish': False,
+                'publish': False,
             },
         ],
         'substitutions': [
@@ -169,13 +171,50 @@ def test_load_yaml():
 
 
 def test_load_book():
-    yaml = YAML
+    yaml = BOOK_SECTION
 
     expected = Book(title='My book',
                     author='Max Mustermann',
                     language='en')
 
-    dict_ = load_yaml(yaml)
-    actual = _load_book(dict_)
+    actual = _load_book(load_yaml(yaml))
 
     assert actual.__dict__ == expected.__dict__
+
+
+def test_load_book_omits_unknown_attribute():
+    yaml = r"""
+title: My book
+author: Max Mustermann
+language: en
+unknown_attribute: hello
+"""
+
+    actual = _load_book(load_yaml(yaml))
+
+    assert 'unknown_attribute' not in actual.__dict__
+
+
+def test_load_book_title_is_mandatory():
+    yaml = r"""
+author: Max Mustermann
+language: en
+unknown_attribute: hello
+"""
+    with pytest.raises(TypeError, match=r'missing 1 required positional argument: \'title\''):
+        _ = _load_book(load_yaml(yaml))
+
+
+def test_load_chapters():
+    yaml = CHAPTER_SECTION
+
+    expected = [Chapter(src='first_chapter.md'),
+                Chapter(src='second_chapter.md'),
+                Chapter(src='unfinished_chapter.md',
+                        publish=False)]
+    actual = _load_chapters(load_yaml(yaml))
+
+    assert len(actual) == len(expected)
+    assert actual[0].__dict__ == expected[0].__dict__
+    assert actual[1].__dict__ == expected[1].__dict__
+    assert actual[2].__dict__ == expected[2].__dict__

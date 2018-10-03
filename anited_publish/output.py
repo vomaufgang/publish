@@ -58,7 +58,7 @@ class HtmlOutput:
 
     Attributes:
         path (str): The output path.
-        css_path (str): The path to the style sheet.
+        stylesheet (str): The path to the style sheet.
         force_publish (bool): Determines wether to force anited_publish all chapters.
 
             If set to true, all chapters of the book will be published
@@ -73,7 +73,7 @@ class HtmlOutput:
         """Initializes a new instance of the :class:`HtmlOutput` class.
         """
         self.path = path
-        self.css_path = kwargs.pop('css_path', None)
+        self.stylesheet = kwargs.pop('stylesheet', None)
         self.force_publish = kwargs.pop('force_publish', False)
 
     def make(self,
@@ -115,15 +115,15 @@ class HtmlOutput:
         return list(filter(lambda c: c.publish is True, chapters))
 
     def _get_css(self) -> str:
-        """Gets the css from the css file specified in css_path as a string.
+        """Gets the css from the css file specified in stylesheet as a string.
 
         Returns:
-            The css from the css file specified in css_path as a string.
+            The css from the css file specified in stylesheet as a string.
         """
-        if not self.css_path:
+        if not self.stylesheet:
             return ''
 
-        css_path = os.path.join(os.getcwd(), self.css_path)
+        css_path = os.path.join(os.getcwd(), self.stylesheet)
 
         LOG.info('Collecting stylesheet ...')
         with open(css_path, 'r') as file:
@@ -229,7 +229,7 @@ class EbookConvertOutput(HtmlOutput):
         ebookconvert_params (List[str]): An optional list of additional command
             line arguments that will be passed to ebookconvert.
         path (str): The output path.
-        css_path (str): The path to the style sheet.
+        stylesheet (str): The path to the style sheet.
         force_publish (bool): Determines wether to force anited_publish all chapters.
 
             If set to true, all chapters of the book will be published

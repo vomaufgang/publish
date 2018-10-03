@@ -51,12 +51,12 @@ Features
 
     html_output = HtmlOutput(
         path='example.html',
-        css_path='style.css')
+        stylesheet='style.css')
     html_output.make(book, [substitution])
 
     ebook_output = EbookConvertOutput(
         path='example.epub',
-        css_path='style.css')
+        stylesheet='style.css')
     ebook_output.make(book, [substitution])
 
   Given the above is saved in a file :code:`my_project.py` and the markdown

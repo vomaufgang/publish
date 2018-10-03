@@ -139,9 +139,9 @@ class Chapter:
     # pylint: disable=too-few-public-methods
 
     def __init__(self,
-                 source_path: str,
+                 src: str,
                  publish: bool = True):
         """Initializes a new instance of the :class:`Chapter` class.
         """
-        self.source_path = source_path
+        self.source_path = src
         self.publish = publish
