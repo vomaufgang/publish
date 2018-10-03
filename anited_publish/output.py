@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# apub - Python package with cli to turn markdown files into ebooks
+# anited_publish - Python package with cli to turn markdown files into ebooks
 # Copyright (c) 2014 Christopher Knörndel
 #
 # Distributed under the MIT License
@@ -23,9 +23,9 @@ from pkg_resources import resource_string
 import markdown
 from jinja2 import Template
 
-from apub import __version__ as apub_version
-from apub.book import Book, Chapter
-from apub.substitution import Substitution, apply_substitutions
+from anited_publish import __version__ as package_version
+from anited_publish.book import Book, Chapter
+from anited_publish.substitution import Substitution, apply_substitutions
 
 LOG = logging.getLogger(__name__)
 LOG.addHandler(logging.NullHandler())
@@ -59,7 +59,7 @@ class HtmlOutput:
     Attributes:
         path (str): The output path.
         css_path (str): The path to the style sheet.
-        force_publish (bool): Determines wether to force publish all chapters.
+        force_publish (bool): Determines wether to force anited_publish all chapters.
 
             If set to true, all chapters of the book will be published
             no matter how the chapters are configured.
@@ -101,10 +101,10 @@ class HtmlOutput:
                                      chapters: Iterable[Chapter]
                                      ) -> Iterable[Chapter]:
         """Gets the list of chapters to be published based on each chapters
-        `publish` attribute.
+        `anited_publish` attribute.
 
         If the outputs `force_publish` override is set to true, all chapters
-        will be published regardless of their individual `publish` attributes.
+        will be published regardless of their individual `anited_publish` attributes.
 
         Returns:
             The list of chapters to be published.
@@ -230,7 +230,7 @@ class EbookConvertOutput(HtmlOutput):
             line arguments that will be passed to ebookconvert.
         path (str): The output path.
         css_path (str): The path to the style sheet.
-        force_publish (bool): Determines wether to force publish all chapters.
+        force_publish (bool): Determines wether to force anited_publish all chapters.
 
             If set to true, all chapters of the book will be published
             no matter how the chapters are configured.
@@ -360,7 +360,7 @@ def _apply_template(html_content: str,
                                      title=title,
                                      css=css,
                                      language=language,
-                                     apub_version=apub_version)
+                                     apub_version=package_version)
 
 
 def _yield_attributes_as_params(object_) -> Generator[str, None, None]:

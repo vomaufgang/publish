@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# apub - Python package with cli to turn markdown files into ebooks
+# anited_publish - Python package with cli to turn markdown files into ebooks
 # Copyright (c) 2014 Christopher Knörndel
 #
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
-"""Tests for `apub.yaml` module.
+"""Tests for `anited_publish.yaml` module.
 """
 
 # pylint: disable=missing-docstring,no-self-use,invalid-name,protected-access
 # pylint: disable=too-few-public-methods
-from apub.book import Book
+from anited_publish.book import Book
 # noinspection PyProtectedMember
-from apub.yaml import (load_yaml, _load_book)
+from anited_publish.yaml import (load_yaml, _load_book)
 
 
 # todo: split huge yaml unit test into multiple unit tests testing one section each
@@ -31,7 +31,7 @@ chapters:
   - src: first_chapter.md
   - src: second_chapter.md
   - src: unfinished_chapter.md
-    publish: False
+    anited_publish: False
 """
 
 SUBSTITUTION_SECTION = r"""
@@ -71,7 +71,7 @@ chapters:
   - src: first_chapter.md
   - src: second_chapter.md
   - src: unfinished_chapter.md
-    publish: False
+    anited_publish: False
 
 substitutions:
   - old: Some
@@ -120,7 +120,7 @@ def test_load_yaml():
             },
             {
                 'src': 'unfinished_chapter.md',
-                'publish': False,
+                'anited_publish': False,
             },
         ],
         'substitutions': [

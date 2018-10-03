@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# apub - Python package with cli to turn markdown files into ebooks
+# anited_publish - Python package with cli to turn markdown files into ebooks
 # Copyright (c) 2014 Christopher Knörndel
 #
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
-"""Tests for `apub.output` module.
+"""Tests for `anited_publish.output` module.
 """
 
 # pylint: disable=missing-docstring,no-self-use,invalid-name,protected-access
@@ -20,17 +20,17 @@ import os
 
 import pytest
 
-from apub import __version__ as apub_version
-from apub.book import Book, Chapter
+from anited_publish import __version__ as package_version
+from anited_publish.book import Book, Chapter
 # noinspection PyProtectedMember
-from apub.output import (SUPPORTED_EBOOKCONVERT_ATTRIBUTES,
-                         _apply_template,
-                         _yield_attributes_as_params,
-                         _get_ebook_convert_params,
-                         HtmlOutput,
-                         NoChaptersFoundError,
-                         EbookConvertOutput)
-from apub.substitution import Substitution, SimpleSubstitution
+from anited_publish.output import (SUPPORTED_EBOOKCONVERT_ATTRIBUTES,
+                                   _apply_template,
+                                   _yield_attributes_as_params,
+                                   _get_ebook_convert_params,
+                                   HtmlOutput,
+                                   NoChaptersFoundError,
+                                   EbookConvertOutput)
+from anited_publish.substitution import Substitution, SimpleSubstitution
 from tests import get_test_book
 
 
@@ -56,7 +56,7 @@ TEST_HTML_TEMPLATE = """<!DOCTYPE html>
 <html lang="{language}">
 <head>
 <meta charset="UTF-8">
-<meta name="generator" content="apub {apub_version}" />
+<meta name="generator" content="anited_publish {package_version}" />
 <title>{title}</title>
 <style type="text/css">
 {css}
@@ -209,7 +209,7 @@ def test_get_html_document():
         title=title,
         css=css,
         language=language,
-        apub_version=apub_version)
+        package_version=package_version)
 
     actual = HtmlOutput('')._get_html_document(
         book,
@@ -230,7 +230,7 @@ def test_apply_template():
         title=title,
         css=css,
         language=language,
-        apub_version=apub_version)
+        package_version=package_version)
 
     actual = _apply_template(
         html_content=html_content,

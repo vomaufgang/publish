@@ -1,24 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# apub - Python package with cli to turn markdown files into ebooks
+# anited_publish - Python package with cli to turn markdown files into ebooks
 # Copyright (c) 2014 Christopher Knörndel
 #
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
-"""This module offers a working example of how to use apub and its class model to produce html
-and epub files from markdown files.
+"""This module offers a working example of how to use anited_publish and its class model to
+produce html and epub files from markdown files.
 """
 
 import logging
-from apub.book import Book, Chapter
-from apub.output import HtmlOutput, EbookConvertOutput
-from apub.substitution import SimpleSubstitution, RegexSubstitution
+from anited_publish.book import Book, Chapter
+from anited_publish.output import HtmlOutput, EbookConvertOutput
+from anited_publish.substitution import SimpleSubstitution, RegexSubstitution
 
 
 def main():
-    """Shows how to use apub to produce an html file and an epub file while also
+    """Shows how to use anited_publish to produce an html file and an epub file while also
     applying a substitution to the markdown text in the process.
 
     Note that logging of everything but exceptions is turned off by default and has to be
@@ -39,8 +39,8 @@ def main():
     substitutions = [
         SimpleSubstitution(old='Cows',
                            new='Substitutions'),
-        RegexSubstitution(pattern=r'\+\+(.*?)\+\+',
-                          replace_with=r'<span class="small-caps">\1</span>')]
+        RegexSubstitution(pattern=r'\+\+(?P<text>.*?)\+\+',
+                          replace_with=r'<span class="small-caps">\g<text></span>')]
 
     html_output = HtmlOutput(
         path='example.html',

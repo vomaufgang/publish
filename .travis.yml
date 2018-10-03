@@ -12,9 +12,9 @@ install:
 
 # command to run tests, e.g. python setup.py test & run code quality tool
 script:
-  - pytest --cov-report term-missing --cov=apub tests/
-  - pylint apub tests examples setup.py
-  - flake8 apub tests examples setup.py
+  - pytest --cov-report term-missing --cov=anited_publish tests/
+  - pylint anited_publish tests examples setup.py
+  - flake8 anited_publish tests examples setup.py
 
 after_success: coveralls
 

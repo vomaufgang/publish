@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# apub - Python package with cli to turn markdown files into ebooks
+# anited_publish - Python package with cli to turn markdown files into ebooks
 # Copyright (c) 2014 Christopher Knörndel
 #
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
-"""Tests for `apub.substitution` module.
+"""Tests for `anited_publish.substitution` module.
 """
 
 # pylint: disable=missing-docstring,no-self-use,invalid-name
 
 from abc import ABCMeta
 
-from apub.substitution import (Substitution,
-                               SimpleSubstitution,
-                               apply_substitutions, RegexSubstitution)
+from anited_publish.substitution import (Substitution,
+                                         SimpleSubstitution,
+                                         apply_substitutions, RegexSubstitution)
 
 
 class TestSubstitution:

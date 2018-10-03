@@ -1,8 +1,8 @@
-===============
-apub - Overview
-===============
+=========================
+anited_publish - Overview
+=========================
 
-apub is a python package with command line interface to turn markdown files
+anited_publish is a python package with command line interface to turn markdown files
 into ebooks.
 
 Created to make publishing stories a lot easier for myself.
@@ -32,9 +32,9 @@ Features
 
   .. code-block:: python
 
-    from apub.book import Book, Chapter
-    from apub.output import HtmlOutput, EbookConvertOutput
-    from apub.substitution import SimpleSubstitution
+    from anited_publish.book import Book, Chapter
+    from anited_publish.output import HtmlOutput, EbookConvertOutput
+    from anited_publish.substitution import SimpleSubstitution
 
     book = Book(
         title='Example',

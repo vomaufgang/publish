@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# apub - Python package with cli to turn markdown files into ebooks
+# anited_publish - Python package with cli to turn markdown files into ebooks
 # Copyright (c) 2014 Christopher Knörndel
 #
 # Distributed under the MIT License
@@ -12,21 +12,21 @@
 
 import logging
 from typing import Dict, Tuple, Iterable, Union
-from ruamel.yaml import YAML
+import ruamel.yaml
 
-from apub.book import Book, Chapter
-from apub.output import HtmlOutput, EbookConvertOutput
-from apub.substitution import Substitution, SimpleSubstitution, RegexSubstitution
+from anited_publish.book import Book, Chapter
+from anited_publish.output import HtmlOutput, EbookConvertOutput
+from anited_publish.substitution import Substitution, SimpleSubstitution, RegexSubstitution
 
 LOG = logging.getLogger(__name__)
 LOG.addHandler(logging.NullHandler())
 
-YAML_ = YAML(typ='safe', pure=True)
+YAML = ruamel.yaml.YAML(typ='safe', pure=True)
 
 
 def load_yaml(yaml: str) -> Dict:
     """todo: docstring load_yaml"""
-    return YAML_.load(yaml)
+    return YAML.load(yaml)
 
 
 def load_project(yaml: str) -> Tuple[Book,

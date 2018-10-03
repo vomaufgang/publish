@@ -9,11 +9,11 @@ stages:
 
 lint:flake8:
   stage: test
-  script: flake8 apub tests examples setup.py
+  script: flake8 anited_publish tests examples setup.py
 
 lint:pylint:
   stage: test
-  script: pylint apub tests examples setup.py
+  script: pylint anited_publish tests examples setup.py
 
 test:py36:
   image: python:3.6
@@ -27,4 +27,4 @@ test:py37:
 
 cover:
   stage: test
-  script: pytest --cov-report term-missing --cov=apub tests/
+  script: pytest --cov-report term-missing --cov=anited_publish tests/

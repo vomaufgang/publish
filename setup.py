@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# apub - Python package with cli to turn markdown files into ebooks
+# anited_publish - Python package with cli to turn markdown files into ebooks
 # Copyright (c) 2014 Christopher Knörndel
 #
 # Distributed under the MIT License
@@ -25,7 +25,7 @@ except ImportError:
 
 
 README = open('README.rst').read()
-VERSION = open('apub/VERSION').read().strip()
+VERSION = open('anited_publish/VERSION').read().strip()
 
 REQUIREMENTS = [
     'markdown>=2.6',
@@ -49,19 +49,19 @@ DEV_REQUIREMENTS = [
 DEV_REQUIREMENTS.extend(TEST_REQUIREMENTS)
 
 setup(
-    name='apub',
+    name='anited_publish',
     version=VERSION,
     description='Python package with command line interface to turn markdown '
                 'files into ebooks.',
     long_description=README,
     author='Christopher Knörndel',
     author_email='cknoerndel@anited.de',
-    url='https://github.com/vomaufgang/apub/',
+    url='https://github.com/vomaufgang/anited_publish/',
     packages=[
-        'apub',
+        'anited_publish',
     ],
     package_data={
-        'apub': ['template.html', 'VERSION']
+        'anited_publish': ['template.html', 'VERSION']
     },
     install_requires=REQUIREMENTS,
     tests_require=TEST_REQUIREMENTS,
@@ -70,9 +70,8 @@ setup(
     },
     license="MIT",
     zip_safe=False,
-    keywords='apub',
+    keywords='anited_publish',
     classifiers=[
-        'Development Status :: 4 - Beta',
         'Intended Audience :: End Users/Desktop',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
