@@ -44,7 +44,8 @@ def load_project(yaml: str) -> Tuple[Book,
 
 
 def _load_book(dict_: Dict) -> Book:
-    """todo: docstring _load_book"""
+    """todo: docstring _load_book
+    """
     book = Book(**dict_)
 
     return book
@@ -52,7 +53,7 @@ def _load_book(dict_: Dict) -> Book:
 
 def _load_chapters(dict_: Dict):
     """todo: docstring _load_chapters
-    todo: unit test _load_chapters"""
+    """
     chapters = []
 
     if 'chapters' in dict_ and dict_['chapters']:
@@ -62,6 +63,8 @@ def _load_chapters(dict_: Dict):
 
 
 def _load_substitutions(dict_: Dict):
+    """todo: docstring _load_substitutions
+    """
     if 'substitutions' in dict_ and dict_['substitutions']:
         substitutions = []
         for substitution in dict_['substitutions']:
@@ -74,11 +77,7 @@ def _load_substitutions(dict_: Dict):
                     RegexSubstitution(pattern=substitution['pattern'],
                                       replace_with=substitution['replace_with']))
             else:
-                # todo error message & exception
-                pass
+                raise TypeError(
+                    f'{list(substitution.keys())} do not match any substitution type.')
 
             return substitutions
-        else:
-            # todo: error message & exception
-            pass
-    # todo: message no substitutions found, skipping - they are optional after all
