@@ -15,7 +15,7 @@ from typing import Dict, Tuple, Iterable, Union
 import ruamel.yaml
 
 from anited_publish.book import Book, Chapter
-from anited_publish.output import HtmlOutput, EbookConvertOutput, NoChaptersFoundError
+from anited_publish.output import HtmlOutput, EbookConvertOutput
 from anited_publish.substitution import Substitution, SimpleSubstitution, RegexSubstitution
 
 LOG = logging.getLogger(__name__)
@@ -59,14 +59,16 @@ def _load_chapters(dict_: Dict):
     if 'chapters' in dict_ and dict_['chapters']:
         for chapter in dict_['chapters']:
             chapters.append(Chapter(**chapter))
-        return chapters
+
+    return chapters
 
 
 def _load_substitutions(dict_: Dict):
     """todo: docstring _load_substitutions
     """
+    substitutions = []
+
     if 'substitutions' in dict_ and dict_['substitutions']:
-        substitutions = []
         for substitution in dict_['substitutions']:
             if 'old' in substitution and 'new' in substitution:
                 substitutions.append(
@@ -80,4 +82,4 @@ def _load_substitutions(dict_: Dict):
                 raise TypeError(
                     f'{list(substitution.keys())} do not match any substitution type.')
 
-            return substitutions
+    return substitutions

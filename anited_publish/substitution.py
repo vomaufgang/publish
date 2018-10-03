@@ -8,8 +8,8 @@
 # (license terms are at http://opensource.org/licenses/MIT).
 
 """This module defines substitution classes that can be passed to the output classes in
-anited_publish.output to apply text substitutions to the markdown content before it is rendered to html
-or epub.
+anited_publish.output to apply text substitutions to the markdown content before it is
+rendered to html or epub.
 """
 
 # pylint: disable=too-few-public-methods,anomalous-backslash-in-string
