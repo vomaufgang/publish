@@ -145,7 +145,7 @@ all systems. The most useful for day to day development are:
 
  * `clean`: removes all temporary build and output directories that may have
    been created during testing or simply running the package (only available on
-   *nix operating systems for now)
+   \*nix operating systems for now)
  * `lint`: runs flake8 on anited_publish and the tests to verify pep8 compliance
  * `test`: runs the test suit against the current python version
  * `test-all`: calls tox to run the test suit against any specified python
