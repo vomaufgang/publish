@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# anited_publish - Python package with cli to turn markdown files into ebooks
+# anited. publish - Python package with cli to turn markdown files into ebooks
 # Copyright (c) 2014 Christopher Knörndel
 #
 # Distributed under the MIT License
@@ -14,9 +14,9 @@ import logging
 from typing import Dict, Tuple, Iterable, Union
 import ruamel.yaml
 
-from anited_publish.book import Book, Chapter
-from anited_publish.output import HtmlOutput, EbookConvertOutput
-from anited_publish.substitution import Substitution, SimpleSubstitution, RegexSubstitution
+from publish.book import Book, Chapter
+from publish.output import HtmlOutput, EbookConvertOutput
+from publish.substitution import Substitution, SimpleSubstitution, RegexSubstitution
 
 LOG = logging.getLogger(__name__)
 LOG.addHandler(logging.NullHandler())

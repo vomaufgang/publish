@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# anited_publish - Python package with cli to turn markdown files into ebooks
+# anited. publish - Python package with cli to turn markdown files into ebooks
 # Copyright (c) 2014 Christopher Knörndel
 #
 # Distributed under the MIT License
@@ -9,7 +9,7 @@
 
 # pylint: disable=missing-docstring
 
-from anited_publish.book import Book
+from publish.book import Book
 
 
 def get_test_book():

@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# anited_publish - Python package with cli to turn markdown files into ebooks
+# anited. publish - Python package with cli to turn markdown files into ebooks
 # Copyright (c) 2014 Christopher Knörndel
 #
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
-"""Tests for `anited_publish.yaml` module.
+"""Tests for `publish.yaml` module.
 """
 
 # pylint: disable=missing-docstring,no-self-use,invalid-name,protected-access
 # pylint: disable=too-few-public-methods
 import pytest
 
-from anited_publish.book import Book, Chapter
+from publish.book import Book, Chapter
 # noinspection PyProtectedMember
-from anited_publish.yaml import (load_yaml, _load_book, _load_chapters)
+from publish.yaml import (load_yaml, _load_book, _load_chapters)
 
 
 # todo: split huge yaml unit test into multiple unit tests testing one section each

@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# anited_publish - Python package with cli to turn markdown files into ebooks
+# anited. publish - Python package with cli to turn markdown files into ebooks
 # Copyright (c) 2014 Christopher Knörndel
 #
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
 """This module defines the book and chapter classes designed to hold the metadata of a book
-and its chapters required by anited_publish.output to produce its output.
+and its chapters required by publish.output to produce its output.
 """
 
 

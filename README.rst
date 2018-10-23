@@ -1,8 +1,8 @@
-=========================
-anited_publish - Overview
-=========================
+==========================
+anited. publish - Overview
+==========================
 
-anited_publish is a python package with command line interface to turn markdown files
+anited. publish is a python package with command line interface to turn markdown files
 into ebooks.
 
 Created to make publishing stories a lot easier for myself.
@@ -72,7 +72,7 @@ Features
   .. note:: Unix/Linux users might have to call python3 instead, depending on
             their distribution.
 
-  A more in depth guide to anited_publish including additional features like multiple
+  A more in depth guide to anited. publish including additional features like multiple
   outputs, default outputs, text substitutions and more can be found at at
   https://docs.anited.de/publish.
 

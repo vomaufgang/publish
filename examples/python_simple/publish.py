@@ -1,24 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# anited_publish - Python package with cli to turn markdown files into ebooks
+# publish - Python package with cli to turn markdown files into ebooks
 # Copyright (c) 2014 Christopher Knörndel
 #
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
-"""This module offers a working example of how to use anited_publish and its class model to
+"""This module offers a working example of how to use publish and its class model to
 produce html and epub files from markdown files.
 """
 
 import logging
-from anited_publish.book import Book, Chapter
-from anited_publish.output import HtmlOutput, EbookConvertOutput
-from anited_publish.substitution import SimpleSubstitution, RegexSubstitution
+from publish.book import Book, Chapter
+from publish.output import HtmlOutput, EbookConvertOutput
+from publish.substitution import SimpleSubstitution, RegexSubstitution
 
 
 def main():
-    """Shows how to use anited_publish to produce an html file and an epub file while also
+    """Shows how to use publish to produce an html file and an epub file while also
     applying a substitution to the markdown text in the process.
 
     Note that logging of everything but exceptions is turned off by default and has to be

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# anited_publish - Python package with cli to turn markdown files into ebooks
+# anited. publish - Python package with cli to turn markdown files into ebooks
 # Copyright (c) 2014 Christopher Knörndel
 #
 # Distributed under the MIT License
@@ -25,7 +25,7 @@ except ImportError:
 
 
 README = open('README.rst').read()
-VERSION = open('anited_publish/VERSION').read().strip()
+VERSION = open('publish/VERSION').read().strip()
 
 REQUIREMENTS = [
     'markdown>=2.6',
@@ -49,7 +49,7 @@ DEV_REQUIREMENTS = [
 DEV_REQUIREMENTS.extend(TEST_REQUIREMENTS)
 
 setup(
-    name='anited_publish',
+    name='anited-publish',
     version=VERSION,
     description='Python package with command line interface to turn markdown '
                 'files into ebooks.',
@@ -58,10 +58,10 @@ setup(
     author_email='cknoerndel@anited.de',
     url='https://gitlab.com/anited/publish/',
     packages=[
-        'anited_publish',
+        'publish',
     ],
     package_data={
-        'anited_publish': ['template.html', 'VERSION']
+        'publish': ['template.html', 'VERSION']
     },
     install_requires=REQUIREMENTS,
     tests_require=TEST_REQUIREMENTS,
@@ -70,7 +70,7 @@ setup(
     },
     license="MIT",
     zip_safe=False,
-    keywords='anited_publish',
+    keywords='publish',
     classifiers=[
         'Intended Audience :: End Users/Desktop',
         'License :: OSI Approved :: MIT License',

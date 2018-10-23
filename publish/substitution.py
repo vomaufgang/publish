@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# anited_publish - Python package with cli to turn markdown files into ebooks
+# anited. publish - Python package with cli to turn markdown files into ebooks
 # Copyright (c) 2014 Christopher Knörndel
 #
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
 """This module defines substitution classes that can be passed to the output classes in
-anited_publish.output to apply text substitutions to the markdown content before it is
+publish.output to apply text substitutions to the markdown content before it is
 rendered to html or epub.
 """
 

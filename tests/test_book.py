@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# anited_publish - Python package with cli to turn markdown files into ebooks
+# anited. publish - Python package with cli to turn markdown files into ebooks
 # Copyright (c) 2014 Christopher Knörndel
 #
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
-"""Tests for `anited_publish.book` module.
+"""Tests for `publish.book` module.
 """
 
 # pylint: disable=missing-docstring,no-self-use,invalid-name
@@ -15,7 +15,7 @@
 from datetime import date
 
 import pytest
-from anited_publish.book import Book, Chapter
+from publish.book import Book, Chapter
 from tests import get_test_book
 
 
