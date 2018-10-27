@@ -19,9 +19,6 @@ from publish.book import Book, Chapter
 from publish.yaml import (load_yaml, _load_book, _load_chapters)
 
 
-# todo: split huge yaml unit test into multiple unit tests testing one section each
-
-# todo: add missing book metadata to test yaml
 BOOK_SECTION = r"""
 title: My book
 author: Max Mustermann
@@ -102,8 +99,6 @@ outputs:
     stylesheet: additional.css
 """
 
-# todo: Make the -- optional for ebookconvert_params, add them automatically when missing
-
 
 def test_load_yaml():
     """Integration test."""
@@ -171,6 +166,8 @@ def test_load_yaml():
 
 
 def test_load_book():
+    """todo: add missing book metadata to test yaml
+    """
     yaml = BOOK_SECTION
 
     expected = Book(title='My book',

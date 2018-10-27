@@ -31,18 +31,18 @@ if "%1" == "test-all" (
 )
 
 if "%1" == "lint" (
-    pylint anited_publish tests examples setup.py
-	flake8 anited_publish tests examples setup.py
+    pylint publish tests examples setup.py
+	flake8 publish tests examples setup.py
     goto end
 )
 
 if "%1" == "cover" (
-	pytest --cov-report term-missing --cov=anited_publish tests/
+	pytest --cov-report term-missing --cov=publish tests/
 	goto end
 )
 
 if "%1" == "cover-pretty" (
-    pytest --cov-report html --cov=anited_publish
+    pytest --cov-report html --cov=publish
     htmlcov\index.html
     goto end
 )

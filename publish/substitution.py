@@ -120,8 +120,8 @@ class RegexSubstitution(Substitution):
             book = Book()
             book.chapters.append(Chapter(source='example.md'))
 
-            substitution = RegexSubstitution(pattern=r'\+\+(.*?)\+\+',
-                                             replace_with='<span class="hello">\1</span>')
+            substitution = RegexSubstitution(pattern=r'\\+\\+(.*?)\\+\\+',
+                                             replace_with='<span class="hello">\\1</span>')
 
             HtmlOutput(path='example.html').make(book, [substitution])
 

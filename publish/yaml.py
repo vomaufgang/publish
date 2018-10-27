@@ -8,6 +8,8 @@
 # (license terms are at http://opensource.org/licenses/MIT).
 
 """ todo yaml docstring
+todo: Make the -- optional for ebookconvert_params, add them automatically when missing
+todo: todo _load_outputs
 """
 
 import logging
@@ -38,7 +40,6 @@ def load_project(yaml: str) -> Tuple[Book,
     book = _load_book(dict_)
     book.chapters.extend(_load_chapters(dict_['chapters']))
     substitutions = list(_load_substitutions(dict_))
-    # todo _load_outputs
 
     return book, substitutions, []
 
