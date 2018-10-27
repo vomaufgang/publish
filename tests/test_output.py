@@ -56,7 +56,7 @@ TEST_HTML_TEMPLATE = """<!DOCTYPE html>
 <html lang="{language}">
 <head>
 <meta charset="UTF-8">
-<meta name="generator" content="publish {package_version}" />
+<meta name="generator" content="anited. publish v{package_version}" />
 <title>{title}</title>
 <style type="text/css">
 {css}
