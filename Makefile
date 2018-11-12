@@ -49,3 +49,8 @@ dist: clean
 	python setup.py sdist
 	python setup.py bdist_wheel
 	ls -l dist
+
+verify:
+	pytest --cov-report term-missing --cov=publish tests/
+	pylint publish tests examples setup.py
+	flake8 publish tests examples setup.py

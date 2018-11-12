@@ -55,6 +55,12 @@ if "%1" == "dist" (
 	goto end
 )
 
+if "%1" == "verify" (
+    make cover
+    make lint
+    goto end
+)
+
 echo.Unrecognized command: '%1'
 echo.
 echo.Supported commands:
