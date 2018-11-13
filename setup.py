@@ -63,6 +63,7 @@ setup(
     package_data={
         'publish': ['template.html', 'VERSION']
     },
+    python_requires=">=3.6",
     install_requires=REQUIREMENTS,
     tests_require=TEST_REQUIREMENTS,
     extras_require={
@@ -76,5 +77,6 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
 )
