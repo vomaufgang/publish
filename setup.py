@@ -28,7 +28,7 @@ README = open('README.rst').read()
 VERSION = open('publish/VERSION').read().strip()
 
 REQUIREMENTS = [
-    'markdown>=2.6',
+    'markdown>=3.0',
     'Jinja2>=2.10',
     'ruamel.yaml>=0.15.50',
 ]

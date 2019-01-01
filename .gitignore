@@ -58,3 +58,4 @@ docs/_build
 
 # virtual environments
 /venv/
+workon.bat

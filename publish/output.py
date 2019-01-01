@@ -396,4 +396,3 @@ def _yield_attributes_as_params(object_) -> Generator[str, None, None]:
 
 class NoChaptersFoundError(Exception):
     """No chapters found."""
-    pass

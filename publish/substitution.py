@@ -41,7 +41,6 @@ class Substitution(metaclass=ABCMeta):
         Returns:
             The changed text.
         """
-        pass  # pragma: no cover
 
 
 class SimpleSubstitution(Substitution):

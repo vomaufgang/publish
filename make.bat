@@ -31,7 +31,9 @@ if "%1" == "test-all" (
 )
 
 if "%1" == "lint" (
+    echo.************* pylint
     pylint publish tests examples setup.py
+    echo.************* flake8
 	flake8 publish tests examples setup.py
     goto end
 )

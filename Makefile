@@ -25,7 +25,9 @@ clean-pyc:
 	find . -name '*~' -exec rm -f {} +
 
 lint:
+    @echo "************* pylint"
 	pylint publish tests examples setup.py
+    @echo "************* flake8"
 	flake8 publish tests examples setup.py
 
 test:
@@ -52,5 +54,7 @@ dist: clean
 
 verify:
 	pytest --cov-report term-missing --cov=publish tests/
+    @echo "************* pylint"
 	pylint publish tests examples setup.py
+    @echo "************* flake8"
 	flake8 publish tests examples setup.py
