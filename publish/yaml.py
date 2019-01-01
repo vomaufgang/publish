@@ -64,7 +64,7 @@ def _load_chapters(dict_: Dict):
     return chapters
 
 
-def _load_substitutions(dict_: Dict):
+def _load_substitutions(dict_: Dict) -> Iterable[Substitution]:
     """todo: docstring _load_substitutions
     """
     substitutions = []
@@ -84,3 +84,35 @@ def _load_substitutions(dict_: Dict):
                     f'{list(substitution.keys())} do not match any substitution type.')
 
     return substitutions
+
+
+def _load_outputs() -> Iterable[Union[HtmlOutput, EbookConvertOutput]]:
+    """todo: implement _load_outputs
+    todo: docstring _load_outputs
+    """
+
+
+def _load_ebookconvert_params(dict_: Dict) -> Iterable[str]:
+    """todo: docstring _load_ebookconvert_params
+    """
+    ebookconvert_params = []
+
+    if 'ebookconvert_params' not in dict_:
+        return ebookconvert_params
+
+    param_list = dict_['ebookconvert_params']
+
+    for param in param_list:
+        param = param.strip()
+        if param.startswith('--'):
+            ebookconvert_params.append(param)
+        else:
+            ebookconvert_params.append(f'--{param}')
+
+    return ebookconvert_params
+
+
+def _load_stylesheet() -> str:
+    """todo: implement _load_stylesheet
+    todo: docstring _load_stylesheet
+    """

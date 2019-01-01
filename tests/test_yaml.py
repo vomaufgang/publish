@@ -16,7 +16,7 @@ import pytest
 
 from publish.book import Book, Chapter
 # noinspection PyProtectedMember
-from publish.yaml import (load_yaml, _load_book, _load_chapters)
+from publish.yaml import (load_yaml, _load_book, _load_chapters, _load_ebookconvert_params)
 
 
 BOOK_SECTION = r"""
@@ -43,7 +43,10 @@ substitutions:
 
 OUTPUT_SECTION = r"""
 ebookconvert_params:
-  - some other param
+  - --level1-toc=//h:h1
+  - --change-justification=left
+  - --page-breaks-before=//*[(name()='h1' or name()='h2') or 
+    (name()='div' and @class='page-break')]
 
 stylesheet: style.css
 
@@ -55,11 +58,11 @@ outputs:
   - type: ebookconvert
     output: example.mobi
     ebookconvert_params:
-      - some additional param
+      - --preserve-cover-aspect-ratio
   - type: ebookconvert
     output: additional_stylesheet.epub
     stylesheet: additional.css
-"""
+"""  # noqa: W291
 
 YAML = r"""
 title: My book
@@ -215,3 +218,50 @@ def test_load_chapters():
     assert actual[0].__dict__ == expected[0].__dict__
     assert actual[1].__dict__ == expected[1].__dict__
     assert actual[2].__dict__ == expected[2].__dict__
+
+
+def test_load_ebookconvert_params():
+    yaml = OUTPUT_SECTION
+
+    expected = ['--level1-toc=//h:h1',
+                '--change-justification=left',
+                '{}{}'.format("--page-breaks-before=//*[(name()='h1' or name()='h2') or ",
+                              "(name()='div' and @class='page-break')]")]
+
+    actual = _load_ebookconvert_params(load_yaml(yaml))
+
+    assert actual == expected
+
+
+def test_load_ebookconvert_params_prepends_missing_double_minus():
+    yaml = r"""
+ebookconvert_params:
+  - level1-toc=//h:h1
+  - change-justification=left
+  - --page-breaks-before=//*[(name()='h1' or name()='h2') or 
+    (name()='div' and @class='page-break')]"""  # noqa: W291
+
+    expected = ['--level1-toc=//h:h1',
+                '--change-justification=left',
+                '{}{}'.format("--page-breaks-before=//*[(name()='h1' or name()='h2') or ",
+                              "(name()='div' and @class='page-break')]")]
+
+    actual = _load_ebookconvert_params(load_yaml(yaml))
+
+    assert actual == expected
+
+
+def test_load_ebookconvert_params_strips_whitespace():
+    yaml = r"""
+ebookconvert_params:
+  -  level1-toc=//h:h1
+  -  --level2-toc=//h:h1
+  - change-justification=left """
+
+    expected = ['--level1-toc=//h:h1',
+                '--level2-toc=//h:h1',
+                '--change-justification=left']
+
+    actual = _load_ebookconvert_params(load_yaml(yaml))
+
+    assert actual == expected
