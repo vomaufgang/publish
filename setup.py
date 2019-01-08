@@ -24,7 +24,7 @@ except ImportError:
     from distutils.core import setup
 
 
-README = open('README.rst').read()
+README = open('README.md').read()
 VERSION = open('publish/VERSION').read().strip()
 
 REQUIREMENTS = [
@@ -54,6 +54,7 @@ setup(
     description='Python package with command line interface to turn markdown '
                 'files into ebooks.',
     long_description=README,
+    long_description_content_type='text/markdown',
     author='Christopher Knörndel',
     author_email='cknoerndel@anited.de',
     url='https://gitlab.com/anited/publish/',
