@@ -24,6 +24,7 @@ class TestSubstitution:
         assert isinstance(Substitution, ABCMeta)
 
     def test_apply_to_is_abstract(self):
+        # noinspection PyUnresolvedReferences
         assert 'apply_to' in Substitution.__abstractmethods__
 
 

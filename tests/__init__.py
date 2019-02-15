@@ -7,8 +7,6 @@
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
-# pylint: disable=missing-docstring
-
 from publish.book import Book
 
 
