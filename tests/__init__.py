@@ -7,10 +7,14 @@
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
+"""Common test functions.
+"""
+
 from publish.book import Book
 
 
 def get_test_book():
+    """Creates a standard test book object."""
     return Book(title='title',
                 author_sort='author_sort',
                 authors='authors',
