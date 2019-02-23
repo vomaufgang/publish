@@ -12,7 +12,7 @@ todo: Make the -- optional for ebookconvert_params, add them automatically when 
 todo: todo _load_outputs
 """
 import logging
-from typing import Dict, Tuple, Iterable, Union
+from typing import Dict, Tuple, Iterable, Union, List
 
 import ruamel.yaml
 
@@ -89,15 +89,17 @@ def _load_substitutions(dict_: Dict) -> Iterable[Substitution]:
 def _load_outputs(dict_: Dict) -> Iterable[Union[HtmlOutput, EbookConvertOutput]]:
     """todo: implement _load_outputs
     todo: docstring _load_outputs
-    todo: load and merge global ebookconvert_params into local ones (local take precedence)
-    todo: load global stylesheet, local stylesheet always replaces global
     todo: document - stylesheet gets replaced, params get merged (local take precedence)
     """
     outputs = []
     global_stylesheet = None
+    global_ec_params = []
 
     if 'stylesheet' in dict_:
         global_stylesheet = dict_['stylesheet']
+
+    if 'ebookconvert_params' in dict_:
+        global_ec_params = _load_ebookconvert_params(dict_)
 
     for output in dict_['outputs']:
         path = output['path']
@@ -110,16 +112,25 @@ def _load_outputs(dict_: Dict) -> Iterable[Union[HtmlOutput, EbookConvertOutput]
             outputs.append(HtmlOutput(**output))
         else:
             if 'ebookconvert_params' in output:
-                # sanitize ebookconvert_params
-                output['ebookconvert_params'] = _load_ebookconvert_params(output)
+                local_ec_params = _load_ebookconvert_params(output)
+                output['ebookconvert_params'] = local_ec_params + global_ec_params
 
             outputs.append(EbookConvertOutput(**output))
 
     return outputs
 
 
-def _load_ebookconvert_params(dict_: Dict) -> Iterable[str]:
-    """todo: docstring _load_ebookconvert_params
+def _load_ebookconvert_params(dict_: Dict) -> List[str]:
+    """Loads ebookconvert command line parameters from a dictionary.
+
+    Prepends -- to parameters that are missing it, making -- optional within the
+    ebookconvert_params block of the project file.
+
+    Args:
+        dict_: The dictionary.
+
+    Returns:
+        The list of ebookconvert command line parameters.
     """
     ebookconvert_params = []
 
@@ -136,10 +147,3 @@ def _load_ebookconvert_params(dict_: Dict) -> Iterable[str]:
             ebookconvert_params.append(f'--{param}')
 
     return ebookconvert_params
-
-
-def _load_stylesheet() -> str:
-    """todo: implement _load_stylesheet
-    todo: docstring _load_stylesheet
-    todo global stylesheet & ebookconvert_params
-    """
