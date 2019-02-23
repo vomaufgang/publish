@@ -141,4 +141,5 @@ def _load_ebookconvert_params(dict_: Dict) -> Iterable[str]:
 def _load_stylesheet() -> str:
     """todo: implement _load_stylesheet
     todo: docstring _load_stylesheet
+    todo global stylesheet & ebookconvert_params
     """

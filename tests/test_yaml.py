@@ -163,7 +163,6 @@ ebookconvert_params:
 
 
 def test_load_outputs_uses_html_output_for_html_file_ending():
-    # todo global stylesheet & ebookconvert_params
     yaml = """
 outputs:
   - path: example.html"""
@@ -179,7 +178,6 @@ outputs:
 
 
 def test_load_outputs_uses_ebookconvert_output_for_all_other_file_endings():
-    # todo global stylesheet & ebookconvert_params
     yaml = """
 outputs:
   - path: example.epub
@@ -201,7 +199,6 @@ outputs:
 
 
 def test_load_outputs_loads_mixed_outputs():
-    # todo global stylesheet & ebookconvert_params
     yaml = """
 outputs:
   - path: example.html
@@ -221,10 +218,10 @@ outputs:
 
 def test_load_outputs_uses_global_stylesheet_when_no_local_present():
     yaml = """
-    stylesheet: global.css
-    
-    outputs:
-      - path: global.epub"""
+stylesheet: global.css
+
+outputs:
+  - path: global.epub"""
 
     expected = [
         EbookConvertOutput(path='global.epub', stylesheet='global.css'),
@@ -238,9 +235,9 @@ def test_load_outputs_uses_global_stylesheet_when_no_local_present():
 
 def test_load_outputs_uses_local_stylesheet_when_no_global_present():
     yaml = """
-    outputs:
-      - path: local.epub
-        stylesheet: local.css"""
+outputs:
+  - path: local.epub
+    stylesheet: local.css"""
 
     expected = [
         EbookConvertOutput(path='local.epub', stylesheet='local.css'),
@@ -254,11 +251,11 @@ def test_load_outputs_uses_local_stylesheet_when_no_global_present():
 
 def test_load_outputs_uses_local_stylesheet_when_both_present():
     yaml = """
-    stylesheet: global.css
-    
-    outputs:
-      - path: local.epub
-        stylesheet: local.css"""
+stylesheet: global.css
+
+outputs:
+  - path: local.epub
+    stylesheet: local.css"""
 
     expected = [
         EbookConvertOutput(path='local.epub', stylesheet='local.css'),
