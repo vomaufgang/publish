@@ -11,9 +11,9 @@
 todo: Make the -- optional for ebookconvert_params, add them automatically when missing
 todo: todo _load_outputs
 """
-
 import logging
 from typing import Dict, Tuple, Iterable, Union
+
 import ruamel.yaml
 
 from publish.book import Book, Chapter
@@ -52,7 +52,7 @@ def _load_book(dict_: Dict) -> Book:
     return book
 
 
-def _load_chapters(dict_: Dict):
+def _load_chapters(dict_: Dict) -> Iterable[Chapter]:
     """todo: docstring _load_chapters
     """
     chapters = []
@@ -86,10 +86,36 @@ def _load_substitutions(dict_: Dict) -> Iterable[Substitution]:
     return substitutions
 
 
-def _load_outputs() -> Iterable[Union[HtmlOutput, EbookConvertOutput]]:
+def _load_outputs(dict_: Dict) -> Iterable[Union[HtmlOutput, EbookConvertOutput]]:
     """todo: implement _load_outputs
     todo: docstring _load_outputs
+    todo: load and merge global ebookconvert_params into local ones (local take precedence)
+    todo: load global stylesheet, local stylesheet always replaces global
+    todo: document - stylesheet gets replaced, params get merged (local take precedence)
     """
+    outputs = []
+    global_stylesheet = None
+
+    if 'stylesheet' in dict_:
+        global_stylesheet = dict_['stylesheet']
+
+    for output in dict_['outputs']:
+        path = output['path']
+        file_type = path.split('.')[-1]
+
+        if 'stylesheet' not in output and global_stylesheet:
+            output['stylesheet'] = global_stylesheet
+
+        if file_type == 'html':
+            outputs.append(HtmlOutput(**output))
+        else:
+            if 'ebookconvert_params' in output:
+                # sanitize ebookconvert_params
+                output['ebookconvert_params'] = _load_ebookconvert_params(output)
+
+            outputs.append(EbookConvertOutput(**output))
+
+    return outputs
 
 
 def _load_ebookconvert_params(dict_: Dict) -> Iterable[str]:

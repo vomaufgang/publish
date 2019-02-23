@@ -14,9 +14,11 @@
 # pylint: disable=too-few-public-methods
 import pytest
 
+from publish.output import HtmlOutput, EbookConvertOutput
 from publish.book import Book, Chapter
 # noinspection PyProtectedMember
-from publish.yaml import (load_yaml, _load_book, _load_chapters, _load_ebookconvert_params)
+from publish.yaml import (load_yaml, _load_book, _load_chapters, _load_ebookconvert_params,
+                          _load_outputs)
 
 
 BOOK_SECTION = r"""
@@ -43,129 +45,22 @@ substitutions:
 
 OUTPUT_SECTION = r"""
 ebookconvert_params:
-  - --level1-toc=//h:h1
-  - --change-justification=left
-  - --page-breaks-before=//*[(name()='h1' or name()='h2') or 
+  - level1-toc=//h:h1
+  - change-justification=left
+  - page-breaks-before=//*[(name()='h1' or name()='h2') or 
     (name()='div' and @class='page-break')]
 
 stylesheet: style.css
 
 outputs:
-  - type: html
-    output: example.html
-  - type: ebookconvert
-    output: example.epub
-  - type: ebookconvert
-    output: example.mobi
+  - path: example.html
+  - path: example.epub
+  - path: example.mobi
     ebookconvert_params:
-      - --preserve-cover-aspect-ratio
-  - type: ebookconvert
-    output: additional_stylesheet.epub
-    stylesheet: additional.css
+      - preserve-cover-aspect-ratio
+  - path: replacement_stylesheet.epub
+    stylesheet: replacement.css
 """  # noqa: W291
-
-YAML = r"""
-title: My book
-author: Max Mustermann
-language: en
-
-chapters:
-  - src: first_chapter.md
-  - src: second_chapter.md
-  - src: unfinished_chapter.md
-    publish: False
-
-substitutions:
-  - old: Some
-    new: Thing
-  - pattern: \+\+(?P<text>.*?)\+\+
-    replace_with: <span class="small-caps">\g<text></span>
-
-ebookconvert_params:
-  - level1-toc=//h:h1
-  - level2-toc=//h:h2
-  - change-justification=left
-
-stylesheet: style.css
-
-outputs:
-  - type: html
-    output: example.html
-  - type: ebookconvert
-    output: example.epub
-  - type: ebookconvert
-    output: example.mobi
-    ebookconvert_params:
-      - mobi-file-type=both
-  - type: ebookconvert
-    output: additional_stylesheet.epub
-    stylesheet: additional.css
-"""
-
-
-def test_load_yaml():
-    """Integration test."""
-    yaml = YAML
-
-    expected = {
-        'title': 'My book',
-        'author': 'Max Mustermann',
-        'language': 'en',
-        'chapters': [
-            {
-                'src': 'first_chapter.md',
-            },
-            {
-                'src': 'second_chapter.md',
-            },
-            {
-                'src': 'unfinished_chapter.md',
-                'publish': False,
-            },
-        ],
-        'substitutions': [
-            {
-                'old': 'Some',
-                'new': 'Thing',
-            },
-            {
-                'pattern': r'\+\+(?P<text>.*?)\+\+',
-                'replace_with': r'<span class="small-caps">\g<text></span>',
-            },
-        ],
-        'ebookconvert_params': [
-            'level1-toc=//h:h1',
-            'level2-toc=//h:h2',
-            'change-justification=left',
-        ],
-        'stylesheet': 'style.css',
-        'outputs': [
-            {
-                'type': 'html',
-                'output': 'example.html',
-            },
-            {
-                'type': 'ebookconvert',
-                'output': 'example.epub',
-            },
-            {
-                'type': 'ebookconvert',
-                'output': 'example.mobi',
-                'ebookconvert_params': [
-                    'mobi-file-type=both',
-                ]
-            },
-            {
-                'type': 'ebookconvert',
-                'output': 'additional_stylesheet.epub',
-                'stylesheet': 'additional.css',
-            },
-        ]
-    }
-
-    actual = load_yaml(yaml)
-
-    assert actual == expected
 
 
 def test_load_book():
@@ -212,7 +107,7 @@ def test_load_chapters():
                 Chapter(src='second_chapter.md'),
                 Chapter(src='unfinished_chapter.md',
                         publish=False)]
-    actual = _load_chapters(load_yaml(yaml))
+    actual = list(_load_chapters(load_yaml(yaml)))
 
     assert len(actual) == len(expected)
     assert actual[0].__dict__ == expected[0].__dict__
@@ -243,8 +138,8 @@ ebookconvert_params:
 
     expected = ['--level1-toc=//h:h1',
                 '--change-justification=left',
-                '{}{}'.format("--page-breaks-before=//*[(name()='h1' or name()='h2') or ",
-                              "(name()='div' and @class='page-break')]")]
+                ''.join(["--page-breaks-before=//*[(name()='h1' or name()='h2') or ",
+                         "(name()='div' and @class='page-break')]"])]
 
     actual = _load_ebookconvert_params(load_yaml(yaml))
 
@@ -265,3 +160,111 @@ ebookconvert_params:
     actual = _load_ebookconvert_params(load_yaml(yaml))
 
     assert actual == expected
+
+
+def test_load_outputs_uses_html_output_for_html_file_ending():
+    # todo global stylesheet & ebookconvert_params
+    yaml = """
+outputs:
+  - path: example.html"""
+
+    expected = [
+        HtmlOutput(path='example.html'),
+    ]
+
+    actual = list(_load_outputs(load_yaml(yaml)))
+
+    assert len(actual) == len(expected)
+    assert actual[0].__dict__ == expected[0].__dict__
+
+
+def test_load_outputs_uses_ebookconvert_output_for_all_other_file_endings():
+    # todo global stylesheet & ebookconvert_params
+    yaml = """
+outputs:
+  - path: example.epub
+  - path: example.mobi
+  - path: example.whatever"""
+
+    expected = [
+        EbookConvertOutput(path='example.epub'),
+        EbookConvertOutput(path='example.mobi'),
+        EbookConvertOutput(path='example.whatever'),
+    ]
+
+    actual = list(_load_outputs(load_yaml(yaml)))
+
+    assert len(actual) == len(expected)
+    assert actual[0].__dict__ == expected[0].__dict__
+    assert actual[1].__dict__ == expected[1].__dict__
+    assert actual[2].__dict__ == expected[2].__dict__
+
+
+def test_load_outputs_loads_mixed_outputs():
+    # todo global stylesheet & ebookconvert_params
+    yaml = """
+outputs:
+  - path: example.html
+  - path: example.epub"""
+
+    expected = [
+        HtmlOutput(path='example.html'),
+        EbookConvertOutput(path='example.epub'),
+    ]
+
+    actual = list(_load_outputs(load_yaml(yaml)))
+
+    assert len(actual) == len(expected)
+    assert actual[0].__dict__ == expected[0].__dict__
+    assert actual[1].__dict__ == expected[1].__dict__
+
+
+def test_load_outputs_uses_global_stylesheet_when_no_local_present():
+    yaml = """
+    stylesheet: global.css
+    
+    outputs:
+      - path: global.epub"""
+
+    expected = [
+        EbookConvertOutput(path='global.epub', stylesheet='global.css'),
+    ]
+
+    actual = list(_load_outputs(load_yaml(yaml)))
+
+    assert len(actual) == len(expected)
+    assert actual[0].__dict__ == expected[0].__dict__
+
+
+def test_load_outputs_uses_local_stylesheet_when_no_global_present():
+    yaml = """
+    outputs:
+      - path: local.epub
+        stylesheet: local.css"""
+
+    expected = [
+        EbookConvertOutput(path='local.epub', stylesheet='local.css'),
+    ]
+
+    actual = list(_load_outputs(load_yaml(yaml)))
+
+    assert len(actual) == len(expected)
+    assert actual[0].__dict__ == expected[0].__dict__
+
+
+def test_load_outputs_uses_local_stylesheet_when_both_present():
+    yaml = """
+    stylesheet: global.css
+    
+    outputs:
+      - path: local.epub
+        stylesheet: local.css"""
+
+    expected = [
+        EbookConvertOutput(path='local.epub', stylesheet='local.css'),
+    ]
+
+    actual = list(_load_outputs(load_yaml(yaml)))
+
+    assert len(actual) == len(expected)
+    assert actual[0].__dict__ == expected[0].__dict__
