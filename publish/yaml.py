@@ -177,6 +177,9 @@ def _load_outputs(dict_: Dict) -> Iterable[Union[HtmlOutput, EbookConvertOutput]
     A file name ending in the file type '.html' will produce an HtmlOutput. '.epub', '.mobi' or
     any other file type excluding '.html' will produce an EbookConvertOutput.
 
+    Note that a local stylesheet *replaces* the global stylesheet, but local ebookconvert_params
+    are *added* to the global ebookconvert_params if present.
+
     Args:
         dict_: The dictionary.
 
