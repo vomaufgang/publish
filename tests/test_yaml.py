@@ -18,8 +18,8 @@ from publish.output import HtmlOutput, EbookConvertOutput
 from publish.book import Book, Chapter
 # noinspection PyProtectedMember
 from publish.yaml import (load_yaml, _load_book, _load_chapters, _load_ebookconvert_params,
-                          _load_outputs)
-
+                          _load_outputs, _load_substitutions)
+from substitution import SimpleSubstitution, RegexSubstitution
 
 BOOK_SECTION = r"""
 title: My book
@@ -349,3 +349,51 @@ outputs:
     actual = list(_load_outputs(load_yaml(yaml)))
 
     assert actual[0].__dict__ == expected[0].__dict__
+
+
+def test_load_substitutions():
+    yaml = r"""
+substitutions:
+  - old: Some
+    new: Thing
+  - pattern: \+\+(?P<text>.*?)\+\+
+    replace_with: <span class="small-caps">\g<text></span>
+"""
+
+    expected = [SimpleSubstitution(old='Some', new='Thing'),
+                RegexSubstitution(pattern=r'\+\+(?P<text>.*?)\+\+',
+                                  replace_with=r'<span class="small-caps">\g<text></span>')]
+
+    actual = list(_load_substitutions(load_yaml(yaml)))
+
+    assert len(actual) == len(expected)
+    assert actual[0].__dict__ == expected[0].__dict__
+    assert actual[1].__dict__ == expected[1].__dict__
+
+
+def test_load_substitutions_raises_type_error_when_keys_dont_match_any_substitution():
+    yaml = r"""
+    substitutions:
+      - donald: duck
+        dagobert: duck
+    """
+
+    with pytest.raises(TypeError) as exc_info:
+        _load_substitutions(load_yaml(yaml))
+
+    assert str(exc_info.value) == "['donald', 'dagobert'] do not match any substitution type."
+
+
+def test_load_substitutions_returns_empty_list_when_not_present_in_yaml():
+    yaml = r"""
+title: some title
+
+outputs:
+  - path: example.html
+"""
+
+    expected = []
+
+    actual = _load_substitutions(load_yaml(yaml))
+
+    assert actual == expected
