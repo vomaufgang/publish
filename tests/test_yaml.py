@@ -19,7 +19,7 @@ from publish.book import Book, Chapter
 # noinspection PyProtectedMember
 from publish.yaml import (load_yaml, _load_book, _load_chapters, _load_ebookconvert_params,
                           _load_outputs, _load_substitutions)
-from substitution import SimpleSubstitution, RegexSubstitution
+from publish.substitution import SimpleSubstitution, RegexSubstitution
 
 BOOK_SECTION = r"""
 title: My book
