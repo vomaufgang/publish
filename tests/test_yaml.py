@@ -132,13 +132,24 @@ def test_load_ebookconvert_params_prepends_missing_double_minus():
     yaml = r"""
 ebookconvert_params:
   - level1-toc=//h:h1
-  - change-justification=left
+  - change-justification=left"""
+    expected = ['--level1-toc=//h:h1',
+                '--change-justification=left']
+
+    actual = _load_ebookconvert_params(load_yaml(yaml))
+
+    assert actual == expected
+
+
+def test_load_ebookconvert_params_retains_whitespace_on_multiline_params():
+    yaml = r"""
+ebookconvert_params:
   - --page-breaks-before=//*[(name()='h1' or name()='h2') or 
     (name()='div' and @class='page-break')]"""  # noqa: W291
+    # Note the trailing space after the 'or' in the page breaks param - this needs to be
+    # preserved.
 
-    expected = ['--level1-toc=//h:h1',
-                '--change-justification=left',
-                ''.join(["--page-breaks-before=//*[(name()='h1' or name()='h2') or ",
+    expected = [''.join(["--page-breaks-before=//*[(name()='h1' or name()='h2') or ",
                          "(name()='div' and @class='page-break')]"])]
 
     actual = _load_ebookconvert_params(load_yaml(yaml))
@@ -146,7 +157,7 @@ ebookconvert_params:
     assert actual == expected
 
 
-def test_load_ebookconvert_params_strips_whitespace():
+def test_load_ebookconvert_params_strips_leading_and_trailing_whitespace():
     yaml = r"""
 ebookconvert_params:
   -  level1-toc=//h:h1
