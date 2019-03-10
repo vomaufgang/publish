@@ -173,6 +173,21 @@ ebookconvert_params:
     assert actual == expected
 
 
+def test_load_ebookconvert_params_returns_empty_list_when_not_present_in_yaml():
+    yaml = r"""
+title: some title
+
+outputs:
+  - path: example.html
+"""
+
+    expected = []
+
+    actual = _load_ebookconvert_params(load_yaml(yaml))
+
+    assert actual == expected
+
+
 def test_load_outputs_uses_html_output_for_html_file_ending():
     yaml = """
 outputs:
