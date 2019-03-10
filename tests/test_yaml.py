@@ -21,55 +21,18 @@ from publish.yaml import (load_yaml, _load_book, _load_chapters, _load_ebookconv
                           _load_outputs, _load_substitutions)
 from publish.substitution import SimpleSubstitution, RegexSubstitution
 
-BOOK_SECTION = r"""
-title: My book
-author: Max Mustermann
-language: en
-"""
-
-CHAPTER_SECTION = r"""
-chapters:
-  - src: first_chapter.md
-  - src: second_chapter.md
-  - src: unfinished_chapter.md
-    publish: False
-"""
-
-SUBSTITUTION_SECTION = r"""
-substitutions:
-  - old: Some
-    new: Thing
-  - pattern: \+\+(?P<text>.*?)\+\+
-    replace_with: <span class="small-caps">\g<text></span>
-"""
-
-OUTPUT_SECTION = r"""
-ebookconvert_params:
-  - level1-toc=//h:h1
-  - change-justification=left
-  - page-breaks-before=//*[(name()='h1' or name()='h2') or 
-    (name()='div' and @class='page-break')]
-
-stylesheet: style.css
-
-outputs:
-  - path: example.html
-  - path: example.epub
-  - path: example.mobi
-    ebookconvert_params:
-      - preserve-cover-aspect-ratio
-  - path: replacement_stylesheet.epub
-    stylesheet: replacement.css
-"""  # noqa: W291
-
 
 def test_load_book():
     """todo: add missing book metadata to test yaml
     """
-    yaml = BOOK_SECTION
+    yaml = r"""
+title: My book
+authors: Max Mustermann
+language: en
+"""
 
     expected = Book(title='My book',
-                    author='Max Mustermann',
+                    authors='Max Mustermann',
                     language='en')
 
     actual = _load_book(load_yaml(yaml))
@@ -101,7 +64,13 @@ unknown_attribute: hello
 
 
 def test_load_chapters():
-    yaml = CHAPTER_SECTION
+    yaml = r"""
+chapters:
+  - src: first_chapter.md
+  - src: second_chapter.md
+  - src: unfinished_chapter.md
+    publish: False
+"""
 
     expected = [Chapter(src='first_chapter.md'),
                 Chapter(src='second_chapter.md'),
@@ -116,7 +85,24 @@ def test_load_chapters():
 
 
 def test_load_ebookconvert_params():
-    yaml = OUTPUT_SECTION
+    yaml = r"""
+ebookconvert_params:
+  - level1-toc=//h:h1
+  - change-justification=left
+  - page-breaks-before=//*[(name()='h1' or name()='h2') or 
+    (name()='div' and @class='page-break')]
+
+stylesheet: style.css
+
+outputs:
+  - path: example.html
+  - path: example.epub
+  - path: example.mobi
+    ebookconvert_params:
+      - preserve-cover-aspect-ratio
+  - path: replacement_stylesheet.epub
+    stylesheet: replacement.css
+"""  # noqa: W291
 
     expected = ['--level1-toc=//h:h1',
                 '--change-justification=left',
