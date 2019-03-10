@@ -276,3 +276,61 @@ outputs:
 
     assert len(actual) == len(expected)
     assert actual[0].__dict__ == expected[0].__dict__
+
+
+def test_load_outputs_uses_global_ebookconvert_params_when_no_local_present():
+    yaml = """
+ebookconvert_params:
+  - global
+
+outputs:
+  - path: example.epub
+"""
+
+    expected = [
+        EbookConvertOutput(path='example.epub',
+                           ebookconvert_params=['--global'])
+    ]
+
+    actual = list(_load_outputs(load_yaml(yaml)))
+
+    assert actual[0].__dict__ == expected[0].__dict__
+
+
+def test_load_outputs_uses_local_ebookconvert_params_when_no_global_present():
+    yaml = """
+outputs:
+  - path: example.epub
+    ebookconvert_params:
+      - local
+"""
+
+    expected = [
+        EbookConvertOutput(path='example.epub',
+                           ebookconvert_params=['--local'])
+    ]
+
+    actual = list(_load_outputs(load_yaml(yaml)))
+
+    assert actual[0].__dict__ == expected[0].__dict__
+
+
+def test_load_outputs_adds_local_ebookconvert_params_to_global_when_both_present():
+    yaml = """
+ebookconvert_params:
+  - global
+
+outputs:
+  - path: example.epub
+    ebookconvert_params:
+      - local
+"""
+
+    expected = [
+        EbookConvertOutput(path='example.epub',
+                           ebookconvert_params=['--global', '--local'])
+    ]
+
+    actual = list(_load_outputs(load_yaml(yaml)))
+
+    assert actual[0].__dict__ == expected[0].__dict__

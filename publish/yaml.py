@@ -209,7 +209,9 @@ def _load_outputs(dict_: Dict) -> Iterable[Union[HtmlOutput, EbookConvertOutput]
         else:
             if 'ebookconvert_params' in output:
                 local_ec_params = _load_ebookconvert_params(output)
-                output['ebookconvert_params'] = local_ec_params + global_ec_params
+                output['ebookconvert_params'] = global_ec_params + local_ec_params
+            else:
+                output['ebookconvert_params'] = global_ec_params
 
             outputs.append(EbookConvertOutput(**output))
 
