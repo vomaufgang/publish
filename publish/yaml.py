@@ -57,10 +57,11 @@ def load_project(yaml: str) -> Tuple[Book,
     dict_ = load_yaml(yaml)
 
     book = _load_book(dict_)
-    book.chapters.extend(_load_chapters(dict_['chapters']))
-    substitutions = list(_load_substitutions(dict_))
+    book.chapters.extend(_load_chapters(dict_))
+    substitutions = _load_substitutions(dict_)
+    outputs = _load_outputs(dict_)
 
-    return book, substitutions, []
+    return book, substitutions, outputs
 
 
 def _load_book(dict_: Dict) -> Book:
@@ -177,6 +178,9 @@ def _load_outputs(dict_: Dict) -> Iterable[Union[HtmlOutput, EbookConvertOutput]
     A file name ending in the file type '.html' will produce an HtmlOutput. '.epub', '.mobi' or
     any other file type excluding '.html' will produce an EbookConvertOutput.
 
+    Note that a local stylesheet *replaces* the global stylesheet, but local ebookconvert_params
+    are *added* to the global ebookconvert_params if present.
+
     Args:
         dict_: The dictionary.
 
@@ -206,7 +210,9 @@ def _load_outputs(dict_: Dict) -> Iterable[Union[HtmlOutput, EbookConvertOutput]
         else:
             if 'ebookconvert_params' in output:
                 local_ec_params = _load_ebookconvert_params(output)
-                output['ebookconvert_params'] = local_ec_params + global_ec_params
+                output['ebookconvert_params'] = global_ec_params + local_ec_params
+            else:
+                output['ebookconvert_params'] = global_ec_params
 
             outputs.append(EbookConvertOutput(**output))
 
