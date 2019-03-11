@@ -18,7 +18,7 @@ from publish.output import HtmlOutput, EbookConvertOutput
 from publish.book import Book, Chapter
 # noinspection PyProtectedMember
 from publish.yaml import (load_yaml, _load_book, _load_chapters, _load_ebookconvert_params,
-                          _load_outputs, _load_substitutions)
+                          _load_outputs, _load_substitutions, load_project)
 from publish.substitution import SimpleSubstitution, RegexSubstitution
 
 
@@ -383,3 +383,42 @@ outputs:
     actual = _load_substitutions(load_yaml(yaml))
 
     assert actual == expected
+
+
+def test_load_project():
+    """This is a broad integration test. For edge cases and specific implementation details of
+    all the moving parts of publish.yaml look at the individual unit tests above."""
+    yaml = r"""
+title: My book
+authors: Max Mustermann
+language: en
+
+chapters:
+  - src: first_chapter.md
+
+substitutions:
+  - old: Some
+    new: Thing
+
+outputs:
+  - path: example.html
+"""  # noqa: W291
+
+    expected_book = Book(title='My book', authors='Max Mustermann', language='en')
+    expected_book.chapters.extend([Chapter(src='first_chapter.md')])
+
+    expected_substitutions = [SimpleSubstitution(old='Some', new='Thing')]
+
+    expected_outputs = [HtmlOutput(path='example.html')]
+
+    actual_book, actual_substitutions, actual_outputs = load_project(yaml)
+
+    assert actual_book.title == expected_book.title
+    assert actual_book.authors == expected_book.authors
+    assert actual_book.language == expected_book.language
+    assert len(actual_book.chapters) == len(expected_book.chapters)
+    assert actual_book.chapters[0].__dict__ == expected_book.chapters[0].__dict__
+    assert len(list(actual_substitutions)) == len(expected_substitutions)
+    assert list(actual_substitutions)[0].__dict__ == expected_substitutions[0].__dict__
+    assert len(list(actual_outputs)) == len(expected_outputs)
+    assert list(actual_outputs)[0].__dict__ == expected_outputs[0].__dict__

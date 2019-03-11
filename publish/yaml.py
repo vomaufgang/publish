@@ -57,10 +57,11 @@ def load_project(yaml: str) -> Tuple[Book,
     dict_ = load_yaml(yaml)
 
     book = _load_book(dict_)
-    book.chapters.extend(_load_chapters(dict_['chapters']))
-    substitutions = list(_load_substitutions(dict_))
+    book.chapters.extend(_load_chapters(dict_))
+    substitutions = _load_substitutions(dict_)
+    outputs = _load_outputs(dict_)
 
-    return book, substitutions, []
+    return book, substitutions, outputs
 
 
 def _load_book(dict_: Dict) -> Book:
