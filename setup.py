@@ -64,6 +64,11 @@ setup(
     package_data={
         'publish': ['template.html', 'VERSION']
     },
+    entry_points={
+        'console_scripts': [
+            'publish = publish.cli:main'
+        ]
+    },
     python_requires=">=3.6",
     install_requires=REQUIREMENTS,
     tests_require=TEST_REQUIREMENTS,
