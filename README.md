@@ -26,6 +26,23 @@ Created to make publishing stories a lot easier for myself.
 * Describe your project and desired output using either a yaml project file or use publish directly
   from Python.
 
+## Examples
+
+Below is a short overview over the two project formats, Python and yaml. You can find complete,
+runnable examples covering every single feature and setting in the `examples` folder.
+
+All examples require an installation of anited. publish in your Python environment.
+
+You can install the latest stable version by following the installation note at the bottom of
+this readme (recommended) or the latest development version by cloning this repository, checking
+out the desired branch and following the installation guide in `CONTRIBUTING.md`.
+
+Examples `python_*` can be run by calling `python publish.py` inside the folder of the example
+you want to run.
+
+Examples `yaml_*` can be run by calling `publish` inside the folder of the example you want
+to run.
+
 ### Yaml project format
 
 Describe your project in a yaml file called `.publish.yaml` alongside your markdown files.
@@ -140,8 +157,8 @@ on the command line.
 ## Documentation and examples
 
 A more in depth guide to anited. publish including additional features like multiple
-outputs, default outputs, text substitutions and more can be found at at
-https://docs.anited.de/publish.
+outputs, default outputs, text substitutions and more can be found in the 
+[Wiki](https://gitlab.com/anited/publish/wikis).
 
 If complete and working examples are more to your liking you can find several such example
 projects in the **examples** directory of the repository.

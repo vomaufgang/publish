@@ -17,7 +17,5 @@ substitutions:
 stylesheet: style.css
 
 outputs:
-  - type: html
-    output: example.html
-  - type: ebookconvert
-    output: example.epub
+  - path: example.html
+  - path: example.epub
