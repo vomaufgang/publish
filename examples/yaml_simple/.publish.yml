@@ -1,0 +1,21 @@
+title: My book
+author: Max Mustermann
+language: en
+
+chapters:
+  - src: first_chapter.md
+  - src: second_chapter.md
+  - src: unfinished_chapter.md
+    publish: False
+
+substitutions:
+  - old: Cows
+    new: Substitutions
+  - pattern: \+\+(?P<text>.*?)\+\+
+    replace_with: <span class="small-caps">\g<text></span>
+
+stylesheet: style.css
+
+outputs:
+  - path: example.html
+  - path: example.epub

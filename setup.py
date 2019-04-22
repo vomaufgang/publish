@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# apub - Python package with cli to turn markdown files into ebooks
+# anited. publish - Python package with cli to turn markdown files into ebooks
 # Copyright (c) 2014 Christopher Knörndel
 #
 # Distributed under the MIT License
@@ -24,12 +24,13 @@ except ImportError:
     from distutils.core import setup
 
 
-README = open('README.rst').read()
-VERSION = open('apub/VERSION').read().strip()
+README = open('README.md').read()
+VERSION = open('publish/VERSION').read().strip()
 
 REQUIREMENTS = [
-    'markdown>=2.6',
+    'markdown>=3.0',
     'Jinja2>=2.10',
+    'ruamel.yaml>=0.15.50',
 ]
 
 TEST_REQUIREMENTS = [
@@ -48,20 +49,27 @@ DEV_REQUIREMENTS = [
 DEV_REQUIREMENTS.extend(TEST_REQUIREMENTS)
 
 setup(
-    name='apub',
+    name='anited-publish',
     version=VERSION,
     description='Python package with command line interface to turn markdown '
                 'files into ebooks.',
     long_description=README,
+    long_description_content_type='text/markdown',
     author='Christopher Knörndel',
     author_email='cknoerndel@anited.de',
-    url='https://github.com/vomaufgang/apub/',
+    url='https://gitlab.com/anited/publish/',
     packages=[
-        'apub',
+        'publish',
     ],
     package_data={
-        'apub': ['template.html', 'VERSION']
+        'publish': ['template.html', 'VERSION']
     },
+    entry_points={
+        'console_scripts': [
+            'publish = publish.cli:main'
+        ]
+    },
+    python_requires=">=3.6",
     install_requires=REQUIREMENTS,
     tests_require=TEST_REQUIREMENTS,
     extras_require={
@@ -69,12 +77,12 @@ setup(
     },
     license="MIT",
     zip_safe=False,
-    keywords='apub',
+    keywords='publish',
     classifiers=[
-        'Development Status :: 4 - Beta',
         'Intended Audience :: End Users/Desktop',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
 )

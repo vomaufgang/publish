@@ -1,0 +1,30 @@
+image: python:3.6
+
+before_script:
+  - python --version
+  - pip install .[dev]
+
+stages:
+  - test
+
+lint:flake8:
+  stage: test
+  script: flake8 publish tests examples setup.py
+
+lint:pylint:
+  stage: test
+  script: pylint publish tests examples setup.py
+
+test:py36:
+  image: python:3.6
+  stage: test
+  script: python setup.py test
+
+test:py37:
+  image: python:3.7
+  stage: test
+  script: python setup.py test
+
+cover:
+  stage: test
+  script: pytest --cov-report term-missing --cov=publish tests/

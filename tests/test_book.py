@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# apub - Python package with cli to turn markdown files into ebooks
+# anited. publish - Python package with cli to turn markdown files into ebooks
 # Copyright (c) 2014 Christopher Knörndel
 #
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
-"""Tests for `apub.book` module.
+"""Tests for `publish.book` module.
 """
 
 # pylint: disable=missing-docstring,no-self-use,invalid-name
@@ -15,7 +15,7 @@
 from datetime import date
 
 import pytest
-from apub.book import Book, Chapter
+from publish.book import Book, Chapter
 from tests import get_test_book
 
 
@@ -156,7 +156,7 @@ class TestChapter:
         chapter = Chapter('source',
                           publish=False)
 
-        assert chapter.source_path == 'source'
+        assert chapter.src == 'source'
         assert chapter.publish is False
 
     def test_default_attribute_values(self):
@@ -172,12 +172,12 @@ class TestChapter:
 
     def test_source(self):
         chapter1 = Chapter('source')
-        chapter1.source_path = "abc"
+        chapter1.src = "abc"
 
         chapter2 = Chapter('source')
 
-        assert chapter1.source_path == "abc"
-        assert chapter2.source_path == "source"
+        assert chapter1.src == "abc"
+        assert chapter2.src == "source"
 
     def test_source_is_required(self):
         with pytest.raises(TypeError):

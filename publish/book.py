@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# apub - Python package with cli to turn markdown files into ebooks
+# anited. publish - Python package with cli to turn markdown files into ebooks
 # Copyright (c) 2014 Christopher Knörndel
 #
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
 """This module defines the book and chapter classes designed to hold the metadata of a book
-and its chapters required by apub.output to produce its output.
+and its chapters required by publish.output to produce its output.
 """
 
 
@@ -122,14 +122,14 @@ class Chapter:
     of a book.
 
     Args:
-        source_path: The path to the source file.
+        src: The path to the source file.
         publish: Determines whether the chapter will be included
             in the resulting output or not.
 
             Default: True
 
     Attributes:
-        source_path (str): The path to the source file.
+        src (str): The path to the source file.
         publish (bool): Determines whether the chapter will be included
             in the resulting output or not.
 
@@ -139,9 +139,9 @@ class Chapter:
     # pylint: disable=too-few-public-methods
 
     def __init__(self,
-                 source_path: str,
+                 src: str,
                  publish: bool = True):
         """Initializes a new instance of the :class:`Chapter` class.
         """
-        self.source_path = source_path
+        self.src = src
         self.publish = publish

@@ -28,6 +28,7 @@ pip-log.txt
 .tox
 nosetests.xml
 htmlcov
+.pytest_cache
 
 # Translations
 *.mo
@@ -57,3 +58,4 @@ docs/_build
 
 # virtual environments
 /venv/
+workon.bat

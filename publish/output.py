@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# apub - Python package with cli to turn markdown files into ebooks
+# anited. publish - Python package with cli to turn markdown files into ebooks
 # Copyright (c) 2014 Christopher Knörndel
 #
 # Distributed under the MIT License
@@ -23,9 +23,9 @@ from pkg_resources import resource_string
 import markdown
 from jinja2 import Template
 
-from apub import __version__ as apub_version
-from apub.book import Book, Chapter
-from apub.substitution import Substitution, apply_substitutions
+from publish import __version__ as package_version
+from publish.book import Book, Chapter
+from publish.substitution import Substitution, apply_substitutions
 
 LOG = logging.getLogger(__name__)
 LOG.addHandler(logging.NullHandler())
@@ -58,7 +58,7 @@ class HtmlOutput:
 
     Attributes:
         path (str): The output path.
-        css_path (str): The path to the style sheet.
+        stylesheet (str): The path to the style sheet.
         force_publish (bool): Determines wether to force publish all chapters.
 
             If set to true, all chapters of the book will be published
@@ -73,7 +73,7 @@ class HtmlOutput:
         """Initializes a new instance of the :class:`HtmlOutput` class.
         """
         self.path = path
-        self.css_path = kwargs.pop('css_path', None)
+        self.stylesheet = kwargs.pop('stylesheet', None)
         self.force_publish = kwargs.pop('force_publish', False)
 
     def make(self,
@@ -115,15 +115,15 @@ class HtmlOutput:
         return list(filter(lambda c: c.publish is True, chapters))
 
     def _get_css(self) -> str:
-        """Gets the css from the css file specified in css_path as a string.
+        """Gets the css from the css file specified in stylesheet as a string.
 
         Returns:
-            The css from the css file specified in css_path as a string.
+            The css from the css file specified in stylesheet as a string.
         """
-        if not self.css_path:
+        if not self.stylesheet:
             return ''
 
-        css_path = os.path.join(os.getcwd(), self.css_path)
+        css_path = os.path.join(os.getcwd(), self.stylesheet)
 
         LOG.info('Collecting stylesheet ...')
         with open(css_path, 'r') as file:
@@ -208,7 +208,7 @@ class HtmlOutput:
 
         LOG.info('Collecting chapters ...')
         for chapter in chapters_to_publish:
-            with open(chapter.source_path, 'r') as file:
+            with open(chapter.src, 'r') as file:
                 markdown_.append(file.read())
 
         return md_paragraph_sep.join(markdown_)
@@ -229,7 +229,7 @@ class EbookConvertOutput(HtmlOutput):
         ebookconvert_params (List[str]): An optional list of additional command
             line arguments that will be passed to ebookconvert.
         path (str): The output path.
-        css_path (str): The path to the style sheet.
+        stylesheet (str): The path to the style sheet.
         force_publish (bool): Determines wether to force publish all chapters.
 
             If set to true, all chapters of the book will be published
@@ -360,7 +360,7 @@ def _apply_template(html_content: str,
                                      title=title,
                                      css=css,
                                      language=language,
-                                     apub_version=apub_version)
+                                     package_version=package_version)
 
 
 def _yield_attributes_as_params(object_) -> Generator[str, None, None]:
@@ -396,4 +396,3 @@ def _yield_attributes_as_params(object_) -> Generator[str, None, None]:
 
 class NoChaptersFoundError(Exception):
     """No chapters found."""
-    pass

@@ -31,18 +31,20 @@ if "%1" == "test-all" (
 )
 
 if "%1" == "lint" (
-    pylint apub tests examples setup.py
-	flake8 apub tests examples setup.py
+    echo.************* pylint
+    pylint publish tests examples setup.py
+    echo.************* flake8
+	flake8 publish tests examples setup.py
     goto end
 )
 
 if "%1" == "cover" (
-	pytest --cov-report term-missing --cov=apub tests/
+	pytest --cov-report term-missing --cov=publish tests/
 	goto end
 )
 
 if "%1" == "cover-pretty" (
-    pytest --cov-report html --cov=apub
+    pytest --cov-report html --cov=publish
     htmlcov\index.html
     goto end
 )
@@ -53,6 +55,12 @@ if "%1" == "dist" (
 	python setup.py bdist_wheel
 	dir dist
 	goto end
+)
+
+if "%1" == "verify" (
+    make cover
+    make lint
+    goto end
 )
 
 echo.Unrecognized command: '%1'

@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# apub - Python package with cli to turn markdown files into ebooks
+# anited. publish - Python package with cli to turn markdown files into ebooks
 # Copyright (c) 2014 Christopher Knörndel
 #
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
 """This module defines substitution classes that can be passed to the output classes in
-apub.output to apply text substitutions to the markdown content before it is rendered to html
-or epub.
+publish.output to apply text substitutions to the markdown content before it is
+rendered to html or epub.
 """
 
 # pylint: disable=too-few-public-methods,anomalous-backslash-in-string
@@ -41,7 +41,6 @@ class Substitution(metaclass=ABCMeta):
         Returns:
             The changed text.
         """
-        pass  # pragma: no cover
 
 
 class SimpleSubstitution(Substitution):
@@ -120,8 +119,8 @@ class RegexSubstitution(Substitution):
             book = Book()
             book.chapters.append(Chapter(source='example.md'))
 
-            substitution = RegexSubstitution(pattern=r'\+\+(.*?)\+\+',
-                                             replace_with='<span class="hello">\1</span>')
+            substitution = RegexSubstitution(pattern=r'\\+\\+(.*?)\\+\\+',
+                                             replace_with='<span class="hello">\\1</span>')
 
             HtmlOutput(path='example.html').make(book, [substitution])
 

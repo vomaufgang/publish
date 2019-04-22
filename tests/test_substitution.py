@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# apub - Python package with cli to turn markdown files into ebooks
+# anited. publish - Python package with cli to turn markdown files into ebooks
 # Copyright (c) 2014 Christopher Knörndel
 #
 # Distributed under the MIT License
 # (license terms are at http://opensource.org/licenses/MIT).
 
-"""Tests for `apub.substitution` module.
+"""Tests for `publish.substitution` module.
 """
 
 # pylint: disable=missing-docstring,no-self-use,invalid-name
 
 from abc import ABCMeta
 
-from apub.substitution import (Substitution,
-                               SimpleSubstitution,
-                               apply_substitutions, RegexSubstitution)
+from publish.substitution import (Substitution,
+                                  SimpleSubstitution,
+                                  apply_substitutions, RegexSubstitution)
 
 
 class TestSubstitution:
@@ -24,6 +24,7 @@ class TestSubstitution:
         assert isinstance(Substitution, ABCMeta)
 
     def test_apply_to_is_abstract(self):
+        # noinspection PyUnresolvedReferences
         assert 'apply_to' in Substitution.__abstractmethods__
 
 
@@ -64,6 +65,24 @@ class TestRegexSubstitution:
     def test_apply_to(self):
         substitution = RegexSubstitution(pattern=r'\+\+(.*?)\+\+',
                                          replace_with=r'<span class="small-caps">\1</span>')
+        text = '\n'.join([
+            'foo',
+            '++something else++',
+            'something foo',
+        ])
+        expected = '\n'.join([
+            'foo',
+            '<span class="small-caps">something else</span>',
+            'something foo',
+        ])
+
+        actual = substitution.apply_to(text)
+
+        assert actual == expected
+
+    def test_apply_to_new_syntax(self):
+        substitution = RegexSubstitution(pattern=r'\+\+(?P<text>.*?)\+\+',
+                                         replace_with=r'<span class="small-caps">\g<text></span>')
         text = '\n'.join([
             'foo',
             '++something else++',

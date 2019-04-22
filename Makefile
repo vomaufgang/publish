@@ -25,8 +25,10 @@ clean-pyc:
 	find . -name '*~' -exec rm -f {} +
 
 lint:
-	pylint apub tests examples setup.py
-	flake8 apub tests examples setup.py
+    @echo "************* pylint"
+	pylint publish tests examples setup.py
+    @echo "************* flake8"
+	flake8 publish tests examples setup.py
 
 test:
 	python setup.py test
@@ -35,10 +37,10 @@ test-all:
 	tox
 
 cover:
-	pytest --cov-report term-missing --cov=apub tests/
+	pytest --cov-report term-missing --cov=publish tests/
 
 cover-pretty:
-	pytest --cov-report html --cov=apub
+	pytest --cov-report html --cov=publish
 	open htmlcov/index.html
 
 release: clean
@@ -49,3 +51,10 @@ dist: clean
 	python setup.py sdist
 	python setup.py bdist_wheel
 	ls -l dist
+
+verify:
+	pytest --cov-report term-missing --cov=publish tests/
+    @echo "************* pylint"
+	pylint publish tests examples setup.py
+    @echo "************* flake8"
+	flake8 publish tests examples setup.py
