@@ -26,7 +26,7 @@ def main():
     """
     logging.basicConfig(format='%(message)s', level=logging.INFO)
 
-    with open('.publish.yml') as publish_yaml:
+    with open('.publish.yml', 'rt', encoding='utf8') as publish_yaml:
         yaml = publish_yaml.read()
 
     book, substitutions, outputs = load_project(str(yaml))
