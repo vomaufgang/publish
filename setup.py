@@ -41,6 +41,7 @@ TEST_REQUIREMENTS = [
 
 DEV_REQUIREMENTS = [
     'tox',
+    'tox-venv',
     'pylint',
     'flake8',  # pylint does not support E301&E303 -> required blank lines between functions
                # and/or classes - let flake8 handle these checks
