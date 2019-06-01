@@ -12,7 +12,7 @@ Created to make publishing stories a lot easier for myself.
 ## Build status
 
 * master: [![master pipeline status](https://gitlab.com/anited/publish/badges/master/build.svg)](https://gitlab.com/anited/publish/commits/master)
-          [![master code coverage](https://gitlab.com/anited/publish/badges/master/coverage.svg?job=cover)](https://gitlab.com/anited/publish/commits/master)
+          [![master code coverage](https://gitlab.com/anited/publish/badges/master/coverage.svg)](https://gitlab.com/anited/publish/commits/master)
 
 ## Features
 
