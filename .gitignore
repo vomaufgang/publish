@@ -29,6 +29,7 @@ pip-log.txt
 nosetests.xml
 htmlcov
 .pytest_cache
+TEST-*.xml
 coverage.xml
 
 # Translations
