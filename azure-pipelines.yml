@@ -6,39 +6,48 @@
 trigger:
 - master
 
-pool:
-  vmImage: 'ubuntu-latest'
-strategy:
-  matrix:
-    Python36:
-      python.version: '3.6'
-      tox.env: 'py36-azure'
-    Python37:
-      python.version: '3.7'
-      tox.env: 'py37-azure'
-
-steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '$(python.version)'
-  displayName: 'Use Python $(python.version)'
-
-- script: |
-    python -m pip install --upgrade pip
-    pip install tox
-  displayName: 'Install tox'
-
-- script: |
-    tox -e $(tox.env)
-  displayName: 'tox $(tox.env)'
-
-- task: PublishTestResults@2
-  inputs:
-    testResultsFormat: 'JUnit'
-    testResultsFiles: '**/TEST-*.xml'
-    failTaskOnFailedTests: true
-
-- task: PublishCodeCoverageResults@1
-  inputs:
-    codeCoverageTool: 'Cobertura'
-    summaryFileLocation: 'coverage.xml'
+jobs:
+- job: Python
+  pool:
+    vmImage: 'ubuntu-latest'
+  strategy:
+    matrix:
+      Python36:
+        python.version: '3.6'
+        tox.env: 'py36-azure'
+      Python37:
+        python.version: '3.7'
+        tox.env: 'py37-azure'
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+    displayName: 'Use Python $(python.version)'
+  - script: |
+      python -m pip install --upgrade pip
+      pip install tox
+    displayName: 'Install tox'
+  - script: |
+      tox -e $(tox.env)
+    displayName: 'tox $(tox.env)'
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '**/TEST-*.xml'
+      failTaskOnFailedTests: true
+  - task: PublishCodeCoverageResults@1
+    inputs:
+      codeCoverageTool: 'Cobertura'
+      summaryFileLocation: 'coverage.xml'
+- job: SonarCloud
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - task: SonarCloudPrepare@1
+    inputs:
+      SonarCloud: 'SonarCloud'
+      organization: 'anited'
+      scannerMode: 'CLI'
+      configMode: 'file'
+      extraProperties: |
+        sonar.projectKey=publish
