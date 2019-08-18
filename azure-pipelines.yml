@@ -51,3 +51,7 @@ jobs:
       configMode: 'file'
       extraProperties: |
         sonar.projectKey=publish
+  - task: SonarCloudAnalyze@1
+  - task: SonarCloudPublish@1
+    inputs:
+      pollingTimeoutSec: '300'
