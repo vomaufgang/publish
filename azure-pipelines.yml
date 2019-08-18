@@ -12,10 +12,10 @@ strategy:
   matrix:
     Python36:
       python.version: '3.6'
-      tox.env: 'py36'
+      tox.env: 'py36-azure'
     Python37:
       python.version: '3.7'
-      tox.env: 'py37'
+      tox.env: 'py37-azure'
 
 steps:
 - task: UsePythonVersion@0
