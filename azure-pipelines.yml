@@ -43,6 +43,10 @@ jobs:
   pool:
     vmImage: 'ubuntu-latest'
   steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.7'
+    displayName: 'Use Python 3.7'
   - task: SonarCloudPrepare@1
     inputs:
       SonarCloud: 'SonarCloud'
@@ -51,7 +55,12 @@ jobs:
       configMode: 'file'
       extraProperties: |
         sonar.projectKey=publish
+        sonar.python.coverage.reportPath=$(System.DefaultWorkingDirectory)/coverage.xml
+  - script: |
+      python -m pip install --upgrade pip
+      pip install tox
+    displayName: 'Install tox'
+  - script: |
+      tox -e py37-azure
+    displayName: 'tox py37-azure'
   - task: SonarCloudAnalyze@1
-  - task: SonarCloudPublish@1
-    inputs:
-      pollingTimeoutSec: '300'
