@@ -26,28 +26,8 @@ except ImportError:
 
 README = open('README.md').read()
 VERSION = open('publish/VERSION').read().strip()
-
-REQUIREMENTS = [
-    'markdown>=3.0',
-    'Jinja2>=2.10',
-    'ruamel.yaml>=0.15.50',
-]
-
-TEST_REQUIREMENTS = [
-    'pytest',
-    'pytest-cov',
-    'pytest-runner',
-]
-
-DEV_REQUIREMENTS = [
-    'tox',
-    'tox-venv',
-    'pylint',
-    'flake8',  # pylint does not support E301&E303 -> required blank lines between functions
-               # and/or classes - let flake8 handle these checks
-    'wheel',
-]
-DEV_REQUIREMENTS.extend(TEST_REQUIREMENTS)
+REQUIREMENTS = open('requirements.txt').readlines()
+DEV_REQUIREMENTS = open('dev-requirements.txt').readlines()[1:]
 
 setup(
     name='anited-publish',
@@ -72,7 +52,7 @@ setup(
     },
     python_requires=">=3.6",
     install_requires=REQUIREMENTS,
-    tests_require=TEST_REQUIREMENTS,
+    tests_require=DEV_REQUIREMENTS,
     extras_require={
         'dev': DEV_REQUIREMENTS
     },

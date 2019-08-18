@@ -1,0 +1,9 @@
+-r requirements.txt
+tox
+tox-venv
+pylint
+flake8
+wheel
+pytest
+pytest-cov
+pytest-runner
