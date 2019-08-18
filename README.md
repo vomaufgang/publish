@@ -11,8 +11,7 @@ Created to make publishing stories a lot easier for myself.
 
 ## Build status
 
-* master: [![master pipeline status](https://gitlab.com/anited/publish/badges/master/build.svg)](https://gitlab.com/anited/publish/commits/master)
-          [![master code coverage](https://gitlab.com/anited/publish/badges/master/coverage.svg)](https://gitlab.com/anited/publish/commits/master)
+* master: [![Build Status](https://anited.visualstudio.com/publish/_apis/build/status/vomaufgang.publish?branchName=master)](https://anited.visualstudio.com/publish/_build/latest?definitionId=1&branchName=master)
 
 ## Features
 
