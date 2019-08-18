@@ -31,3 +31,9 @@ steps:
 - script: |
     tox -e $(tox.env)
   displayName: 'tox $(tox.env)'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: '**/TEST-*.xml'
+    failTaskOnFailedTests: true
