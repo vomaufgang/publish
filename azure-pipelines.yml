@@ -57,6 +57,7 @@ jobs:
         sonar.projectKey=publish
         sonar.python.coverage.reportPaths=$(Build.SourcesDirectory)/coverage.xml
         sonar.exclusions=**/publish/template.html
+        sonar.coverage.exclusions=setup.py,tests/**,examples/**
   - script: |
       python -m pip install --upgrade pip
       pip install tox
