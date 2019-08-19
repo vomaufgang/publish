@@ -11,7 +11,7 @@ Created to make publishing stories a lot easier for myself.
 
 ## Build status
 
-* master: [![Build Status](https://anited.visualstudio.com/publish/_apis/build/status/vomaufgang.publish?branchName=master)](https://anited.visualstudio.com/publish/_build/latest?definitionId=1&branchName=master) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=publish&metric=alert_status)](https://sonarcloud.io/dashboard?id=publish)
+* master: [![Build Status](https://anited.visualstudio.com/publish/_apis/build/status/vomaufgang.publish?branchName=master)](https://anited.visualstudio.com/publish/_build/latest?definitionId=1&branchName=master)
 
 ## Features
 
