@@ -55,7 +55,8 @@ jobs:
       configMode: 'file'
       extraProperties: |
         sonar.projectKey=publish
-        sonar.python.coverage.reportPath=coverage.xml
+        sonar.python.coverage.reportPaths=coverage.xml
+        sonar.exclusions=**/publish/template.html
   - script: |
       python -m pip install --upgrade pip
       pip install tox
