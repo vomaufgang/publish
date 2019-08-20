@@ -346,7 +346,7 @@ def _apply_template(html_content: str,
     Returns:
         The html document.
     """
-    template = resource_string(__name__, 'template.html') \
+    template = resource_string(__name__, 'template.jinja') \
         .decode('utf-8') \
         .replace('\r\n', '\n')
     # resource_string opens the file as bytes, which means that we
