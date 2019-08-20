@@ -43,7 +43,7 @@ setup(
         'publish',
     ],
     package_data={
-        'publish': ['template.html', 'VERSION']
+        'publish': ['template.jinja', 'VERSION']
     },
     entry_points={
         'console_scripts': [
