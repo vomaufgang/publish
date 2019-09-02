@@ -11,7 +11,7 @@ Created to make publishing stories a lot easier for myself.
 
 ## Build status
 
-* master: [![Build Status](https://anited.visualstudio.com/publish/_apis/build/status/vomaufgang.publish?branchName=master)](https://anited.visualstudio.com/publish/_build/latest?definitionId=4&branchName=master)
+* master: [![Build Status](https://anited.visualstudio.com/pipelines/_apis/build/status/anited.publish?branchName=master)](https://anited.visualstudio.com/pipelines/_build/latest?definitionId=4&branchName=master)
 
 ## Features
 
