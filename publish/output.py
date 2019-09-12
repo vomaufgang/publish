@@ -13,7 +13,7 @@
 import logging
 import os
 import shutil
-import subprocess
+import subprocess  # nosec
 import uuid
 from tempfile import mkdtemp
 from textwrap import fill
@@ -289,7 +289,7 @@ class EbookConvertOutput(HtmlOutput):
             LOG.info('Calling ebook-convert ...')
 
             try:
-                subprocess.call(call_params)
+                subprocess.call(call_params, shell=False)  # nosec
             except FileNotFoundError:
                 LOG.error(
                     fill('Could not find ebook-convert. Please install calibre if you want to '
