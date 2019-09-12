@@ -9,7 +9,7 @@ You can contribute in many ways:
 
 ### Report Bugs
 
-Report bugs at https://gitlab.com/anited/publish/issues.
+Report bugs at https://github.com/anited/publish/issues.
 
 If you are reporting a bug, please include:
 
@@ -19,12 +19,12 @@ If you are reporting a bug, please include:
 
 ### Fix Bugs
 
-Look through the GitLab issues for bugs. Anything tagged with "bug"
+Look through the GitHub issues for bugs. Anything tagged with "bug"
 is open to whoever wants to implement it.
 
 ### Implement Features
 
-Look through the GitLab issues for features. Anything tagged with "feature"
+Look through the GitHub issues for features. Anything tagged with "feature"
 is open to whoever wants to implement it.
 
 ### Write Documentation
@@ -35,7 +35,7 @@ articles, and such.
 
 ### Submit Feedback
 
-The best way to send feedback is to file an issue at https://gitlab.com/anited/publish/issues.
+The best way to send feedback is to file an issue at https://github.com/anited/publish/issues.
 
 If you are proposing a feature:
 
@@ -48,15 +48,16 @@ If you are proposing a feature:
 
 Ready to contribute? Here's how to set up `anited_publish` for local development.
 
-1. Fork the `anited/publish` repo on GitLab.
+1. Fork the `anited/publish` repo on GitHub.
 
 2. Clone your fork locally:
 
    ~~~shell
-   $ git clone git@gitlab.com:your_name_here/publish.git
+   $ git clone git@github.com:your_name_here/publish.git
    ~~~
 
-3. Install your local copy into a virtualenv. This is how you set up your fork for local development:
+3. Install your local copy into a virtualenv. This is how you set up your fork for local 
+   development:
 
    ~~~shell
    $ cd publish/
@@ -64,11 +65,13 @@ Ready to contribute? Here's how to set up `anited_publish` for local development
    $ pip install -e .[dev]
    ~~~
 
-   **Note**: Setup of your virtualenv may differ based on your operating system and whether your Python 3 executable is suffixed as `python3` or not.
+   **Note**: Setup of your virtualenv may differ based on your operating system and whether 
+   your Python 3 executable is suffixed as `python3` or not.
 
    The example above is for Python 3 on Windows.
 
-   `pip install -e .[dev]` installs your local copy as an editable python package and also installs all required development requirements like pylint and pytest.
+   `pip install -e .[dev]` installs your local copy as an editable python package and also 
+   installs all required development requirements like pylint and pytest.
 
 5. Create a branch for local development:
 
@@ -78,26 +81,22 @@ Ready to contribute? Here's how to set up `anited_publish` for local development
 
    Now you can make your changes locally.
 
-6. When you're done making changes, check that your changes pass pylint and the tests:
-
-   ~~~shell
-   $ pylint anited_publish tests examples setup.py
-   $ python setup.py test
-   ~~~
-
-   Including testing other Python versions with tox:
+6. When you're done making changes, check that your changes pass pylint and the tests including
+   code coverage:
 
    ~~~shell
    $ tox
    ~~~
 
-   Check the code coverage of your changes and unit tests:
+   tox will automatically run all checks against Python 3.6 and 3.7. If your system is 
+   missing one of these Python versions you can force tox to run using a specific interpreter 
+   version like this:
 
    ~~~shell
-   $ pytest --cov-report term-missing --cov=anited_publish
+   $ tox -e py36
    ~~~
 
-7. Commit your changes and push your branch to GitLab:
+7. Commit your changes and push your branch to GitHub:
 
    ~~~shell
    $ git add .
@@ -105,7 +104,7 @@ Ready to contribute? Here's how to set up `anited_publish` for local development
    $ git push origin name-of-your-bugfix-or-feature
    ~~~
 
-8. Submit a pull request through the GitLab website.
+8. Submit a pull request through the GitHub website.
 
    **Note**: Don't forget to add yourself to the list of contributors in AUTHORS.rst. :smiley:
 
@@ -114,13 +113,15 @@ Ready to contribute? Here's how to set up `anited_publish` for local development
 Before you submit a pull request, check that it meets these guidelines:
 
 1. The pull request should include tests.
+
 2. If the pull request adds functionality, the docs should be updated.
    Functions and classes should be documented using docstrings.
    Add major features to the list in README.rst.
    Update the readthedocs documentation in /docs.
-3. The pull request should work for Python >= 3.6. Check
-   https://gitlab.com/anited/publish/pipelines
-   and make sure that the tests pass for all supported Python versions.
+   
+3. The pull request should work for Python >= 3.6. The Azure Pipelines check setup
+   in the main repository on GitHub should take care of that. Pull Requests without a or with
+   an only partially passing Azure Pipelines check will not be merged.
 
 ## Tips
 
