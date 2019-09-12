@@ -38,7 +38,7 @@ setup(
     long_description_content_type='text/markdown',
     author='Christopher Knörndel',
     author_email='cknoerndel@anited.de',
-    url='https://gitlab.com/anited/publish/',
+    url='https://github.com/anited/publish',
     packages=[
         'publish',
     ],

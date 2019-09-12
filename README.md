@@ -6,8 +6,6 @@ into ebooks.
 Created to make publishing stories a lot easier for myself.
 
 * **Free software**: [MIT](https://opensource.org/licenses/MIT>)
-* **Official page**: https://anited.de/publish
-* **Documentation**: https://docs.anited.de/publish
 
 ## Build status
 
@@ -151,25 +149,16 @@ on the command line.
 
 * The following output types are planned for an upcoming version:
 
-  * HTML in JSON for use with https://gitlab.com/anited/read
-
-## Documentation and examples
-
-A more in depth guide to anited. publish including additional features like multiple
-outputs, default outputs, text substitutions and more can be found in the 
-[Wiki](https://gitlab.com/anited/publish/wikis).
-
-If complete and working examples are more to your liking you can find several such example
-projects in the **examples** directory of the repository.
+  * HTML in JSON for use with https://github.com/anited/reader
 
 ## Installation
 
-For the time being apub is only available via this git repository. You can use pip to install it
-into your local or virtual Python environment:
+For the time being anited. publish is only available via this git repository. You can use pip to 
+install it into your local or virtual Python environment:
 
 ~~~shell
-pip install https://gitlab.com/anited/publish/-/archive/master/publish-master.zip
+pip install https://github.com/anited/publish/archive/v2.0.2.zip
 ~~~
 
-Releases via gitlab pipeline artifacts in the form of wheels are planned but I have no timeframe
+Releases via Azure Pipeline artifacts in the form of wheels are planned but I have no timeframe
 on the availability yet.
