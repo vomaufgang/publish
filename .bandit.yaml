@@ -1,0 +1,2 @@
+exclude_dirs: [".tox", "venv"]
+skips: ["B101"]
