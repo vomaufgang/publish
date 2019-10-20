@@ -18,9 +18,6 @@ jobs:
       Python37:
         python.version: '3.7'
         tox.env: 'py37-azure'
-      Python38:
-        python.version: '3.8'
-        tox.env: 'py38-azure'
   steps:
   - task: UsePythonVersion@0
     inputs:
