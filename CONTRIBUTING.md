@@ -132,30 +132,3 @@ To run a subset of tests:
 ~~~shell
 $ pytest tests/test_book.py
 ~~~
-
-
-### Makefiles
-
-The repository contains makefiles for all major operating systems  to give
-easy access to recurring development tasks such as running tests, building
-anited_publish, building the documentation and removing output folders.
-
-You can use the makefile like so:
-
-~~~shell
-$ make [command]
-~~~
-
-The commands that can be invoked through `make` are the same on
-all systems. The most useful for day to day development are:
-
- * `clean`: removes all temporary build and output directories that may have
-   been created during testing or simply running the package (only available on
-   *nix operating systems for now)
- * `lint`: runs flake8 on anited_publish and the tests to verify pep8 compliance
- * `test`: runs the test suit against the current python version
- * `test-all`: calls tox to run the test suit against any specified python
-   versions
- * `cover`: calculates the test coverage using pytest-cov
- * `docs`: builds and displays the documentation
-
