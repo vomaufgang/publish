@@ -9,7 +9,8 @@ Created to make publishing stories a lot easier for myself.
 
 ## Build status
 
-* master: [![Build Status](https://anited.visualstudio.com/pipelines/_apis/build/status/anited.publish?branchName=master)](https://anited.visualstudio.com/pipelines/_build/latest?definitionId=4&branchName=master)
+[![pipeline status](https://gitlab.com/anited/publish/badges/master/pipeline.svg)](https://gitlab.com/anited/publish/-/commits/master)
+[![coverage report](https://gitlab.com/anited/publish/badges/master/coverage.svg?job=test:python38)](https://gitlab.com/anited/publish/-/commits/master)
 
 ## Features
 
@@ -147,17 +148,13 @@ on the command line.
 
     (requires an additional installation of [Kavid Goyal's Calibre](https://calibre-ebook.com/))
 
-* The following output types are planned for an upcoming version:
-
-  * HTML in JSON for use with https://github.com/anited/reader
-
 ## Installation
 
 For the time being anited. publish is only available via this git repository. You can use pip to 
 install it into your local or virtual Python environment:
 
 ~~~shell
-pip install https://github.com/anited/publish/archive/v2.0.2.zip
+pip install https://gitlab.com/anited/publish/-/archive/v2.0.2/publish-v2.0.2.zip
 ~~~
 
 Releases via Azure Pipeline artifacts in the form of wheels are planned but I have no timeframe

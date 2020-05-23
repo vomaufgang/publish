@@ -9,7 +9,7 @@ You can contribute in many ways:
 
 ### Report Bugs
 
-Report bugs at https://github.com/anited/publish/issues.
+Report bugs at https://gitlab.com/anited/publish/-/issues.
 
 If you are reporting a bug, please include:
 
@@ -19,12 +19,12 @@ If you are reporting a bug, please include:
 
 ### Fix Bugs
 
-Look through the GitHub issues for bugs. Anything tagged with "bug"
+Look through the GitLab issues for bugs. Anything tagged with "bug"
 is open to whoever wants to implement it.
 
 ### Implement Features
 
-Look through the GitHub issues for features. Anything tagged with "feature"
+Look through the GitLab issues for features. Anything tagged with "feature"
 is open to whoever wants to implement it.
 
 ### Write Documentation
@@ -35,7 +35,7 @@ articles, and such.
 
 ### Submit Feedback
 
-The best way to send feedback is to file an issue at https://github.com/anited/publish/issues.
+The best way to send feedback is to file an issue at https://gitlab.com/anited/publish/-/issues.
 
 If you are proposing a feature:
 
@@ -48,12 +48,12 @@ If you are proposing a feature:
 
 Ready to contribute? Here's how to set up `anited_publish` for local development.
 
-1. Fork the `anited/publish` repo on GitHub.
+1. Fork the `anited/publish` repo on GitLab.
 
 2. Clone your fork locally:
 
    ~~~shell
-   $ git clone git@github.com:your_name_here/publish.git
+   $ git clone https://gitlab.com/your_username_here/publish.git
    ~~~
 
 3. Install your local copy into a virtualenv. This is how you set up your fork for local 
@@ -96,7 +96,7 @@ Ready to contribute? Here's how to set up `anited_publish` for local development
    $ tox -e py36
    ~~~
 
-7. Commit your changes and push your branch to GitHub:
+7. Commit your changes and push your branch to GitLab:
 
    ~~~shell
    $ git add .
@@ -104,7 +104,7 @@ Ready to contribute? Here's how to set up `anited_publish` for local development
    $ git push origin name-of-your-bugfix-or-feature
    ~~~
 
-8. Submit a pull request through the GitHub website.
+8. Submit a pull request through the GitLab website.
 
    **Note**: Don't forget to add yourself to the list of contributors in AUTHORS.rst. :smiley:
 
@@ -119,9 +119,9 @@ Before you submit a pull request, check that it meets these guidelines:
    Add major features to the list in README.rst.
    Update the readthedocs documentation in /docs.
    
-3. The pull request should work for Python >= 3.6. The Azure Pipelines check setup
-   in the main repository on GitHub should take care of that. Pull Requests without a or with
-   an only partially passing Azure Pipelines check will not be merged.
+3. The pull request should work for Python >= 3.6. The CI setup in the main repository on 
+   GitLab checks the pull request against all supported Python version. Pull Requests 
+   without or with only partially passing pipelines will not be merged.
 
 ## Tips
 
