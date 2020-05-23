@@ -1,5 +1,6 @@
 include:
-  template: Dependency-Scanning.gitlab-ci.yml
+  - template: Dependency-Scanning.gitlab-ci.yml
+  - template: License-Scanning.gitlab-ci.yml
 
 .shared_before_script: &shared_before_script
   before_script:
