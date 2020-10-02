@@ -10,6 +10,8 @@
 """Setup script for easy_install and pip."""
 
 import sys
+import codecs
+import os.path
 
 MIN_SUPPORTED_PYTHON_VERSION = (3, 6)
 
@@ -24,8 +26,28 @@ except ImportError:
     from distutils.core import setup
 
 
+def read(rel_path):
+    """Reads the contents of the file atthe  relative path `rel_path`.
+    """
+    here = os.path.abspath(os.path.dirname(__file__))
+    with codecs.open(os.path.join(here, rel_path), 'r') as file_:
+        return file_.read()
+
+
+def get_version(rel_path):
+    """Gets the version number declared in the `__version__` constant of
+    the Python file at `rel_path`.
+    """
+    for line in read(rel_path).splitlines():
+        if line.startswith('__version__'):
+            delim = '"' if '"' in line else "'"
+            return line.split(delim)[1]
+
+    raise RuntimeError("Unable to find version string.")
+
+
 README = open('README.md').read()
-VERSION = open('publish/VERSION').read().strip()
+VERSION = get_version('publish/__init__.py')
 REQUIREMENTS = open('requirements.txt').readlines()
 DEV_REQUIREMENTS = open('dev-requirements.txt').readlines()[1:]
 
